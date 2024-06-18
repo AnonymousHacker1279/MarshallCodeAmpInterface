@@ -4730,7 +4730,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="E:/GitHub/MarshallCodeAmpInterface/designer/main_window.qrc">:/code50amp/resources/code50.png</pixmap>
+     <pixmap resource="E:/GitHub/MarshallCodeAmpInterface/resources.qrc">:/code50amp/resources/code50.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -4768,7 +4768,7 @@
   </action>
  </widget>
  <resources>
-  <include location="E:/GitHub/MarshallCodeAmpInterface/designer/main_window.qrc"/>
+  <include location="E:/GitHub/MarshallCodeAmpInterface/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

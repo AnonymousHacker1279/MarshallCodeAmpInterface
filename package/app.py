@@ -1,10 +1,8 @@
-import sys
-
-from PySide6.QtWidgets import QMainWindow, QApplication, QDialog
-from MainWindowUI import Ui_MainWindow
-from AboutDialogUI import Ui_Dialog
-from interface.AmpConfig import AmpConfig
-from interface.AmpMIDIInterface import AmpMIDIInterface
+from PySide6.QtWidgets import QMainWindow, QDialog
+from ui.main_window_ui import Ui_MainWindow
+from ui.dialogs.about import Ui_Dialog
+from package.amp_config import AmpConfig
+from package.amp_midi_interface import AmpMIDIInterface
 
 
 class AmpInterfaceWindow(QMainWindow):
@@ -27,15 +25,17 @@ class AmpInterfaceWindow(QMainWindow):
 		self.setup_from_config()
 		self.attach_signals()
 
-	def __open_about_dialog(self):
+	def __open_about_dialog(self) -> None:
 		self.aboutDialog.show()
 
-	def closeEvent(self, event):
+	def closeEvent(self, event) -> None:
 		"""Close the MIDI port when the window is closed."""
-		self.interface.port.close()
+		if self.interface.connected:
+			self.interface.port.close()
+
 		event.accept()
 
-	def attach_signals(self):
+	def attach_signals(self) -> None:
 		"""Attach signals to their respective update functions."""
 		# Dials
 		self.ui.gainDial.valueChanged.connect(self.interface.set_gain)
@@ -128,7 +128,7 @@ class AmpInterfaceWindow(QMainWindow):
 		self.ui.multiTapPatternList.currentRowChanged.connect(self.interface.set_delay_p3)
 		self.ui.reverbTab.currentChanged.connect(self.interface.set_reverb_type)
 
-	def setup_from_config(self):
+	def setup_from_config(self) -> None:
 		config = self.interface.get_amp_configuration()
 		if len(config) != 0:
 			self.amp_config.load_from_sysex(config)
@@ -313,10 +313,3 @@ class AmpInterfaceWindow(QMainWindow):
 				self.ui.stadiumToneDisplay.display(self.ui.stadiumToneDial.value() / 10.0)
 				self.ui.stadiumLevelDial.setValue(self.amp_config.REVERB_P4)
 				self.ui.stadiumLevelDisplay.display(self.ui.stadiumLevelDial.value() / 10.0)
-
-
-if __name__ == "__main__":
-	app = QApplication(sys.argv)
-	window = AmpInterfaceWindow()
-	window.show()
-	sys.exit(app.exec())

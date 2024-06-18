@@ -2,7 +2,7 @@ import mido
 import rtmidi
 from PySide6.QtCore import QTimer
 
-from MainWindowUI import Ui_MainWindow
+from ui.main_window_ui import Ui_MainWindow
 
 
 class AmpMIDIInterface:
@@ -22,7 +22,7 @@ class AmpMIDIInterface:
 		except OSError:
 			print('Could not connect to amp.')
 
-	def __handle_incoming_messages(self):
+	def __handle_incoming_messages(self) -> None:
 		"""Handle incoming messages from the amp."""
 		try:
 			for msg in self.port.iter_pending():
@@ -36,7 +36,7 @@ class AmpMIDIInterface:
 		except KeyboardInterrupt:
 			pass
 
-	def __send_control_change(self, control_id: int, value: int):
+	def __send_control_change(self, control_id: int, value: int) -> None:
 		"""Send a control_change message to the connected amp."""
 		if not self.connected:
 			try:
@@ -46,8 +46,8 @@ class AmpMIDIInterface:
 				self.ui.connectionStatusLabel.setText('Status: CONNECTED')
 				self.ui.connectionStatusLabel.setStyleSheet('color: green')
 			except OSError:
-				pass
-			pass
+				return
+			return
 
 		self.ignore_updates = True
 
@@ -66,6 +66,9 @@ class AmpMIDIInterface:
 
 	def get_amp_configuration(self) -> list:
 		"""Get the current amp configuration."""
+		if not self.connected:
+			return []
+
 		self.port.send(mido.Message('sysex', data=[0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00]))
 		msg = self.port.receive()
 		if msg.type == "sysex":
@@ -73,95 +76,95 @@ class AmpMIDIInterface:
 		else:
 			return []
 
-	def set_gain(self, value: int):
+	def set_gain(self, value: int) -> None:
 		"""Set the gain of the amp."""
 		self.ui.gainDisplay.display(value / 10.0)
 		self.main.amp_config.GAIN = value
 		self.__send_control_change(70, value)
 
-	def set_volume(self, value: int):
+	def set_volume(self, value: int) -> None:
 		"""Set the volume of the amp."""
 		self.ui.volumeDisplay.display(value / 10.0)
 		self.main.amp_config.VOLUME = value
 		self.__send_control_change(74, value)
 
-	def set_gate_threshold(self, value: int):
+	def set_gate_threshold(self, value: int) -> None:
 		"""Set the gate threshold of the amp."""
 		self.ui.gateDisplay.display(value / 10.0)
 		self.main.amp_config.GATE_THRESHOLD = value
 		self.__send_control_change(83, value)
 
-	def set_bass(self, value: int):
+	def set_bass(self, value: int) -> None:
 		"""Set the bass of the amp."""
 		self.ui.bassDisplay.display(value / 10.0)
 		self.main.amp_config.BASS = value
 		self.__send_control_change(71, value)
 
-	def set_middle(self, value: int):
+	def set_middle(self, value: int) -> None:
 		"""Set the middle of the amp."""
 		self.ui.middleDisplay.display(value / 10.0)
 		self.main.amp_config.MIDDLE = value
 		self.__send_control_change(72, value)
 
-	def set_treble(self, value: int):
+	def set_treble(self, value: int) -> None:
 		"""Set the treble of the amp."""
 		self.ui.trebleDisplay.display(value / 10.0)
 		self.main.amp_config.TREBLE = value
 		self.__send_control_change(73, value)
 
-	def set_presence(self, value: int):
+	def set_presence(self, value: int) -> None:
 		"""Set the presence of the amp."""
 		self.ui.presenceDisplay.display(value / 10.0)
 		self.main.amp_config.PRESENCE = value
 		self.__send_control_change(118, value)
 
-	def set_resonance(self, value: int):
+	def set_resonance(self, value: int) -> None:
 		"""Set the resonance of the amp."""
 		self.ui.resonanceDisplay.display(value / 10.0)
 		self.main.amp_config.RESONANCE = value
 		self.__send_control_change(119, value)
 
-	def toggle_preamp(self, state: bool):
+	def toggle_preamp(self, state: bool) -> None:
 		"""Toggle the preamp of the amp."""
 		self.main.amp_config.AMP_STATE = state
 		self.__send_control_change(81, 1 if state else 0)
 
-	def set_preamp_type(self, value: int):
+	def set_preamp_type(self, value: int) -> None:
 		"""Set the type of the amp."""
 		self.main.amp_config.AMP_TYPE = value
 		self.__send_control_change(82, value)
 
-	def toggle_power_amp(self, state: bool):
+	def toggle_power_amp(self, state: bool) -> None:
 		"""Toggle the power amp of the amp."""
 		self.main.amp_config.POWER_AMP_STATE = state
 		self.__send_control_change(114, 1 if state else 0)
 
-	def set_power_amp_type(self, value: int):
+	def set_power_amp_type(self, value: int) -> None:
 		"""Set the type of the power amp."""
 		self.main.amp_config.POWER_AMP_TYPE = value
 		self.__send_control_change(115, value)
 
-	def toggle_cab(self, state: bool):
+	def toggle_cab(self, state: bool) -> None:
 		"""Toggle the cabinet of the amp."""
 		self.main.amp_config.CABINET_STATE = state
 		self.__send_control_change(116, 1 if state else 0)
 
-	def set_cab_type(self, value: int):
+	def set_cab_type(self, value: int) -> None:
 		"""Set the type of the cabinet."""
 		self.main.amp_config.CABINET_TYPE = value
 		self.__send_control_change(117, value)
 
-	def toggle_pedal(self, state: bool):
+	def toggle_pedal(self, state: bool) -> None:
 		"""Toggle the pedal of the amp."""
 		self.main.amp_config.PEDAL_STATE = state
 		self.__send_control_change(75, 1 if state else 0)
 
-	def set_pedal_type(self, value: int):
+	def set_pedal_type(self, value: int) -> None:
 		"""Set the type of the pedal."""
 		self.main.amp_config.PEDAL_TYPE = value
 		self.__send_control_change(76, value)
 
-	def set_pedal_p1(self, value: int):
+	def set_pedal_p1(self, value: int) -> None:
 		"""Set the first parameter of the pedal."""
 		match self.main.amp_config.PEDAL_TYPE:
 			case 0:
@@ -171,7 +174,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.PEDAL_P1 = value
 		self.__send_control_change(77, value)
 
-	def set_pedal_p2(self, value: int):
+	def set_pedal_p2(self, value: int) -> None:
 		"""Set the second parameter of the pedal."""
 		match self.main.amp_config.PEDAL_TYPE:
 			case 0:
@@ -185,7 +188,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.PEDAL_P2 = value
 		self.__send_control_change(78, value)
 
-	def set_pedal_p3(self, value: int):
+	def set_pedal_p3(self, value: int) -> None:
 		"""Set the third parameter of the pedal."""
 		match self.main.amp_config.PEDAL_TYPE:
 			case 0:
@@ -199,7 +202,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.PEDAL_P3 = value
 		self.__send_control_change(79, value)
 
-	def set_pedal_p4(self, value: int):
+	def set_pedal_p4(self, value: int) -> None:
 		"""Set the fourth parameter of the pedal."""
 		match self.main.amp_config.PEDAL_TYPE:
 			case 0:
@@ -213,22 +216,22 @@ class AmpMIDIInterface:
 		self.main.amp_config.PEDAL_P4 = value
 		self.__send_control_change(80, value)
 
-	def toggle_modulation(self, state: bool):
+	def toggle_modulation(self, state: bool) -> None:
 		"""Toggle the modulation of the amp."""
 		self.main.amp_config.MODULATION_STATE = state
 		self.__send_control_change(85, 1 if state else 0)
 
-	def set_modulation_type(self, value: int):
+	def set_modulation_type(self, value: int) -> None:
 		"""Set the type of the modulation."""
 		self.main.amp_config.MODULATION_TYPE = value
 		self.__send_control_change(86, value)
 
-	def set_modulation_p1(self, value: int):
+	def set_modulation_p1(self, value: int) -> None:
 		"""Set the first parameter of the modulation."""
 		self.main.amp_config.MODULATION_P1 = value
 		self.__send_control_change(90, value)
 
-	def set_modulation_p2(self, value: int):
+	def set_modulation_p2(self, value: int) -> None:
 		"""Set the second parameter of the modulation."""
 		match self.main.amp_config.MODULATION_TYPE:
 			case 0:
@@ -242,7 +245,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.MODULATION_P2 = value
 		self.__send_control_change(87, value)
 
-	def set_modulation_p3(self, value: int):
+	def set_modulation_p3(self, value: int) -> None:
 		"""Set the third parameter of the modulation."""
 		match self.main.amp_config.MODULATION_TYPE:
 			case 0:
@@ -256,7 +259,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.MODULATION_P3 = value
 		self.__send_control_change(89, value)
 
-	def set_modulation_p4(self, value: int):
+	def set_modulation_p4(self, value: int) -> None:
 		"""Set the fourth parameter of the modulation."""
 		match self.main.amp_config.MODULATION_TYPE:
 			case 0:
@@ -271,17 +274,17 @@ class AmpMIDIInterface:
 		self.main.amp_config.MODULATION_P4 = value
 		self.__send_control_change(102, value)
 
-	def toggle_delay(self, state: bool):
+	def toggle_delay(self, state: bool) -> None:
 		"""Toggle the delay of the amp."""
 		self.main.amp_config.DELAY_STATE = state
 		self.__send_control_change(103, 1 if state else 0)
 
-	def set_delay_type(self, value: int):
+	def set_delay_type(self, value: int) -> None:
 		"""Set the type of the delay."""
 		self.main.amp_config.DELAY_TYPE = value
 		self.__send_control_change(104, value)
 
-	def set_delay_p1(self, value: int):
+	def set_delay_p1(self, value: int) -> None:
 		"""Set the first parameter of the delay."""
 		match self.main.amp_config.DELAY_TYPE:
 			case 0:
@@ -300,7 +303,7 @@ class AmpMIDIInterface:
 		self.__send_control_change(31, msb)
 		self.__send_control_change(63, lsb)
 
-	def set_delay_p2(self, value: int):
+	def set_delay_p2(self, value: int) -> None:
 		"""Set the second parameter of the delay."""
 		match self.main.amp_config.DELAY_TYPE:
 			case 0:
@@ -314,7 +317,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.DELAY_P2 = value
 		self.__send_control_change(105, value)
 
-	def set_delay_p3(self, value: int):
+	def set_delay_p3(self, value: int) -> None:
 		"""Set the third parameter of the delay."""
 		match self.main.amp_config.DELAY_TYPE:
 			case 0:
@@ -326,7 +329,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.DELAY_P3 = value
 		self.__send_control_change(106, value)
 
-	def set_delay_p4(self, value: int):
+	def set_delay_p4(self, value: int) -> None:
 		"""Set the fourth parameter of the delay."""
 		match self.main.amp_config.DELAY_TYPE:
 			case 0:
@@ -340,17 +343,17 @@ class AmpMIDIInterface:
 		self.main.amp_config.DELAY_P4 = value
 		self.__send_control_change(107, value)
 
-	def toggle_reverb(self, state: bool):
+	def toggle_reverb(self, state: bool) -> None:
 		"""Toggle the reverb of the amp."""
 		self.main.amp_config.REVERB_STATE = state
 		self.__send_control_change(108, 1 if state else 0)
 
-	def set_reverb_type(self, value: int):
+	def set_reverb_type(self, value: int) -> None:
 		"""Set the type of the reverb."""
 		self.main.amp_config.REVERB_TYPE = value
 		self.__send_control_change(109, value)
 
-	def set_reverb_p1(self, value: int):
+	def set_reverb_p1(self, value: int) -> None:
 		"""Set the first parameter of the reverb."""
 		match self.main.amp_config.REVERB_TYPE:
 			case 0:
@@ -364,7 +367,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.REVERB_P1 = value
 		self.__send_control_change(110, value)
 		
-	def set_reverb_p2(self, value: int):
+	def set_reverb_p2(self, value: int) -> None:
 		"""Set the second parameter of the reverb."""
 		match self.main.amp_config.REVERB_TYPE:
 			case 0:
@@ -378,7 +381,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.REVERB_P2 = value
 		self.__send_control_change(111, value)
 
-	def set_reverb_p3(self, value: int):
+	def set_reverb_p3(self, value: int) -> None:
 		"""Set the third parameter of the reverb."""
 		match self.main.amp_config.REVERB_TYPE:
 			case 0:
@@ -392,7 +395,7 @@ class AmpMIDIInterface:
 		self.main.amp_config.REVERB_P3 = value
 		self.__send_control_change(112, value)
 
-	def set_reverb_p4(self, value: int):
+	def set_reverb_p4(self, value: int) -> None:
 		"""Set the fourth parameter of the reverb."""
 		match self.main.amp_config.REVERB_TYPE:
 			case 0:

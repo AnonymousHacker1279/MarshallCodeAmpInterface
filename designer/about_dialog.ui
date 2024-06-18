@@ -39,7 +39,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="main_window.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
