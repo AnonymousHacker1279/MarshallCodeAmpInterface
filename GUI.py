@@ -1,7 +1,8 @@
 import sys
 
-from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6.QtWidgets import QMainWindow, QApplication, QDialog
 from MainWindowUI import Ui_MainWindow
+from AboutDialogUI import Ui_Dialog
 from interface.AmpConfig import AmpConfig
 from interface.AmpMIDIInterface import AmpMIDIInterface
 
@@ -12,8 +13,11 @@ class AmpInterfaceWindow(QMainWindow):
 		super(AmpInterfaceWindow, self).__init__()
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
-		self.interface = AmpMIDIInterface(self, self.ui)
+		self.aboutDialog = QDialog(self)
+		Ui_Dialog().setupUi(self.aboutDialog)
+		self.ui.actionAbout.triggered.connect(self.__open_about_dialog)
 
+		self.interface = AmpMIDIInterface(self, self.ui)
 		if self.interface.connected:
 			self.ui.connectionStatusLabel.setText('Status: CONNECTED')
 			self.ui.connectionStatusLabel.setStyleSheet('color: green')
@@ -22,6 +26,9 @@ class AmpInterfaceWindow(QMainWindow):
 
 		self.setup_from_config()
 		self.attach_signals()
+
+	def __open_about_dialog(self):
+		self.aboutDialog.show()
 
 	def closeEvent(self, event):
 		"""Close the MIDI port when the window is closed."""

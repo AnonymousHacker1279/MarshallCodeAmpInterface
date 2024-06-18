@@ -11,14 +11,15 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QDial, QFrame, QGroupBox,
     QLCDNumber, QLabel, QListWidget, QListWidgetItem,
-    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QTabWidget, QWidget)
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QStatusBar, QTabWidget, QWidget)
 import main_window_rc
 
 class Ui_MainWindow(object):
@@ -29,6 +30,11 @@ class Ui_MainWindow(object):
         icon = QIcon()
         icon.addFile(u":/code50amp/resources/code50.png", QSize(), QIcon.Normal, QIcon.On)
         MainWindow.setWindowIcon(icon)
+        self.actionAbout = QAction(MainWindow)
+        self.actionAbout.setObjectName(u"actionAbout")
+        icon1 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DialogInformation))
+        self.actionAbout.setIcon(icon1)
+        self.actionAbout.setMenuRole(QAction.MenuRole.AboutRole)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.logoLabel = QLabel(self.centralwidget)
@@ -1356,10 +1362,15 @@ class Ui_MainWindow(object):
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 894, 33))
+        self.menuFile = QMenu(self.menubar)
+        self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menuFile.addAction(self.actionAbout)
 
         self.retranslateUi(MainWindow)
 
@@ -1374,6 +1385,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Marshall CODE Interface - AnonymousHacker1279", None))
+        self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.logoLabel.setText(QCoreApplication.translate("MainWindow", u"Marshall CODE Interface", None))
         self.authorLabel.setText(QCoreApplication.translate("MainWindow", u"AnonymousHacker1279", None))
         self.connectionStatusLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" color:#aa0000;\">Status: DISCONNECTED</span></p></body></html>", None))
@@ -1803,5 +1815,6 @@ class Ui_MainWindow(object):
         self.stadiumHelpLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p align=\"center\"><span style=\" font-size:11pt; font-weight:700;\">?</span></p></body></html>", None))
         self.reverbTab.setTabText(self.reverbTab.indexOf(self.stadiumTab), QCoreApplication.translate("MainWindow", u"Stadium", None))
         self.code50AmpIconLabel.setText("")
+        self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
     # retranslateUi
 
