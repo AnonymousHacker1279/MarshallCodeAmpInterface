@@ -1,0 +1,132 @@
+<RCC>
+  <qresource prefix="code50amp">
+    <file>resources/code50.png</file>
+  </qresource>
+  <qresource prefix="Reverb_Hall">
+    <file>resources/reverb/hall.png</file>
+  </qresource>
+  <qresource prefix="Reverb_Room">
+    <file>resources/reverb/room.png</file>
+  </qresource>
+  <qresource prefix="Reverb_Spring">
+    <file>resources/reverb/spring.png</file>
+  </qresource>
+  <qresource prefix="Reverb_Stadium">
+    <file>resources/reverb/stadium.png</file>
+  </qresource>
+  <qresource prefix="Delay_Multi">
+    <file>resources/delay/multi.png</file>
+  </qresource>
+  <qresource prefix="Delay_Reverse">
+    <file>resources/delay/reverse.png</file>
+  </qresource>
+  <qresource prefix="Delay_Studio">
+    <file>resources/delay/studio.png</file>
+  </qresource>
+  <qresource prefix="Delay_Vintage">
+    <file>resources/delay/vintage.png</file>
+  </qresource>
+  <qresource prefix="Modulation_Chorus">
+    <file>resources/modulation/chorus.png</file>
+  </qresource>
+  <qresource prefix="Modulation_Flanger">
+    <file>resources/modulation/flanger.png</file>
+  </qresource>
+  <qresource prefix="Modulation_Phaser">
+    <file>resources/modulation/phaser.png</file>
+  </qresource>
+  <qresource prefix="Modulation_Tremolo">
+    <file>resources/modulation/tremolo.png</file>
+  </qresource>
+  <qresource prefix="PreFX_Auto_Wah">
+    <file>resources/pre-fx/auto_wah.png</file>
+  </qresource>
+  <qresource prefix="PreFX_Compressor">
+    <file>resources/pre-fx/compressor.png</file>
+  </qresource>
+  <qresource prefix="PreFX_Distortion">
+    <file>resources/pre-fx/distortion.png</file>
+  </qresource>
+  <qresource prefix="PreFX_Pitch_Shifter">
+    <file>resources/pre-fx/pitch_shifter.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1960">
+    <file>resources/cabinet/1960.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1960V">
+    <file>resources/cabinet/1960V.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1960X">
+    <file>resources/cabinet/1960X.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1960HW">
+    <file>resources/cabinet/1960HW.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1936">
+    <file>resources/cabinet/1936.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1936V">
+    <file>resources/cabinet/1936V.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1912">
+    <file>resources/cabinet/1912.png</file>
+  </qresource>
+  <qresource prefix="Marshall_1974CX">
+    <file>resources/cabinet/1974CX.png</file>
+  </qresource>
+  <qresource prefix="American_Class_AB">
+    <file>resources/power-amps/American_Class_AB.png</file>
+  </qresource>
+  <qresource prefix="British_Class_A">
+    <file>resources/power-amps/British_Class_A.png</file>
+  </qresource>
+  <qresource prefix="Classic_Marshall_100w">
+    <file>resources/power-amps/Classic_Marshall_100w.png</file>
+  </qresource>
+  <qresource prefix="Vintage_Marshall_30w">
+    <file>resources/power-amps/Vintage_Marshall_30w.png</file>
+  </qresource>
+  <qresource prefix="Marshall_JTM45">
+    <file>resources/pre-amps/JTM45.png</file>
+  </qresource>
+  <qresource prefix="Marshall_DSL">
+    <file>resources/pre-amps/Clean_DSL.png</file>
+    <file>resources/pre-amps/OD_DSL.png</file>
+  </qresource>
+  <qresource prefix="Clean_American">
+    <file>resources/pre-amps/Clean_American.png</file>
+  </qresource>
+  <qresource prefix="Marshall_JVM410H">
+    <file>resources/pre-amps/Clean_JVM.png</file>
+  </qresource>
+  <qresource prefix="Acoustic">
+    <file>resources/pre-amps/Acoustic.png</file>
+  </qresource>
+  <qresource prefix="Marshall_Bluesbreaker">
+    <file>resources/pre-amps/Bluesbreaker.png</file>
+  </qresource>
+  <qresource prefix="Marshall_Plexi">
+    <file>resources/pre-amps/Plexi.png</file>
+  </qresource>
+  <qresource prefix="Crunch_American">
+    <file>resources/pre-amps/Crunch_American.png</file>
+  </qresource>
+  <qresource prefix="Marshall_JCM800">
+    <file>resources/pre-amps/JCM800.png</file>
+  </qresource>
+  <qresource prefix="50s_British">
+    <file>resources/pre-amps/50s_British.png</file>
+  </qresource>
+  <qresource prefix="Marshall_JVM">
+    <file>resources/pre-amps/OD_JVM.png</file>
+  </qresource>
+  <qresource prefix="OD_American">
+    <file>resources/pre-amps/OD_American.png</file>
+  </qresource>
+  <qresource prefix="Marshall_Silver_Jubilee">
+    <file>resources/pre-amps/OD_Silver_Jubilee.png</file>
+  </qresource>
+  <qresource prefix="Natural">
+    <file>resources/pre-amps/Natural.png</file>
+  </qresource>
+</RCC>
