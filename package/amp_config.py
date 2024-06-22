@@ -1,5 +1,7 @@
 class AmpConfig:
 
+	PRESET_NAME: str = ""
+	PRESET_NUMBER: int = 0
 	GAIN: int = 0
 	BASS: int = 0
 	MIDDLE: int = 0
@@ -42,8 +44,10 @@ class AmpConfig:
 	def __init__(self):
 		pass
 
-	def load_from_sysex(self, data: list):
+	def load_from_sysex(self, data: list) -> None:
 		"""Load the configuration from a SysEx message."""
+		self.PRESET_NAME = ''.join([chr(byte) for byte in data[9:27]]).strip()
+		self.PRESET_NUMBER = data[8]
 		self.GAIN = data[28]
 		self.BASS = data[29]
 		self.MIDDLE = data[30]

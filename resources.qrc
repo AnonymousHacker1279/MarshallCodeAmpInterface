@@ -2,6 +2,9 @@
   <qresource prefix="code50amp">
     <file>resources/code50.png</file>
   </qresource>
+  <qresource prefix="Tuner_Background">
+    <file>resources/tuner_background.png</file>
+  </qresource>
   <qresource prefix="Reverb_Hall">
     <file>resources/reverb/hall.png</file>
   </qresource>

@@ -1,8 +1,18 @@
+import asyncio
+
 import mido
 import rtmidi
 from PySide6.QtCore import QTimer
 
 from ui.main_window_ui import Ui_MainWindow
+
+
+def midi_to_note(midi_number: int) -> str:
+	"""Convert a MIDI note number to a note name."""
+	notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+	octave = int(midi_number / 12) - 1
+	note_index = midi_number % 12
+	return notes[note_index] + str(octave)
 
 
 class AmpMIDIInterface:
@@ -29,8 +39,21 @@ class AmpMIDIInterface:
 				if self.ignore_updates:
 					return
 
+				if msg.is_cc(52):
+					if msg.value == 1:
+						self.main.open_tuner_dialog(False)
+					else:
+						self.main.close_tuner_dialog(False)
+
+					return
+
 				if msg.is_cc() or msg.type == "program_change":
-					self.main.setup_from_config()
+					asyncio.run(self.main.setup_from_config())
+
+				if msg.type == "polytouch":
+					note = midi_to_note(msg.note)
+					accuracy = msg.value
+					self.main.tunerDialog.draw_tuner(note, accuracy)
 
 			self.ignore_updates = False
 		except KeyboardInterrupt:
@@ -55,6 +78,8 @@ class AmpMIDIInterface:
 		if control_id < 0 or control_id > 127:
 			raise ValueError(f'Control ID must be between 0 and 127. Got {control_id} with value {value}.')
 		if value < 0 or value > 127:
+			if value == -1:
+				return
 			raise ValueError(f'Value must be between 0 and 127. Got {value} for control ID {control_id}.')
 
 		try:
@@ -64,17 +89,32 @@ class AmpMIDIInterface:
 			self.ui.connectionStatusLabel.setText('Status: DISCONNECTED')
 			self.ui.connectionStatusLabel.setStyleSheet('color: red')
 
-	def get_amp_configuration(self) -> list:
-		"""Get the current amp configuration."""
+	def send_program_change(self, program: int):
+		"""Send a program change message to the connected amp."""
+		if not self.connected:
+			return
+
+		self.port.send(mido.Message('program_change', program=program))
+		asyncio.run(self.main.setup_from_config())
+
+	def get_amp_configuration(self, preset: int = -1) -> list:
+		"""
+		Get the specified amp preset configuration.
+
+		:param preset: The preset to get the configuration for. Omitting this will return the current configuration.
+		"""
 		if not self.connected:
 			return []
 
-		self.port.send(mido.Message('sysex', data=[0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00]))
-		msg = self.port.receive()
-		if msg.type == "sysex":
-			return msg.data
+		if preset == -1:
+			self.port.send(mido.Message('sysex', data=[0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00]))
 		else:
-			return []
+			self.port.send(mido.Message('sysex', data=[0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x01, preset]))
+
+		msg = self.port.receive()
+		while msg.type != "sysex":
+			msg = self.port.receive()
+		return msg.data
 
 	def set_gain(self, value: int) -> None:
 		"""Set the gain of the amp."""
@@ -323,7 +363,7 @@ class AmpMIDIInterface:
 			case 0:
 				self.ui.studioFreqDisplay.display(value / 10.0)
 			case 1:
-				self.ui.vintageAgeDisplay.display(value / 10.0)
+				self.ui.vintageFreqDisplay.display(value / 10.0)
 			case 3:
 				self.ui.reverseFreqDisplay.display(value / 10.0)
 		self.main.amp_config.DELAY_P3 = value
@@ -408,3 +448,7 @@ class AmpMIDIInterface:
 				self.ui.stadiumLevelDisplay.display(value / 10.0)
 		self.main.amp_config.REVERB_P4 = value
 		self.__send_control_change(113, value)
+
+	def set_tuner_state(self, state: bool) -> None:
+		"""Set the state of the tuner."""
+		self.__send_control_change(52, 1 if state else 0)

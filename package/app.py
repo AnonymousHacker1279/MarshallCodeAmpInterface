@@ -1,8 +1,13 @@
-from PySide6.QtWidgets import QMainWindow, QDialog
-from ui.main_window_ui import Ui_MainWindow
-from ui.dialogs.about import Ui_Dialog
+import asyncio
+from typing import List
+
+from PySide6.QtWidgets import QMainWindow
+
+from about_dialog import AboutDialog
 from package.amp_config import AmpConfig
 from package.amp_midi_interface import AmpMIDIInterface
+from tuner_dialog import TunerDialog
+from ui.main_window_ui import Ui_MainWindow
 
 
 class AmpInterfaceWindow(QMainWindow):
@@ -11,9 +16,12 @@ class AmpInterfaceWindow(QMainWindow):
 		super(AmpInterfaceWindow, self).__init__()
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
-		self.aboutDialog = QDialog(self)
-		Ui_Dialog().setupUi(self.aboutDialog)
-		self.ui.actionAbout.triggered.connect(self.__open_about_dialog)
+
+		self.aboutDialog = AboutDialog()
+		self.ui.actionAbout.triggered.connect(self.open_about_dialog)
+
+		self.tunerDialog = TunerDialog(self)
+		self.ui.actionTuner.triggered.connect(lambda _: self.open_tuner_dialog(True))
 
 		self.interface = AmpMIDIInterface(self, self.ui)
 		if self.interface.connected:
@@ -21,12 +29,28 @@ class AmpInterfaceWindow(QMainWindow):
 			self.ui.connectionStatusLabel.setStyleSheet('color: green')
 
 		self.amp_config = AmpConfig()
+		self.presets: List[AmpConfig] = []
 
-		self.setup_from_config()
 		self.attach_signals()
 
-	def __open_about_dialog(self) -> None:
+		asyncio.run(self.async_setup())
+
+	async def async_setup(self):
+		await self.setup_from_config()
+		await self.setup_presets()
+
+	def open_about_dialog(self) -> None:
 		self.aboutDialog.show()
+
+	def open_tuner_dialog(self, update_tuner: bool = False) -> None:
+		self.tunerDialog.show()
+		if update_tuner:
+			self.interface.set_tuner_state(update_tuner)
+
+	def close_tuner_dialog(self, update_tuner: bool = False) -> None:
+		self.tunerDialog.close()
+		if update_tuner:
+			self.interface.set_tuner_state(update_tuner)
 
 	def closeEvent(self, event) -> None:
 		"""Close the MIDI port when the window is closed."""
@@ -128,10 +152,30 @@ class AmpInterfaceWindow(QMainWindow):
 		self.ui.multiTapPatternList.currentRowChanged.connect(self.interface.set_delay_p3)
 		self.ui.reverbTab.currentChanged.connect(self.interface.set_reverb_type)
 
-	def setup_from_config(self) -> None:
+		# Preset list
+		self.ui.presetList.currentRowChanged.connect(lambda current_index: self.interface.send_program_change(current_index))
+
+	async def setup_presets(self) -> None:
+		for i in range(0, 100):
+			preset_data = self.interface.get_amp_configuration(i)
+			if len(preset_data) != 0:
+				preset_config = AmpConfig()
+				preset_config.load_from_sysex(preset_data)
+				self.presets.append(preset_config)
+			else:
+				print(f'Preset {i} not found')
+
+		for i in range(0, len(self.presets)):
+			self.ui.presetList.addItem(self.presets[i].PRESET_NAME)
+
+	async def setup_from_config(self) -> None:
 		config = self.interface.get_amp_configuration()
 		if len(config) != 0:
 			self.amp_config.load_from_sysex(config)
+
+		# Preset information
+		self.ui.presetNumberDisplay.display(self.amp_config.PRESET_NUMBER)
+		self.ui.presetNameLabel.setText(self.amp_config.PRESET_NAME)
 
 		# Amp settings
 		self.ui.ampToggleButton.setChecked(self.amp_config.AMP_STATE)
