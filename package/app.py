@@ -156,6 +156,9 @@ class AmpInterfaceWindow(QMainWindow):
 		self.ui.presetList.currentRowChanged.connect(lambda current_index: self.interface.send_program_change(current_index))
 
 	async def setup_presets(self) -> None:
+		if not self.interface.connected:
+			return
+
 		for i in range(0, 100):
 			preset_data = self.interface.get_amp_configuration(i)
 			if len(preset_data) != 0:

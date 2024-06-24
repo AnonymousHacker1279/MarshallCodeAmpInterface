@@ -30,7 +30,7 @@ class AmpMIDIInterface:
 			self.timer.timeout.connect(self.__handle_incoming_messages)
 			self.timer.start(100)
 		except OSError:
-			print('Could not connect to amp.')
+			pass
 
 	def __handle_incoming_messages(self) -> None:
 		"""Handle incoming messages from the amp."""
@@ -68,6 +68,8 @@ class AmpMIDIInterface:
 
 				self.ui.connectionStatusLabel.setText('Status: CONNECTED')
 				self.ui.connectionStatusLabel.setStyleSheet('color: green')
+
+				asyncio.run(self.main.async_setup())
 			except OSError:
 				return
 			return
