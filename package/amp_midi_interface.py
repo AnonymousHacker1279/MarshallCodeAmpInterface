@@ -48,7 +48,7 @@ class AmpMIDIInterface:
 					return
 
 				if msg.is_cc() or msg.type == "program_change":
-					asyncio.run(self.main.setup_from_config())
+					self.main.setup_from_config()
 
 				if msg.type == "polytouch":
 					note = midi_to_note(msg.note)
@@ -69,7 +69,8 @@ class AmpMIDIInterface:
 				self.ui.connectionStatusLabel.setText('Status: CONNECTED')
 				self.ui.connectionStatusLabel.setStyleSheet('color: green')
 
-				asyncio.run(self.main.async_setup())
+				self.main.setup_from_config()
+				self.main.setup_presets()
 			except OSError:
 				return
 			return
@@ -97,7 +98,7 @@ class AmpMIDIInterface:
 			return
 
 		self.port.send(mido.Message('program_change', program=program))
-		asyncio.run(self.main.setup_from_config())
+		self.main.setup_from_config()
 
 	def get_amp_configuration(self, preset: int = -1) -> list:
 		"""

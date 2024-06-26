@@ -1,7 +1,8 @@
 import asyncio
+import json
 from typing import List
 
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QFileDialog
 
 from about_dialog import AboutDialog
 from package.amp_config import AmpConfig
@@ -23,6 +24,10 @@ class AmpInterfaceWindow(QMainWindow):
 		self.tunerDialog = TunerDialog(self)
 		self.ui.actionTuner.triggered.connect(lambda _: self.open_tuner_dialog(True))
 
+		self.ui.actionRefresh_Amp_Settings.triggered.connect(lambda _: self.setup_from_config())
+		self.ui.actionLoad_from_File.triggered.connect(lambda _: self.open_preset_file())
+		self.ui.actionSave_to_File.triggered.connect(lambda _: self.save_preset_file())
+
 		self.interface = AmpMIDIInterface(self, self.ui)
 		if self.interface.connected:
 			self.ui.connectionStatusLabel.setText('Status: CONNECTED')
@@ -33,11 +38,8 @@ class AmpInterfaceWindow(QMainWindow):
 
 		self.attach_signals()
 
-		asyncio.run(self.async_setup())
-
-	async def async_setup(self):
-		await self.setup_from_config()
-		await self.setup_presets()
+		self.setup_from_config()
+		self.setup_presets()
 
 	def open_about_dialog(self) -> None:
 		self.aboutDialog.show()
@@ -155,7 +157,7 @@ class AmpInterfaceWindow(QMainWindow):
 		# Preset list
 		self.ui.presetList.currentRowChanged.connect(lambda current_index: self.interface.send_program_change(current_index))
 
-	async def setup_presets(self) -> None:
+	def setup_presets(self) -> None:
 		if not self.interface.connected:
 			return
 
@@ -171,10 +173,11 @@ class AmpInterfaceWindow(QMainWindow):
 		for i in range(0, len(self.presets)):
 			self.ui.presetList.addItem(self.presets[i].PRESET_NAME)
 
-	async def setup_from_config(self) -> None:
-		config = self.interface.get_amp_configuration()
-		if len(config) != 0:
-			self.amp_config.load_from_sysex(config)
+	def setup_from_config(self, load_from_amp: bool = True) -> None:
+		if load_from_amp:
+			config = self.interface.get_amp_configuration()
+			if len(config) != 0:
+				self.amp_config.load_from_sysex(config)
 
 		# Preset information
 		self.ui.presetNumberDisplay.display(self.amp_config.PRESET_NUMBER)
@@ -360,3 +363,20 @@ class AmpInterfaceWindow(QMainWindow):
 				self.ui.stadiumToneDisplay.display(self.ui.stadiumToneDial.value() / 10.0)
 				self.ui.stadiumLevelDial.setValue(self.amp_config.REVERB_P4)
 				self.ui.stadiumLevelDisplay.display(self.ui.stadiumLevelDial.value() / 10.0)
+
+	def open_preset_file(self):
+		"""Open a preset file and load the configuration."""
+		file_name = QFileDialog.getOpenFileName(self, 'Select a preset file', '', 'JSON Files (*.json)')[0]
+		if file_name:
+			with open(file_name, 'r') as file:
+				config = json.load(file)
+				self.amp_config.load_from_json(config)
+				self.setup_from_config(False)
+
+	def save_preset_file(self):
+		"""Save the configuration to a preset file."""
+		file_name = QFileDialog.getSaveFileName(self, 'Save the current configuration', '', 'JSON Files (*.json)')[0]
+		if file_name:
+			with open(file_name, 'w') as file:
+				config = self.amp_config.to_json()
+				json.dump(config, file, indent=4)

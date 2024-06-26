@@ -4795,10 +4795,19 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionRefresh_Amp_Settings"/>
     <addaction name="actionTuner"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuLocal_Presets">
+    <property name="title">
+     <string>Local Presets</string>
+    </property>
+    <addaction name="actionSave_to_File"/>
+    <addaction name="actionLoad_from_File"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuLocal_Presets"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAbout">
@@ -4818,6 +4827,30 @@
    </property>
    <property name="text">
     <string>Tuner</string>
+   </property>
+  </action>
+  <action name="actionSave_to_File">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
+   </property>
+   <property name="text">
+    <string>Save to File</string>
+   </property>
+  </action>
+  <action name="actionLoad_from_File">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
+   </property>
+   <property name="text">
+    <string>Load from File</string>
+   </property>
+  </action>
+  <action name="actionRefresh_Amp_Settings">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+   </property>
+   <property name="text">
+    <string>Refresh Amp Settings</string>
    </property>
   </action>
  </widget>

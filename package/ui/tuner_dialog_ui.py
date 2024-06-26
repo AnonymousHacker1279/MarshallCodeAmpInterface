@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'tuner_dialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -25,7 +25,7 @@ class Ui_Dialog(object):
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(500, 400)
         icon = QIcon()
-        icon.addFile(u":/code50amp/resources/code50.png", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u":/code50amp/resources/code50.png", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         Dialog.setWindowIcon(icon)
         Dialog.setModal(True)
         self.tunerLabel = QLabel(Dialog)

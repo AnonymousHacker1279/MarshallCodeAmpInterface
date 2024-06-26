@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(900, 830)
         icon = QIcon()
-        icon.addFile(u":/code50amp/resources/code50.png", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u":/code50amp/resources/code50.png", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         MainWindow.setWindowIcon(icon)
         self.actionAbout = QAction(MainWindow)
         self.actionAbout.setObjectName(u"actionAbout")
@@ -39,6 +39,18 @@ class Ui_MainWindow(object):
         self.actionTuner.setObjectName(u"actionTuner")
         icon2 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.AudioInputMicrophone))
         self.actionTuner.setIcon(icon2)
+        self.actionSave_to_File = QAction(MainWindow)
+        self.actionSave_to_File.setObjectName(u"actionSave_to_File")
+        icon3 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentSaveAs))
+        self.actionSave_to_File.setIcon(icon3)
+        self.actionLoad_from_File = QAction(MainWindow)
+        self.actionLoad_from_File.setObjectName(u"actionLoad_from_File")
+        icon4 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.DocumentOpen))
+        self.actionLoad_from_File.setIcon(icon4)
+        self.actionRefresh_Amp_Settings = QAction(MainWindow)
+        self.actionRefresh_Amp_Settings.setObjectName(u"actionRefresh_Amp_Settings")
+        icon5 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.ViewRefresh))
+        self.actionRefresh_Amp_Settings.setIcon(icon5)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.logoLabel = QLabel(self.centralwidget)
@@ -1381,14 +1393,20 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 900, 33))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
+        self.menuLocal_Presets = QMenu(self.menubar)
+        self.menuLocal_Presets.setObjectName(u"menuLocal_Presets")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuLocal_Presets.menuAction())
+        self.menuFile.addAction(self.actionRefresh_Amp_Settings)
         self.menuFile.addAction(self.actionTuner)
         self.menuFile.addAction(self.actionAbout)
+        self.menuLocal_Presets.addAction(self.actionSave_to_File)
+        self.menuLocal_Presets.addAction(self.actionLoad_from_File)
 
         self.retranslateUi(MainWindow)
 
@@ -1405,6 +1423,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Marshall CODE Interface - AnonymousHacker1279", None))
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
         self.actionTuner.setText(QCoreApplication.translate("MainWindow", u"Tuner", None))
+        self.actionSave_to_File.setText(QCoreApplication.translate("MainWindow", u"Save to File", None))
+        self.actionLoad_from_File.setText(QCoreApplication.translate("MainWindow", u"Load from File", None))
+        self.actionRefresh_Amp_Settings.setText(QCoreApplication.translate("MainWindow", u"Refresh Amp Settings", None))
         self.logoLabel.setText(QCoreApplication.translate("MainWindow", u"Marshall CODE Interface", None))
         self.authorLabel.setText(QCoreApplication.translate("MainWindow", u"AnonymousHacker1279", None))
         self.connectionStatusLabel.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" color:#aa0000;\">Status: DISCONNECTED</span></p></body></html>", None))
@@ -1836,5 +1857,6 @@ class Ui_MainWindow(object):
         self.presetGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"PRESET", None))
         self.presetNameLabel.setText(QCoreApplication.translate("MainWindow", u"PRESET NAME", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
+        self.menuLocal_Presets.setTitle(QCoreApplication.translate("MainWindow", u"Local Presets", None))
     # retranslateUi
 
