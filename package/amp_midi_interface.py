@@ -4,7 +4,7 @@ import mido
 import rtmidi
 from PySide6.QtCore import QTimer
 
-from ui.main_window_ui import Ui_MainWindow
+from package.ui.main_window_ui import Ui_MainWindow
 
 
 def midi_to_note(midi_number: int) -> str:
@@ -29,7 +29,7 @@ class AmpMIDIInterface:
 			self.timer = QTimer()
 			self.timer.timeout.connect(self.__handle_incoming_messages)
 			self.timer.start(100)
-		except OSError:
+		except OSError or AttributeError:
 			pass
 
 	def __handle_incoming_messages(self) -> None:

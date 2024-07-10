@@ -3,11 +3,11 @@ from typing import List
 
 from PySide6.QtWidgets import QMainWindow
 
-from about_dialog import AboutDialog
+from package.about_dialog import AboutDialog
 from package.amp_config import AmpConfig
 from package.amp_midi_interface import AmpMIDIInterface
-from tuner_dialog import TunerDialog
-from ui.main_window_ui import Ui_MainWindow
+from package.tuner_dialog import TunerDialog
+from package.ui.main_window_ui import Ui_MainWindow
 
 
 class AmpInterfaceWindow(QMainWindow):
