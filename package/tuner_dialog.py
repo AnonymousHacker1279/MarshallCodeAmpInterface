@@ -2,7 +2,7 @@ from PySide6.QtCore import QRectF
 from PySide6.QtGui import QPixmap, QBrush, QPen, Qt
 from PySide6.QtWidgets import QDialog, QGraphicsScene, QGraphicsRectItem
 
-from ui.tuner_dialog_ui import Ui_Dialog
+from package.ui.tuner_dialog_ui import Ui_Dialog
 
 
 class TunerDialog(QDialog, Ui_Dialog):
