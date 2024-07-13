@@ -414,7 +414,7 @@
      <widget class="Line" name="preampLine">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>190</x>
         <y>20</y>
         <width>16</width>
         <height>91</height>
@@ -427,7 +427,7 @@
      <widget class="QLCDNumber" name="bassDisplay">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>210</x>
         <y>90</y>
         <width>51</width>
         <height>23</height>
@@ -440,7 +440,7 @@
      <widget class="QDial" name="bassDial">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>210</x>
         <y>10</y>
         <width>50</width>
         <height>64</height>
@@ -462,7 +462,7 @@
      <widget class="QLabel" name="bassLabel">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>210</x>
         <y>70</y>
         <width>49</width>
         <height>16</height>
@@ -478,7 +478,7 @@
      <widget class="QDial" name="middleDial">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>270</x>
         <y>10</y>
         <width>50</width>
         <height>64</height>
@@ -500,7 +500,7 @@
      <widget class="QLabel" name="middleLabel">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>270</x>
         <y>70</y>
         <width>49</width>
         <height>16</height>
@@ -516,7 +516,7 @@
      <widget class="QLCDNumber" name="middleDisplay">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>270</x>
         <y>90</y>
         <width>51</width>
         <height>23</height>
@@ -529,7 +529,7 @@
      <widget class="QLCDNumber" name="trebleDisplay">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>330</x>
         <y>90</y>
         <width>51</width>
         <height>23</height>
@@ -542,7 +542,7 @@
      <widget class="QDial" name="trebleDial">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>330</x>
         <y>10</y>
         <width>50</width>
         <height>64</height>
@@ -564,7 +564,7 @@
      <widget class="QLabel" name="trebleLabel">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>330</x>
         <y>70</y>
         <width>49</width>
         <height>16</height>
@@ -575,6 +575,31 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="flattenEQButton">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>20</y>
+        <width>20</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Flatten the EQ settings. Typically used with a dedicated EQ pedal.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset theme="QIcon::ThemeIcon::ListRemove"/>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>8</width>
+        <height>8</height>
+       </size>
       </property>
      </widget>
     </widget>

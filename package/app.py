@@ -137,6 +137,7 @@ class AmpInterfaceWindow(QMainWindow):
 		self.ui.modulationToggleButton.clicked.connect(self.interface.toggle_modulation)
 		self.ui.delayToggleButton.clicked.connect(self.interface.toggle_delay)
 		self.ui.reverbToggleButton.clicked.connect(self.interface.toggle_reverb)
+		self.ui.flattenEQButton.clicked.connect(self.flatten_eq)
 
 		# Lists and tabs
 		self.ui.ampList.currentRowChanged.connect(self.interface.set_preamp_type)
@@ -380,3 +381,9 @@ class AmpInterfaceWindow(QMainWindow):
 			with open(file_name, 'w') as file:
 				config = self.amp_config.to_json()
 				json.dump(config, file, indent=4)
+
+	def flatten_eq(self):
+		"""Flatten all EQ settings"""
+		self.interface.set_bass(50)
+		self.interface.set_middle(50)
+		self.interface.set_treble(50)
