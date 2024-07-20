@@ -137,6 +137,7 @@ class AmpInterfaceWindow(QMainWindow):
 		self.ui.delayToggleButton.clicked.connect(self.interface.toggle_delay)
 		self.ui.reverbToggleButton.clicked.connect(self.interface.toggle_reverb)
 		self.ui.flattenEQButton.clicked.connect(self.flatten_eq)
+		self.ui.autoFlattenEQButton.clicked.connect(self.flatten_eq)
 
 		# Lists and tabs
 		self.ui.ampList.currentRowChanged.connect(self.interface.set_preamp_type)
@@ -363,6 +364,9 @@ class AmpInterfaceWindow(QMainWindow):
 				self.ui.stadiumToneDisplay.display(self.ui.stadiumToneDial.value() / 10.0)
 				self.ui.stadiumLevelDial.setValue(self.amp_config.REVERB_P4)
 				self.ui.stadiumLevelDisplay.display(self.ui.stadiumLevelDial.value() / 10.0)
+
+		if self.ui.autoFlattenEQButton.isChecked():
+			self.flatten_eq()
 
 	def open_preset_file(self):
 		"""Open a preset file and load the configuration."""
