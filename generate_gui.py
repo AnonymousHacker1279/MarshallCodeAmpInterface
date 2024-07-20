@@ -1,6 +1,6 @@
+import fileinput
 import os
 import subprocess
-import fileinput
 
 # Generate the UI files
 cwd = os.getcwd()

@@ -1,5 +1,3 @@
-import asyncio
-
 import mido
 import rtmidi
 from PySide6.QtCore import QTimer
