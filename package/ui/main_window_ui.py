@@ -17,9 +17,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QDial, QFrame, QGroupBox,
-    QLCDNumber, QLabel, QListWidget, QListWidgetItem,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QStatusBar, QTabWidget, QWidget)
+    QLCDNumber, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QMainWindow, QMenu, QMenuBar,
+    QPushButton, QSizePolicy, QStatusBar, QTabWidget,
+    QWidget)
 import package.ui.resources_rc
 
 class Ui_MainWindow(object):
@@ -1398,7 +1399,12 @@ class Ui_MainWindow(object):
         self.presetNameLabel.setFrameShadow(QFrame.Shadow.Plain)
         self.presetList = QListWidget(self.presetGroupBox)
         self.presetList.setObjectName(u"presetList")
-        self.presetList.setGeometry(QRect(10, 60, 171, 221))
+        self.presetList.setGeometry(QRect(10, 90, 171, 191))
+        self.presetSearchBox = QLineEdit(self.presetGroupBox)
+        self.presetSearchBox.setObjectName(u"presetSearchBox")
+        self.presetSearchBox.setGeometry(QRect(10, 60, 171, 22))
+        self.presetSearchBox.setMaxLength(28)
+        self.presetSearchBox.setClearButtonEnabled(True)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -1876,6 +1882,7 @@ class Ui_MainWindow(object):
         self.reverbTab.setTabText(self.reverbTab.indexOf(self.stadiumTab), QCoreApplication.translate("MainWindow", u"Stadium", None))
         self.presetGroupBox.setTitle(QCoreApplication.translate("MainWindow", u"PRESET", None))
         self.presetNameLabel.setText(QCoreApplication.translate("MainWindow", u"PRESET NAME", None))
+        self.presetSearchBox.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search Presets", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuLocal_Presets.setTitle(QCoreApplication.translate("MainWindow", u"Local Presets", None))
     # retranslateUi

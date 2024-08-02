@@ -156,7 +156,8 @@ class AmpInterfaceWindow(QMainWindow):
 		self.ui.reverbTab.currentChanged.connect(self.interface.set_reverb_type)
 
 		# Preset list
-		self.ui.presetList.currentRowChanged.connect(lambda current_index: self.interface.send_program_change(current_index))
+		self.ui.presetList.itemClicked.connect(self.handle_preset_change)
+		self.ui.presetSearchBox.textChanged.connect(self.handle_preset_search)
 
 	def setup_presets(self) -> None:
 		if not self.interface.connected:
@@ -367,6 +368,27 @@ class AmpInterfaceWindow(QMainWindow):
 
 		if self.ui.autoFlattenEQButton.isChecked():
 			self.flatten_eq()
+
+	def handle_preset_change(self, item):
+		"""Runs when the selected preset changes."""
+		preset_name = item.text().lower()
+
+		# Find the index of the preset name in the global list
+		preset_index = 0
+		for i in range(0, len(self.presets)):
+			if self.presets[i].PRESET_NAME.lower() == preset_name:
+				preset_index = i
+				break
+
+		self.interface.send_program_change(preset_index)
+
+	def handle_preset_search(self):
+		"""Runs when the text content of the preset search box is modified."""
+		search_content = self.ui.presetSearchBox.text().lower()
+		self.ui.presetList.clear()
+		for i in range(0, len(self.presets)):
+			if search_content in self.presets[i].PRESET_NAME.lower():
+				self.ui.presetList.addItem(self.presets[i].PRESET_NAME)
 
 	def open_preset_file(self):
 		"""Open a preset file and load the configuration."""
