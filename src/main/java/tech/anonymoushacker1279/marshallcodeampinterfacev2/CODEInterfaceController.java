@@ -1,12 +1,15 @@
 package tech.anonymoushacker1279.marshallcodeampinterfacev2;
 
+import javafx.application.HostServices;
 import javafx.collections.*;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.*;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import tech.anonymoushacker1279.marshallcodeampinterfacev2.amp.AmpConfig;
 
 import javax.sound.midi.InvalidMidiDataException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
@@ -170,8 +173,14 @@ public class CODEInterfaceController implements Initializable {
 	@FXML public TextField presetSearchTextField;
 	@FXML public ListView<String> presetListView;
 	@FXML public ToggleButton autoFlattenEQToggleButton;
+	@FXML public MenuItem aboutMenuItem;
 
 	public boolean ignorePresetChange = false;
+	private HostServices hostServices;
+
+	public void setHostServices(HostServices hostServices) {
+		this.hostServices = hostServices;
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -402,6 +411,22 @@ public class CODEInterfaceController implements Initializable {
 				bassSlider.setValue(5);
 				middleSlider.setValue(5);
 				trebleSlider.setValue(5);
+			}
+		});
+
+		aboutMenuItem.setOnAction(event -> {
+			FXMLLoader fxmlLoader = new FXMLLoader(AboutDialogController.class.getResource("about-view.fxml"));
+			try {
+				Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+				Stage stage = new Stage();
+				stage.setTitle("About Marshall CODE Interface");
+				stage.setScene(scene);
+				stage.show();
+
+				AboutDialogController aboutDialogController = fxmlLoader.getController();
+				aboutDialogController.setHostServices(hostServices);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		});
 	}

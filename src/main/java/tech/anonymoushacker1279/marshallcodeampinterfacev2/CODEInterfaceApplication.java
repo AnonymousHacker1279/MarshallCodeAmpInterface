@@ -2,6 +2,7 @@ package tech.anonymoushacker1279.marshallcodeampinterfacev2;
 
 import atlantafx.base.theme.CupertinoDark;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -36,6 +37,7 @@ public class CODEInterfaceApplication extends Application {
 		stage.setScene(scene);
 		stage.show();
 		CONTROLLER = fxmlLoader.getController();
+		CONTROLLER.setHostServices(getHostServices());
 
 		AmpConfig.setInterfaceValues(CONTROLLER, DEFAULT_CONFIG);
 	}
