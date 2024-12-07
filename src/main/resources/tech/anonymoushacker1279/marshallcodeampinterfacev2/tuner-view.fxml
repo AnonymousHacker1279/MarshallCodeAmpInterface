@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterfacev2.TuningDialogController">
+   <children>
+      <Text layoutX="16.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tuner" textAlignment="CENTER" wrappingWidth="568.826171875">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <TextField fx:id="tunerTextField" alignment="CENTER" editable="false" layoutX="270.0" layoutY="72.0" prefHeight="42.0" prefWidth="60.0" text="E">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </TextField>
+      <Pane layoutX="200.0" layoutY="135.0" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Arc fill="#bea98c" layoutX="115.0" layoutY="100.0" length="270.0" radiusX="100.0" radiusY="100.0" rotate="90.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="CHORD" />
+            <Line fx:id="tuningLine" endX="0.3553466796875" endY="-120.0" layoutX="100.0" layoutY="186.0" startX="0.3553466796875" startY="-0.6446533203125" strokeWidth="3.0" />
+         </children>
+      </Pane>
+      <Text layoutX="428.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VERY SHARP (&gt; 30c)" textAlignment="CENTER" wrappingWidth="87.623046875" />
+      <Text layoutX="92.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VERY FLAT (&lt; -30c)" textAlignment="CENTER" wrappingWidth="67.826171875" />
+      <Text layoutX="382.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SHARP (&gt; 15c)" />
+      <Text layoutX="126.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" FLAT (&lt; -15c)" textAlignment="CENTER" wrappingWidth="87.623046875" />
+      <Text layoutX="266.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ACCURATE" />
+   </children>
+</AnchorPane>
