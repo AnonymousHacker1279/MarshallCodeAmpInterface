@@ -1,6 +1,7 @@
 module tech.anonymoushacker1279.marshallcodeampinterfacev2 {
 	requires javafx.fxml;
 	requires atlantafx.base;
+	requires org.jetbrains.annotations;
 	requires java.desktop;
 
 

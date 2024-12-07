@@ -174,6 +174,7 @@ public class CODEInterfaceController implements Initializable {
 	@FXML public ListView<String> presetListView;
 	@FXML public ToggleButton autoFlattenEQToggleButton;
 	@FXML public MenuItem aboutMenuItem;
+	@FXML public MenuItem openTunerMenuItem;
 
 	public boolean ignorePresetChange = false;
 	private HostServices hostServices;
@@ -428,6 +429,11 @@ public class CODEInterfaceController implements Initializable {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
+		});
+
+		openTunerMenuItem.setOnAction(event -> {
+			CODEInterfaceApplication.INTERFACE.toggleTuner(true);
+			TuningDialogController.openDialog(CODEInterfaceApplication.INTERFACE::setTuningDialogController);
 		});
 	}
 

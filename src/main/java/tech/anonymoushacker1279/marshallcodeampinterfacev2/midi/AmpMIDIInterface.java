@@ -1,9 +1,15 @@
 package tech.anonymoushacker1279.marshallcodeampinterfacev2.midi;
 
 
+import org.jetbrains.annotations.Nullable;
+import tech.anonymoushacker1279.marshallcodeampinterfacev2.TuningDialogController;
+
 import javax.sound.midi.InvalidMidiDataException;
 
 public abstract class AmpMIDIInterface {
+
+	@Nullable
+	private TuningDialogController tuningDialogController;
 
 	public AmpMIDIInterface() {}
 
@@ -35,6 +41,19 @@ public abstract class AmpMIDIInterface {
 	 * Close the connection to the device
 	 */
 	public abstract void close();
+
+	/**
+	 * Set the tuning dialog controller
+	 * @param tuningDialogController the tuning dialog controller
+	 */
+	public void setTuningDialogController(@Nullable TuningDialogController tuningDialogController) {
+		this.tuningDialogController = tuningDialogController;
+	}
+
+	@Nullable
+	public TuningDialogController getTuningDialogController() {
+		return tuningDialogController;
+	}
 
 	/**
 	 * Toggle the state of the preamp
@@ -582,6 +601,18 @@ public abstract class AmpMIDIInterface {
 	public void setReverbParameter4(float parameter4) {
 		try {
 			sendControlChange(113, (int) (parameter4 * 10));
+		} catch (InvalidMidiDataException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Toggle the state of the built-in amp tuner
+	 * @param state the state of the tuner
+	 */
+	public void toggleTuner(boolean state) {
+		try {
+			sendControlChange(52, state ? 1 : 0);
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);
 		}

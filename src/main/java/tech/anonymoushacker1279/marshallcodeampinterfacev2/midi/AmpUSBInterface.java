@@ -1,6 +1,8 @@
 package tech.anonymoushacker1279.marshallcodeampinterfacev2.midi;
 
+import org.jetbrains.annotations.Nullable;
 import tech.anonymoushacker1279.marshallcodeampinterfacev2.CODEInterfaceApplication;
+import tech.anonymoushacker1279.marshallcodeampinterfacev2.TuningDialogController;
 import tech.anonymoushacker1279.marshallcodeampinterfacev2.amp.AmpConfig;
 
 import javax.sound.midi.*;
@@ -51,7 +53,7 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 		return message;
 	}
 
-	private static class MessageReceiver implements Receiver {
+	private class MessageReceiver implements Receiver {
 
 		@Override
 		public void send(MidiMessage message, long timeStamp) {
@@ -61,11 +63,26 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 
 			if (message instanceof ShortMessage shortMessage) {
 				if (shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE) {
+					if (shortMessage.getData1() == 52) {
+						if (shortMessage.getData2() == 1) {
+							TuningDialogController.openDialog(AmpUSBInterface.this::setTuningDialogController);
+						} else {
+							if (getTuningDialogController() != null) {
+								TuningDialogController.closeDialog();
+								setTuningDialogController(null);
+							}
+						}
+					}
+
 					AmpConfig.updateInterface(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.DEFAULT_CONFIG, shortMessage.getData1(), shortMessage.getData2());
 				}
 				if (shortMessage.getCommand() == ShortMessage.PROGRAM_CHANGE) {
 					AmpConfig.setInterfaceValues(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.PRESETS.get(shortMessage.getData1()));
 					CODEInterfaceApplication.CONTROLLER.presetSearchTextField.clear();
+				}
+
+				if (shortMessage.getCommand() == ShortMessage.POLY_PRESSURE && getTuningDialogController() != null) {
+					getTuningDialogController().updateTuner(shortMessage.getData1(), shortMessage.getData2());
 				}
 			}
 		}
