@@ -1,13 +1,12 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2;
+package tech.anonymoushacker1279.marshallcodeampinterface;
 
 import atlantafx.base.theme.CupertinoDark;
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.amp.AmpConfig;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.midi.*;
+import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
+import tech.anonymoushacker1279.marshallcodeampinterface.midi.*;
 
 import javax.sound.midi.*;
 import java.io.IOException;

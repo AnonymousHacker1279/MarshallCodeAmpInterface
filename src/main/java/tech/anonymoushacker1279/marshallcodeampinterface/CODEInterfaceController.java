@@ -1,4 +1,4 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2;
+package tech.anonymoushacker1279.marshallcodeampinterface;
 
 import javafx.application.HostServices;
 import javafx.collections.*;
@@ -6,7 +6,7 @@ import javafx.fxml.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.amp.AmpConfig;
+import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.IOException;

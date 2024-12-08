@@ -1,4 +1,4 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2.midi;
+package tech.anonymoushacker1279.marshallcodeampinterface.midi;
 
 import javax.sound.midi.*;
 

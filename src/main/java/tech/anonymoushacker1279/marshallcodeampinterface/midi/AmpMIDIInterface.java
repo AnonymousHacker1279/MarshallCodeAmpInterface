@@ -1,8 +1,8 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2.midi;
+package tech.anonymoushacker1279.marshallcodeampinterface.midi;
 
 
 import org.jetbrains.annotations.Nullable;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.TuningDialogController;
+import tech.anonymoushacker1279.marshallcodeampinterface.TuningDialogController;
 
 import javax.sound.midi.InvalidMidiDataException;
 

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterfacev2.AboutDialogController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterface.AboutDialogController">
    <children>
       <Text layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A desktop program to modify amp settings without needing to use the Marshall Gateway app." textAlignment="CENTER" wrappingWidth="600.0">
          <font>

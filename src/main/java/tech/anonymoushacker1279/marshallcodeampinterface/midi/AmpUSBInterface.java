@@ -1,9 +1,8 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2.midi;
+package tech.anonymoushacker1279.marshallcodeampinterface.midi;
 
-import org.jetbrains.annotations.Nullable;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.CODEInterfaceApplication;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.TuningDialogController;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.amp.AmpConfig;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
+import tech.anonymoushacker1279.marshallcodeampinterface.TuningDialogController;
+import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 
 import javax.sound.midi.*;
 import java.util.ArrayList;

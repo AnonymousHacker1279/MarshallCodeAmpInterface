@@ -1,4 +1,4 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2;
+package tech.anonymoushacker1279.marshallcodeampinterface;
 
 import javafx.application.Platform;
 import javafx.fxml.*;

@@ -1,8 +1,8 @@
-package tech.anonymoushacker1279.marshallcodeampinterfacev2.amp;
+package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.CODEInterfaceApplication;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.CODEInterfaceController;
-import tech.anonymoushacker1279.marshallcodeampinterfacev2.midi.AmpMIDIInterface;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceController;
+import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 
 import java.util.Arrays;
 
