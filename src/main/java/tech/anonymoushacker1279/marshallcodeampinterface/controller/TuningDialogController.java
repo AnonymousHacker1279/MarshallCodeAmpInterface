@@ -1,12 +1,15 @@
-package tech.anonymoushacker1279.marshallcodeampinterface;
+package tech.anonymoushacker1279.marshallcodeampinterface.controller;
 
 import javafx.application.Platform;
-import javafx.fxml.*;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +21,7 @@ public class TuningDialogController implements Initializable {
 	@FXML TextField tunerTextField;
 	@FXML Line tuningLine;
 
-	private static final FXMLLoader fxmlLoader = new FXMLLoader(TuningDialogController.class.getResource("tuner-view.fxml"));
+	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("tuner-view.fxml"));
 	private static Scene scene;
 	private static Stage stage;
 	private final Rotate tuningLineRotate = new Rotate();

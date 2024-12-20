@@ -1,7 +1,7 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
-import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceController;
+import tech.anonymoushacker1279.marshallcodeampinterface.controller.CODEInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 
 import java.util.Arrays;
@@ -54,6 +54,14 @@ public class AmpConfig {
 	private AmpConfig() {}
 
 	/**
+	 * Create an empty AmpConfig instance. This should only be used for initialization.
+	 * @return an empty AmpConfig instance
+	 */
+	public static AmpConfig empty() {
+		return new AmpConfig();
+	}
+
+	/**
 	 * Create a new AmpConfig instance based on the current amp settings.
 	 * @param ampMIDIInterface the AmpMIDIInterface instance
 	 * @return a new AmpConfig instance
@@ -80,7 +88,7 @@ public class AmpConfig {
 	 * @return a new AmpConfig instance
 	 */
 	private static AmpConfig create(byte[] sysexData) {
-		// Remove first and last status bytes
+		// Remove status bytes
 		sysexData = Arrays.copyOfRange(sysexData, 1, sysexData.length - 1);
 		AmpConfig config = new AmpConfig();
 

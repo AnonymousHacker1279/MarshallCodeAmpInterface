@@ -2,7 +2,10 @@ package tech.anonymoushacker1279.marshallcodeampinterface.midi;
 
 
 import org.jetbrains.annotations.Nullable;
-import tech.anonymoushacker1279.marshallcodeampinterface.TuningDialogController;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
+import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
+import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpModel;
+import tech.anonymoushacker1279.marshallcodeampinterface.controller.TuningDialogController;
 
 import javax.sound.midi.InvalidMidiDataException;
 
@@ -38,9 +41,38 @@ public abstract class AmpMIDIInterface {
 	public abstract byte[] receiveSysexMessage();
 
 	/**
+	 * Validate an incoming sysex message to check for errors
+	 * @param message the sysex message
+	 * @return true if the message is valid, false otherwise
+	 */
+	public boolean validateSysexMessage(byte[] message) {
+		// Look for the sysex start and end bytes
+		if (message[0] != (byte) 0xF0 || message[message.length - 1] != (byte) 0xF7) {
+			System.out.println("Start/stop bytes missing!");
+			return false;
+		}
+
+		byte statusByte = message[7];
+		if (statusByte == 0x72 || statusByte == 0x73) {
+			if (message.length < 75) {
+				System.out.println("Message length too short!");
+			}
+			return message.length >= 75;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Close the connection to the device
 	 */
 	public abstract void close();
+
+	/**
+	 * Check if the device is ready to receive messages
+	 * @return true if the device is ready, false otherwise
+	 */
+	public abstract boolean isReady();
 
 	/**
 	 * Set the tuning dialog controller
@@ -53,6 +85,46 @@ public abstract class AmpMIDIInterface {
 	@Nullable
 	public TuningDialogController getTuningDialogController() {
 		return tuningDialogController;
+	}
+
+	/**
+	 * Handle an incoming control change message
+	 * @param control the control number
+	 * @param value the control value
+	 */
+	protected void handleControlChange(int control, int value) {
+		if (control == 52) {
+			if (value == 1) {
+				TuningDialogController.openDialog(this::setTuningDialogController);
+			} else {
+				if (getTuningDialogController() != null) {
+					TuningDialogController.closeDialog();
+					setTuningDialogController(null);
+				}
+			}
+		}
+
+		AmpConfig.updateInterface(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.DEFAULT_CONFIG, control, value);
+	}
+
+	/**
+	 * Handle an incoming program change message
+	 * @param preset the preset number
+	 */
+	protected void handlePresetChange(int preset) {
+		AmpConfig.setInterfaceValues(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.PRESETS.get(preset));
+		CODEInterfaceApplication.CONTROLLER.presetSearchTextField.clear();
+	}
+
+	/**
+	 * Handle an incoming tuning data change message
+	 * @param note the note
+	 * @param accuracy the accuracy
+	 */
+	protected void handleTuningDataChange(int note, int accuracy) {
+		if (getTuningDialogController() != null) {
+			getTuningDialogController().updateTuner(note, accuracy);
+		}
 	}
 
 	/**
@@ -637,6 +709,46 @@ public abstract class AmpMIDIInterface {
 		try {
 			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x01, (byte) preset, (byte) 0xF7});
 			return receiveSysexMessage();
+		} catch (InvalidMidiDataException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Set the amp hardware information in the interface.
+	 */
+	public void setAmpHardwareInformation() {
+		try {
+			AmpModel.load();
+			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x10, (byte) 0xF7});
+			byte[] message = receiveSysexMessage();
+			CODEInterfaceApplication.CONTROLLER.serialNumberTextField.setText(new String(message, 9, 18));
+
+			int familyId = message[4] & 0xFF;
+			int modelId = message[5] & 0xFF;
+			int deviceId = message[6] & 0xFF;
+			AmpModel model = AmpModel.getModel(familyId, modelId, deviceId);
+			CODEInterfaceApplication.CONTROLLER.modelTextField.setText(model.ampName());
+
+			int majorHardwareVersion = message[19] & 0xFF;
+			int minorHardwareVersion = message[20] & 0xFF;
+			CODEInterfaceApplication.CONTROLLER.revisionTextField.setText("v" + majorHardwareVersion + "." + minorHardwareVersion);
+
+			int majorBootloaderVersion = message[21] & 0xFF;
+			int minorBootloaderVersion = message[22] & 0xFF;
+			CODEInterfaceApplication.CONTROLLER.bootloaderTextField.setText("v" + majorBootloaderVersion + "." + minorBootloaderVersion);
+
+			int majorMcuVersion = message[27] & 0xFF;
+			int minorMcuVersion = message[28] & 0xFF;
+			CODEInterfaceApplication.CONTROLLER.mcuTextField.setText("v" + majorMcuVersion + "." + minorMcuVersion);
+
+			int majorDspVersion = message[32] & 0xFF;
+			int minorDspVersion = message[33] & 0xFF;
+			CODEInterfaceApplication.CONTROLLER.dspTextField.setText("v" + majorDspVersion + "." + minorDspVersion);
+
+			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x62, 0x01, 0x04, (byte) 0xF7});
+			message = receiveSysexMessage();
+			CODEInterfaceApplication.CONTROLLER.bluetoothTextField.setText(new String(message, 11, 3));
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);
 		}

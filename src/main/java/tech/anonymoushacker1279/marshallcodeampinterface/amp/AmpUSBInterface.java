@@ -1,8 +1,7 @@
-package tech.anonymoushacker1279.marshallcodeampinterface.midi;
+package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
-import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
-import tech.anonymoushacker1279.marshallcodeampinterface.TuningDialogController;
-import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
+import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
+import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
 import javax.sound.midi.*;
 import java.util.ArrayList;
@@ -15,6 +14,11 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 	public AmpUSBInterface(IOMIDIDevice device) {
 		this.device = device;
 		device.setReceiver(new MessageReceiver());
+	}
+
+	@Override
+	public boolean isReady() {
+		return true;
 	}
 
 	@Override
@@ -62,26 +66,14 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 
 			if (message instanceof ShortMessage shortMessage) {
 				if (shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE) {
-					if (shortMessage.getData1() == 52) {
-						if (shortMessage.getData2() == 1) {
-							TuningDialogController.openDialog(AmpUSBInterface.this::setTuningDialogController);
-						} else {
-							if (getTuningDialogController() != null) {
-								TuningDialogController.closeDialog();
-								setTuningDialogController(null);
-							}
-						}
-					}
-
-					AmpConfig.updateInterface(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.DEFAULT_CONFIG, shortMessage.getData1(), shortMessage.getData2());
+					handleControlChange(shortMessage.getData1(), shortMessage.getData2());
 				}
 				if (shortMessage.getCommand() == ShortMessage.PROGRAM_CHANGE) {
-					AmpConfig.setInterfaceValues(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.PRESETS.get(shortMessage.getData1()));
-					CODEInterfaceApplication.CONTROLLER.presetSearchTextField.clear();
+					handlePresetChange(shortMessage.getData1());
 				}
 
 				if (shortMessage.getCommand() == ShortMessage.POLY_PRESSURE && getTuningDialogController() != null) {
-					getTuningDialogController().updateTuner(shortMessage.getData1(), shortMessage.getData2());
+					handleTuningDataChange(shortMessage.getData1(), shortMessage.getData2());
 				}
 			}
 		}

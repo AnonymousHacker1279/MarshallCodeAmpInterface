@@ -1,4 +1,4 @@
-package tech.anonymoushacker1279.marshallcodeampinterface;
+package tech.anonymoushacker1279.marshallcodeampinterface.controller;
 
 import javafx.application.HostServices;
 import javafx.fxml.FXML;

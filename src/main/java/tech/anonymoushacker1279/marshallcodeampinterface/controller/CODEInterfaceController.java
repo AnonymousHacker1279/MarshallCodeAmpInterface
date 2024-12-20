@@ -1,11 +1,17 @@
-package tech.anonymoushacker1279.marshallcodeampinterface;
+package tech.anonymoushacker1279.marshallcodeampinterface.controller;
 
+import atlantafx.base.controls.RingProgressIndicator;
 import javafx.application.HostServices;
-import javafx.collections.*;
-import javafx.fxml.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -175,6 +181,15 @@ public class CODEInterfaceController implements Initializable {
 	@FXML public ToggleButton autoFlattenEQToggleButton;
 	@FXML public MenuItem aboutMenuItem;
 	@FXML public MenuItem openTunerMenuItem;
+	@FXML public ImageView connectionMethodImageView;
+	@FXML public RingProgressIndicator presetLoadingIndicator;
+	@FXML public TextField modelTextField;
+	@FXML public TextField serialNumberTextField;
+	@FXML public TextField revisionTextField;
+	@FXML public TextField bootloaderTextField;
+	@FXML public TextField mcuTextField;
+	@FXML public TextField dspTextField;
+	@FXML public TextField bluetoothTextField;
 
 	public boolean ignorePresetChange = false;
 	private HostServices hostServices;
@@ -416,7 +431,7 @@ public class CODEInterfaceController implements Initializable {
 		});
 
 		aboutMenuItem.setOnAction(event -> {
-			FXMLLoader fxmlLoader = new FXMLLoader(AboutDialogController.class.getResource("about-view.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("about-view.fxml"));
 			try {
 				Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 				Stage stage = new Stage();
