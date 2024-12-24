@@ -51,10 +51,12 @@ public class AmpConfig {
 
 	private static int DELAY_TIME_MSB = -1;
 
-	private AmpConfig() {}
+	private AmpConfig() {
+	}
 
 	/**
 	 * Create an empty AmpConfig instance. This should only be used for initialization.
+	 *
 	 * @return an empty AmpConfig instance
 	 */
 	public static AmpConfig empty() {
@@ -63,6 +65,7 @@ public class AmpConfig {
 
 	/**
 	 * Create a new AmpConfig instance based on the current amp settings.
+	 *
 	 * @param ampMIDIInterface the AmpMIDIInterface instance
 	 * @return a new AmpConfig instance
 	 */
@@ -73,8 +76,9 @@ public class AmpConfig {
 
 	/**
 	 * Create a new AmpConfig instance based on the provided preset number.
+	 *
 	 * @param ampMIDIInterface the AmpMIDIInterface instance
-	 * @param presetNumber the preset number
+	 * @param presetNumber     the preset number
 	 * @return a new AmpConfig instance
 	 */
 	public static AmpConfig create(AmpMIDIInterface ampMIDIInterface, int presetNumber) {
@@ -82,8 +86,9 @@ public class AmpConfig {
 	}
 
 	/**
-	 * Create a new AmpConfig instance based on the provided sysex data.
-	 * Use {@link AmpMIDIInterface#getAmpConfig()} to get the current amp configuration.
+	 * Create a new AmpConfig instance based on the provided sysex data. Use {@link AmpMIDIInterface#getAmpConfig()} to
+	 * get the current amp configuration.
+	 *
 	 * @param sysexData a byte array of sysex data
 	 * @return a new AmpConfig instance
 	 */
@@ -213,7 +218,7 @@ public class AmpConfig {
 				controller.tremoloModeListView.getSelectionModel().select(config.modulationParameter1);
 				controller.tremoloSpeedSlider.setValue(config.modulationParameter2 / 10f);
 				controller.tremoloDepthSlider.setValue(config.modulationParameter3 / 10f);
-				controller.tremoloSkewSlider.setValue(config.modulationParameter4  - 50);
+				controller.tremoloSkewSlider.setValue(config.modulationParameter4 - 50);
 			}
 		}
 

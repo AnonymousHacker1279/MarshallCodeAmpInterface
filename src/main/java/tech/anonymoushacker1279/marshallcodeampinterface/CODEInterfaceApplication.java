@@ -17,8 +17,8 @@ import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
 import javax.sound.midi.MidiUnavailableException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CODEInterfaceApplication extends Application {
 
@@ -34,21 +34,18 @@ public class CODEInterfaceApplication extends Application {
 		Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
 
 		FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("main-view.fxml"));
-		Scene scene = new Scene(fxmlLoader.load(), 1280, 1100);
+		Scene scene = new Scene(fxmlLoader.load(), 1260, 1070);
 		stage.setTitle("Marshall CODE Interface");
+		stage.setMaxWidth(1260);
+		stage.setMaxHeight(1070);
+		stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
 		stage.setScene(scene);
 		stage.show();
 		CONTROLLER = fxmlLoader.getController();
 		CONTROLLER.setHostServices(getHostServices());
 
 		if (INTERFACE instanceof AmpBLEInterface) {
-			InputStream stream = CODEInterfaceApplication.class.getResourceAsStream("bluetooth.png");
-
-			if (stream == null) {
-				throw new RuntimeException("Failed to load BLE image");
-			}
-
-			CONTROLLER.connectionMethodImageView.setImage(new Image(stream));
+			CONTROLLER.connectionMethodImageView.setImage(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("bluetooth.png"))));
 		}
 
 		new Thread(this::loadPresets).start();

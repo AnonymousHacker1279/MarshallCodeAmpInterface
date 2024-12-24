@@ -18,8 +18,10 @@ import java.util.function.Consumer;
 
 public class TuningDialogController implements Initializable {
 
-	@FXML TextField tunerTextField;
-	@FXML Line tuningLine;
+	@FXML
+	TextField tunerTextField;
+	@FXML
+	Line tuningLine;
 
 	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("tuner-view.fxml"));
 	private static Scene scene;
@@ -34,10 +36,10 @@ public class TuningDialogController implements Initializable {
 	}
 
 	/**
-	 * Update the tuner display. The note is the MIDI note number and the accuracy is a value between 0 and 5
-	 * 0 being "very flat" and 5 being "very sharp"
+	 * Update the tuner display. The note is the MIDI note number and the accuracy is a value between 0 and 5, with 0
+	 * being "very flat" and 5 being "very sharp".
 	 *
-	 * @param note the MIDI note number
+	 * @param note     the MIDI note number
 	 * @param accuracy the accuracy value
 	 */
 	public void updateTuner(int note, int accuracy) {
@@ -68,6 +70,7 @@ public class TuningDialogController implements Initializable {
 					stage = new Stage();
 					stage.setTitle("Tuner");
 					stage.setScene(scene);
+					stage.setResizable(false);
 
 					stage.setOnCloseRequest(event -> {
 						event.consume();

@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 public record BTConfigurationData(String name, String address, boolean isPaired) {
 
 	/**
-	 * Save a BLE device configuration to disk, to improve application startup performance.
-	 * This allows discovery to be skipped if the device is known and still exists.
+	 * Save a BLE device configuration to disk, to improve application startup performance. This allows discovery to be
+	 * skipped if the device is known and still exists.
 	 */
 	public void save() {
 		Gson gson = new Gson();
@@ -28,6 +28,7 @@ public record BTConfigurationData(String name, String address, boolean isPaired)
 
 	/**
 	 * Load a BLE device configuration from disk.
+	 *
 	 * @return the configuration data, or null if it could not be loaded
 	 */
 	@Nullable

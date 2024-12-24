@@ -14,23 +14,27 @@ public abstract class AmpMIDIInterface {
 	@Nullable
 	private TuningDialogController tuningDialogController;
 
-	public AmpMIDIInterface() {}
+	public AmpMIDIInterface() {
+	}
 
 	/**
 	 * Send a control change message to the connected device
+	 *
 	 * @param control the control number
-	 * @param value the control value
+	 * @param value   the control value
 	 */
 	public abstract void sendControlChange(int control, int value) throws InvalidMidiDataException;
 
 	/**
 	 * Send a program change message to the connected device
+	 *
 	 * @param program the program number
 	 */
 	public abstract void sendProgramChange(int program) throws InvalidMidiDataException;
 
 	/**
 	 * Send a sysex message to the connected device
+	 *
 	 * @param message the sysex message
 	 */
 	public abstract void sendSysexMessage(byte[] message) throws InvalidMidiDataException;
@@ -42,6 +46,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Validate an incoming sysex message to check for errors
+	 *
 	 * @param message the sysex message
 	 * @return true if the message is valid, false otherwise
 	 */
@@ -70,12 +75,14 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Check if the device is ready to receive messages
+	 *
 	 * @return true if the device is ready, false otherwise
 	 */
 	public abstract boolean isReady();
 
 	/**
 	 * Set the tuning dialog controller
+	 *
 	 * @param tuningDialogController the tuning dialog controller
 	 */
 	public void setTuningDialogController(@Nullable TuningDialogController tuningDialogController) {
@@ -89,8 +96,9 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Handle an incoming control change message
+	 *
 	 * @param control the control number
-	 * @param value the control value
+	 * @param value   the control value
 	 */
 	protected void handleControlChange(int control, int value) {
 		if (control == 52) {
@@ -109,6 +117,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Handle an incoming program change message
+	 *
 	 * @param preset the preset number
 	 */
 	protected void handlePresetChange(int preset) {
@@ -118,7 +127,8 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Handle an incoming tuning data change message
-	 * @param note the note
+	 *
+	 * @param note     the note
 	 * @param accuracy the accuracy
 	 */
 	protected void handleTuningDataChange(int note, int accuracy) {
@@ -129,6 +139,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of the preamp
+	 *
 	 * @param state the state of the preamp
 	 */
 	public void togglePreamp(boolean state) {
@@ -141,6 +152,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the preamp type. Must be an integer between 0 and 14.
+	 *
 	 * @param type the preamp type
 	 */
 	public void setPreampType(int type) {
@@ -153,6 +165,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the gain of the preamp. Must be a float between 0 and 10.
+	 *
 	 * @param gain the gain of the preamp
 	 */
 	public void setGain(float gain) {
@@ -165,6 +178,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the volume of the preamp. Must be a float between 0 and 10.
+	 *
 	 * @param volume the volume of the preamp
 	 */
 	public void setVolume(float volume) {
@@ -177,6 +191,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the gate threshold of the preamp. Must be a float between 0 and 10.
+	 *
 	 * @param gate the gate threshold of the preamp
 	 */
 	public void setGate(float gate) {
@@ -189,6 +204,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the bass of the preamp. Must be a float between 0 and 10.
+	 *
 	 * @param bass the bass of the preamp
 	 */
 	public void setBass(float bass) {
@@ -201,6 +217,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the middle of the preamp. Must be a float between 0 and 10.
+	 *
 	 * @param middle the middle of the preamp
 	 */
 	public void setMiddle(float middle) {
@@ -213,6 +230,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the treble of the preamp. Must be a float between 0 and 10.
+	 *
 	 * @param treble the treble of the preamp
 	 */
 	public void setTreble(float treble) {
@@ -225,6 +243,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of the power amp
+	 *
 	 * @param state the state of the power amp
 	 */
 	public void togglePowerAmp(boolean state) {
@@ -237,6 +256,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the power amp type. Must be an integer between 0 and 3.
+	 *
 	 * @param type the power amp type
 	 */
 	public void setPowerAmpType(int type) {
@@ -249,6 +269,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the presence of the power amp. Must be a float between 0 and 10.
+	 *
 	 * @param presence the presence of the power amp
 	 */
 	public void setPresence(float presence) {
@@ -261,6 +282,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the resonance of the power amp. Must be a float between 0 and 10.
+	 *
 	 * @param resonance the resonance of the power amp
 	 */
 	public void setResonance(float resonance) {
@@ -273,6 +295,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of the cab
+	 *
 	 * @param state the state of the cab
 	 */
 	public void toggleCab(boolean state) {
@@ -285,6 +308,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Set the cab type. Must be an integer between 0 and 7.
+	 *
 	 * @param type the cab type
 	 */
 	public void setCabType(int type) {
@@ -297,6 +321,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of the preFX pedal
+	 *
 	 * @param state the state of the preFX pedal
 	 */
 	public void togglePreFXPedal(boolean state) {
@@ -308,14 +333,14 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set the preFX pedal type. Must be an integer between 0 and 3.
-	 * The pedal types are as follows:
+	 * Set the preFX pedal type. Must be an integer between 0 and 3. The pedal types are as follows:
 	 * <ol>
 	 * <li>Compressor</li>
 	 * <li>Distortion</li>
 	 * <li>Auto Wah</li>
 	 * <li>Pitch Shifter</li>
 	 * </ol>
+	 *
 	 * @param type the preFX pedal type
 	 */
 	public void setPreFXPedalType(int type) {
@@ -339,8 +364,9 @@ public abstract class AmpMIDIInterface {
 	 *         </p>
 	 *     </li>
 	 * </ol>
+	 *
 	 * @param parameter1 the preFX pedal parameter 1
-	 * @param pedalType the type of pedal
+	 * @param pedalType  the type of pedal
 	 */
 	public void setPedalParameter1(float parameter1, int pedalType) {
 		try {
@@ -362,8 +388,9 @@ public abstract class AmpMIDIInterface {
 	 *     <li>Auto Wah (Freq): 0-10</li>
 	 *     <li>Pitch Shifter (Fine): -50-50</li>
 	 * </ol>
+	 *
 	 * @param parameter2 the preFX pedal parameter 2
-	 * @param pedalType the type of pedal
+	 * @param pedalType  the type of pedal
 	 */
 	public void setPedalParameter2(float parameter2, int pedalType) {
 		try {
@@ -384,6 +411,7 @@ public abstract class AmpMIDIInterface {
 	 *     <li>Auto Wah (Sensitivity)</li>
 	 *     <li>Pitch Shifter (Regen)</li>
 	 * </ol>
+	 *
 	 * @param parameter3 the preFX pedal parameter 3
 	 */
 	public void setPedalParameter3(float parameter3) {
@@ -395,13 +423,15 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set preFX pedal parameter 4. The accepted value is not dependent on the pedal type, and will always be between 0 and 10.
+	 * Set preFX pedal parameter 4. The accepted value is not dependent on the pedal type, and will always be between 0
+	 * and 10.
 	 * <ol>
 	 *     <li>Compressor (Level)</li>
 	 *     <li>Distortion (Level)</li>
 	 *     <li>Auto Wah (Res)</li>
 	 *     <li>Pitch Shifter (Mix)</li>
 	 * </ol>
+	 *
 	 * @param parameter4 the preFX pedal parameter 4
 	 */
 	public void setPedalParameter4(float parameter4) {
@@ -414,6 +444,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of modulation
+	 *
 	 * @param state the state of modulation
 	 */
 	public void toggleModulation(boolean state) {
@@ -425,14 +456,14 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set the modulation type. Must be an integer between 0 and 3.
-	 * The modulation types are as follows:
+	 * Set the modulation type. Must be an integer between 0 and 3. The modulation types are as follows:
 	 * <ol>
 	 * <li>Chorus</li>
 	 * <li>Flanger</li>
 	 * <li>Phaser</li>
 	 * <li>Tremolo</li>
 	 * </ol>
+	 *
 	 * @param type the modulation type
 	 */
 	public void setModulationType(int type) {
@@ -444,8 +475,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set modulation parameter 1. The accepted value is not dependent on the modulation type, and will always be between 0 and 1.
-	 * This always sets the mode of the selected modulation type.
+	 * Set modulation parameter 1. The accepted value is not dependent on the modulation type, and will always be
+	 * between 0 and 1. This always sets the mode of the selected modulation type.
+	 *
 	 * @param parameter1 the modulation parameter 1
 	 */
 	public void setModulationParameter1(float parameter1) {
@@ -457,8 +489,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set modulation parameter 2. The accepted value is not dependent on the modulation type, and will always be between 0 and 10.
-	 * This always sets the speed of the selected modulation type.
+	 * Set modulation parameter 2. The accepted value is not dependent on the modulation type, and will always be
+	 * between 0 and 10. This always sets the speed of the selected modulation type.
+	 *
 	 * @param parameter2 the modulation parameter 2
 	 */
 	public void setModulationParameter2(float parameter2) {
@@ -470,8 +503,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set modulation parameter 3. The accepted value is not dependent on the modulation type, and will always be between 0 and 10.
-	 * This always sets the depth of the selected modulation type.
+	 * Set modulation parameter 3. The accepted value is not dependent on the modulation type, and will always be
+	 * between 0 and 10. This always sets the depth of the selected modulation type.
+	 *
 	 * @param parameter3 the modulation parameter 3
 	 */
 	public void setModulationParameter3(float parameter3) {
@@ -489,6 +523,7 @@ public abstract class AmpMIDIInterface {
 	 *     <li>Flanger (Regen): 0-10</li>
 	 *     <li>Phaser (Regen): 0-10</li>
 	 *     <li>Tremolo (Skew): -50-50</li>
+	 *
 	 * @param parameter4 the modulation parameter 4
 	 */
 	public void setModulationParameter4(float parameter4, int modulationType) {
@@ -504,6 +539,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of delay
+	 *
 	 * @param state the state of delay
 	 */
 	public void toggleDelay(boolean state) {
@@ -515,14 +551,14 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set the delay type. Must be an integer between 0 and 3.
-	 * The delay types are as follows:
+	 * Set the delay type. Must be an integer between 0 and 3. The delay types are as follows:
 	 * <ol>
 	 * <li>Studio</li>
 	 * <li>Vintage</li>
 	 * <li>Multi</li>
 	 * <li>Reverse</li>
 	 * </ol>
+	 *
 	 * @param type the delay type
 	 */
 	public void setDelayType(int type) {
@@ -534,8 +570,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set delay parameter 1. The accepted value is not dependent on the delay type, and will always be between 0 and 4000.
-	 * This always sets the time of the selected delay type.
+	 * Set delay parameter 1. The accepted value is not dependent on the delay type, and will always be between 0 and
+	 * 4000. This always sets the time of the selected delay type.
+	 *
 	 * @param parameter1 the delay parameter 1
 	 */
 	public void setDelayParameter1(float parameter1) {
@@ -549,8 +586,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set delay parameter 2. The accepted value is not dependent on the delay type, and will always be between 0 and 10.
-	 * This always sets the feedback/age of the selected delay type.
+	 * Set delay parameter 2. The accepted value is not dependent on the delay type, and will always be between 0 and
+	 * 10. This always sets the feedback/age of the selected delay type.
+	 *
 	 * @param parameter2 the delay parameter 2
 	 */
 	public void setDelayParameter2(float parameter2) {
@@ -569,6 +607,7 @@ public abstract class AmpMIDIInterface {
 	 *     <li>Multi (Tap Pattern): 0-3</li>
 	 *     <li>Reverse (Freq): 0-10</li>
 	 * </ol>
+	 *
 	 * @param parameter3 the delay parameter 3
 	 */
 	public void setDelayParameter3(float parameter3, int delayType) {
@@ -583,8 +622,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set delay parameter 4. The accepted value is not dependent on the delay type, and will always be between 0 and 10.
-	 * This always sets the level of the selected delay type.
+	 * Set delay parameter 4. The accepted value is not dependent on the delay type, and will always be between 0 and
+	 * 10. This always sets the level of the selected delay type.
+	 *
 	 * @param parameter4 the delay parameter 4
 	 */
 	public void setDelayParameter4(float parameter4) {
@@ -597,6 +637,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of reverb
+	 *
 	 * @param state the state of reverb
 	 */
 	public void toggleReverb(boolean state) {
@@ -608,14 +649,14 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set the reverb type. Must be an integer between 0 and 3.
-	 * The reverb types are as follows:
+	 * Set the reverb type. Must be an integer between 0 and 3. The reverb types are as follows:
 	 * <ol>
 	 *     <li>Room</li>
 	 *     <li>Hall</li>
 	 *     <li>Spring</li>
 	 *     <li>Stadium</li>
 	 * </ol>
+	 *
 	 * @param type the reverb type
 	 */
 	public void setReverbType(int type) {
@@ -627,8 +668,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set reverb parameter 1. The accepted value is not dependent on the reverb type, and will always be between 0 and 10.
-	 * This always sets the decay of the selected reverb type.
+	 * Set reverb parameter 1. The accepted value is not dependent on the reverb type, and will always be between 0 and
+	 * 10. This always sets the decay of the selected reverb type.
+	 *
 	 * @param parameter1 the reverb parameter 1
 	 */
 	public void setReverbParameter1(float parameter1) {
@@ -640,8 +682,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set reverb parameter 2. The accepted value is not dependent on the reverb type, and will always be between 0 and 10.
-	 * This always sets the pre-delay of the selected reverb type.
+	 * Set reverb parameter 2. The accepted value is not dependent on the reverb type, and will always be between 0 and
+	 * 10. This always sets the pre-delay of the selected reverb type.
+	 *
 	 * @param parameter2 the reverb parameter 2
 	 */
 	public void setReverbParameter2(float parameter2) {
@@ -653,8 +696,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set reverb parameter 3. The accepted value is not dependent on the reverb type, and will always be between 0 and 10.
-	 * This always sets the tone of the selected reverb type.
+	 * Set reverb parameter 3. The accepted value is not dependent on the reverb type, and will always be between 0 and
+	 * 10. This always sets the tone of the selected reverb type.
+	 *
 	 * @param parameter3 the reverb parameter 3
 	 */
 	public void setReverbParameter3(float parameter3) {
@@ -666,8 +710,9 @@ public abstract class AmpMIDIInterface {
 	}
 
 	/**
-	 * Set reverb parameter 4. The accepted value is not dependent on the reverb type, and will always be between 0 and 10.
-	 * This always sets the level of the selected reverb type.
+	 * Set reverb parameter 4. The accepted value is not dependent on the reverb type, and will always be between 0 and
+	 * 10. This always sets the level of the selected reverb type.
+	 *
 	 * @param parameter4 the reverb parameter 4
 	 */
 	public void setReverbParameter4(float parameter4) {
@@ -680,6 +725,7 @@ public abstract class AmpMIDIInterface {
 
 	/**
 	 * Toggle the state of the built-in amp tuner
+	 *
 	 * @param state the state of the tuner
 	 */
 	public void toggleTuner(boolean state) {
@@ -695,7 +741,7 @@ public abstract class AmpMIDIInterface {
 	 */
 	public byte[] getAmpConfig() {
 		try {
-			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00, (byte) 0xF7});
+			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00, (byte) 0xF7});
 			return receiveSysexMessage();
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);
@@ -707,7 +753,7 @@ public abstract class AmpMIDIInterface {
 	 */
 	public byte[] getAmpConfig(int preset) {
 		try {
-			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x01, (byte) preset, (byte) 0xF7});
+			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x01, (byte) preset, (byte) 0xF7});
 			return receiveSysexMessage();
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);
@@ -720,7 +766,7 @@ public abstract class AmpMIDIInterface {
 	public void setAmpHardwareInformation() {
 		try {
 			AmpModel.load();
-			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x10, (byte) 0xF7});
+			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x10, (byte) 0xF7});
 			byte[] message = receiveSysexMessage();
 			CODEInterfaceApplication.CONTROLLER.serialNumberTextField.setText(new String(message, 9, 18));
 
@@ -746,7 +792,7 @@ public abstract class AmpMIDIInterface {
 			int minorDspVersion = message[33] & 0xFF;
 			CODEInterfaceApplication.CONTROLLER.dspTextField.setText("v" + majorDspVersion + "." + minorDspVersion);
 
-			sendSysexMessage(new byte[] {(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x62, 0x01, 0x04, (byte) 0xF7});
+			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x62, 0x01, 0x04, (byte) 0xF7});
 			message = receiveSysexMessage();
 			CODEInterfaceApplication.CONTROLLER.bluetoothTextField.setText(new String(message, 11, 3));
 		} catch (InvalidMidiDataException e) {

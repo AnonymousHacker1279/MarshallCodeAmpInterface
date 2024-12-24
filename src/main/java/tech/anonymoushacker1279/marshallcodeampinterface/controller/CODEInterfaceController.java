@@ -5,17 +5,13 @@ import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 
 import javax.sound.midi.InvalidMidiDataException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
@@ -23,173 +19,340 @@ import java.util.function.Consumer;
 
 public class CODEInterfaceController implements Initializable {
 
-	@FXML public ToggleButton ampToggleButton;
-	@FXML public ListView<String> ampListView;
-	@FXML public Slider gainSlider;
-	@FXML public TextField gainTextField;
-	@FXML public Slider volumeSlider;
-	@FXML public TextField volumeTextField;
-	@FXML public Slider gateSlider;
-	@FXML public TextField gateTextField;
-	@FXML public Slider bassSlider;
-	@FXML public TextField bassTextField;
-	@FXML public Slider middleSlider;
-	@FXML public TextField middleTextField;
-	@FXML public Slider trebleSlider;
-	@FXML public TextField trebleTextField;
-	@FXML public ToggleButton powerToggleButton;
-	@FXML public ListView<String> powerListView;
-	@FXML public Slider presenceSlider;
-	@FXML public TextField presenceTextField;
-	@FXML public Slider resonanceSlider;
-	@FXML public TextField resonanceTextField;
-	@FXML public ToggleButton cabToggleButton;
-	@FXML public ListView<String> cabListView;
-	@FXML public ToggleButton preFXToggleButton;
-	@FXML public TabPane preFXTabPane;
-	@FXML public Slider compressorToneSlider;
-	@FXML public TextField compressorToneTextField;
-	@FXML public Slider compressorRatioSlider;
-	@FXML public TextField compressorRatioTextField;
-	@FXML public Slider compressorCompSlider;
-	@FXML public TextField compressorCompTextField;
-	@FXML public Slider compressorLevelSlider;
-	@FXML public TextField compressorLevelTextField;
-	@FXML public ListView<String> distortionModeListView;
-	@FXML public Slider distortionDriveSlider;
-	@FXML public TextField distortionDriveTextField;
-	@FXML public Slider distortionToneSlider;
-	@FXML public TextField distortionToneTextField;
-	@FXML public Slider distortionLevelSlider;
-	@FXML public TextField distortionLevelTextField;
-	@FXML public ListView<String> autoWahModeListView;
-	@FXML public Slider autoWahFreqSlider;
-	@FXML public TextField autoWahFreqTextField;
-	@FXML public Slider autoWahSensitivitySlider;
-	@FXML public TextField autoWahSensitivityTextField;
-	@FXML public Slider autoWahResSlider;
-	@FXML public TextField autoWahResTextField;
-	@FXML public Slider pitchShifterSemitoneSlider;
-	@FXML public TextField pitchShifterSemitoneTextField;
-	@FXML public Slider pitchShifterFineSlider;
-	@FXML public TextField pitchShifterFineTextField;
-	@FXML public Slider pitchShifterRegenSlider;
-	@FXML public TextField pitchShifterRegenTextField;
-	@FXML public Slider pitchShifterMixSlider;
-	@FXML public TextField pitchShifterMixTextField;
-	@FXML public ToggleButton modulationToggleButton;
-	@FXML public TabPane modulationTabPane;
-	@FXML public ListView<String> chorusModeListView;
-	@FXML public Slider chorusSpeedSlider;
-	@FXML public TextField chorusSpeedTextField;
-	@FXML public Slider chorusDepthSlider;
-	@FXML public TextField chorusDepthTextField;
-	@FXML public Slider chorusToneSlider;
-	@FXML public TextField chorusToneTextField;
-	@FXML public ListView<String> flangerModeListView;
-	@FXML public Slider flangerSpeedSlider;
-	@FXML public TextField flangerSpeedTextField;
-	@FXML public Slider flangerDepthSlider;
-	@FXML public TextField flangerDepthTextField;
-	@FXML public Slider flangerRegenSlider;
-	@FXML public TextField flangerRegenTextField;
-	@FXML public ListView<String> phaserModeListView;
-	@FXML public Slider phaserSpeedSlider;
-	@FXML public TextField phaserSpeedTextField;
-	@FXML public Slider phaserDepthSlider;
-	@FXML public TextField phaserDepthTextField;
-	@FXML public Slider phaserRegenSlider;
-	@FXML public TextField phaserRegenTextField;
-	@FXML public ListView<String> tremoloModeListView;
-	@FXML public Slider tremoloSpeedSlider;
-	@FXML public TextField tremoloSpeedTextField;
-	@FXML public Slider tremoloDepthSlider;
-	@FXML public TextField tremoloDepthTextField;
-	@FXML public Slider tremoloSkewSlider;
-	@FXML public TextField tremoloSkewTextField;
-	@FXML public ToggleButton delayToggleButton;
-	@FXML public TabPane delayTabPane;
-	@FXML public Slider studioTimeSlider;
-	@FXML public TextField studioTimeTextField;
-	@FXML public Slider studioFeedbackSlider;
-	@FXML public TextField studioFeedbackTextField;
-	@FXML public Slider studioFreqSlider;
-	@FXML public TextField studioFreqTextField;
-	@FXML public Slider studioLevelSlider;
-	@FXML public TextField studioLevelTextField;
-	@FXML public Slider vintageTimeSlider;
-	@FXML public TextField vintageTimeTextField;
-	@FXML public Slider vintageAgeSlider;
-	@FXML public TextField vintageAgeTextField;
-	@FXML public Slider vintageFreqSlider;
-	@FXML public TextField vintageFreqTextField;
-	@FXML public Slider vintageLevelSlider;
-	@FXML public TextField vintageLevelTextField;
-	@FXML public Slider multiTimeSlider;
-	@FXML public TextField multiTimeTextField;
-	@FXML public Slider multiFeedbackSlider;
-	@FXML public TextField multiFeedbackTextField;
-	@FXML public ListView<Integer> multiTapPatternListView;
-	@FXML public Slider multiLevelSlider;
-	@FXML public TextField multiLevelTextField;
-	@FXML public Slider reverseTimeSlider;
-	@FXML public TextField reverseTimeTextField;
-	@FXML public Slider reverseFeedbackSlider;
-	@FXML public TextField reverseFeedbackTextField;
-	@FXML public Slider reverseFreqSlider;
-	@FXML public TextField reverseFreqTextField;
-	@FXML public Slider reverseLevelSlider;
-	@FXML public TextField reverseLevelTextField;
-	@FXML public ToggleButton reverbToggleButton;
-	@FXML public TabPane reverbTabPane;
-	@FXML public Slider roomDecaySlider;
-	@FXML public TextField roomDecayTextField;
-	@FXML public Slider roomPreDelaySlider;
-	@FXML public TextField roomPreDelayTextField;
-	@FXML public Slider roomToneSlider;
-	@FXML public TextField roomToneTextField;
-	@FXML public Slider roomLevelSlider;
-	@FXML public TextField roomLevelTextField;
-	@FXML public Slider hallDecaySlider;
-	@FXML public TextField hallDecayTextField;
-	@FXML public Slider hallPreDelaySlider;
-	@FXML public TextField hallPreDelayTextField;
-	@FXML public Slider hallToneSlider;
-	@FXML public TextField hallToneTextField;
-	@FXML public Slider hallLevelSlider;
-	@FXML public TextField hallLevelTextField;
-	@FXML public Slider springDecaySlider;
-	@FXML public TextField springDecayTextField;
-	@FXML public Slider springPreDelaySlider;
-	@FXML public TextField springPreDelayTextField;
-	@FXML public Slider springToneSlider;
-	@FXML public TextField springToneTextField;
-	@FXML public Slider springLevelSlider;
-	@FXML public TextField springLevelTextField;
-	@FXML public Slider stadiumDecaySlider;
-	@FXML public TextField stadiumDecayTextField;
-	@FXML public Slider stadiumPreDelaySlider;
-	@FXML public TextField stadiumPreDelayTextField;
-	@FXML public Slider stadiumToneSlider;
-	@FXML public TextField stadiumToneTextField;
-	@FXML public Slider stadiumLevelSlider;
-	@FXML public TextField stadiumLevelTextField;
-	@FXML public TextField presetNumberTextField;
-	@FXML public TextField presetNameTextField;
-	@FXML public TextField presetSearchTextField;
-	@FXML public ListView<String> presetListView;
-	@FXML public ToggleButton autoFlattenEQToggleButton;
-	@FXML public MenuItem aboutMenuItem;
-	@FXML public MenuItem openTunerMenuItem;
-	@FXML public ImageView connectionMethodImageView;
-	@FXML public RingProgressIndicator presetLoadingIndicator;
-	@FXML public TextField modelTextField;
-	@FXML public TextField serialNumberTextField;
-	@FXML public TextField revisionTextField;
-	@FXML public TextField bootloaderTextField;
-	@FXML public TextField mcuTextField;
-	@FXML public TextField dspTextField;
-	@FXML public TextField bluetoothTextField;
+	@FXML
+	public ToggleButton ampToggleButton;
+	@FXML
+	public ListView<String> ampListView;
+	@FXML
+	public Slider gainSlider;
+	@FXML
+	public TextField gainTextField;
+	@FXML
+	public Slider volumeSlider;
+	@FXML
+	public TextField volumeTextField;
+	@FXML
+	public Slider gateSlider;
+	@FXML
+	public TextField gateTextField;
+	@FXML
+	public Slider bassSlider;
+	@FXML
+	public TextField bassTextField;
+	@FXML
+	public Slider middleSlider;
+	@FXML
+	public TextField middleTextField;
+	@FXML
+	public Slider trebleSlider;
+	@FXML
+	public TextField trebleTextField;
+	@FXML
+	public ToggleButton powerToggleButton;
+	@FXML
+	public ListView<String> powerListView;
+	@FXML
+	public Slider presenceSlider;
+	@FXML
+	public TextField presenceTextField;
+	@FXML
+	public Slider resonanceSlider;
+	@FXML
+	public TextField resonanceTextField;
+	@FXML
+	public ToggleButton cabToggleButton;
+	@FXML
+	public ListView<String> cabListView;
+	@FXML
+	public ToggleButton preFXToggleButton;
+	@FXML
+	public TabPane preFXTabPane;
+	@FXML
+	public Slider compressorToneSlider;
+	@FXML
+	public TextField compressorToneTextField;
+	@FXML
+	public Slider compressorRatioSlider;
+	@FXML
+	public TextField compressorRatioTextField;
+	@FXML
+	public Slider compressorCompSlider;
+	@FXML
+	public TextField compressorCompTextField;
+	@FXML
+	public Slider compressorLevelSlider;
+	@FXML
+	public TextField compressorLevelTextField;
+	@FXML
+	public ListView<String> distortionModeListView;
+	@FXML
+	public Slider distortionDriveSlider;
+	@FXML
+	public TextField distortionDriveTextField;
+	@FXML
+	public Slider distortionToneSlider;
+	@FXML
+	public TextField distortionToneTextField;
+	@FXML
+	public Slider distortionLevelSlider;
+	@FXML
+	public TextField distortionLevelTextField;
+	@FXML
+	public ListView<String> autoWahModeListView;
+	@FXML
+	public Slider autoWahFreqSlider;
+	@FXML
+	public TextField autoWahFreqTextField;
+	@FXML
+	public Slider autoWahSensitivitySlider;
+	@FXML
+	public TextField autoWahSensitivityTextField;
+	@FXML
+	public Slider autoWahResSlider;
+	@FXML
+	public TextField autoWahResTextField;
+	@FXML
+	public Slider pitchShifterSemitoneSlider;
+	@FXML
+	public TextField pitchShifterSemitoneTextField;
+	@FXML
+	public Slider pitchShifterFineSlider;
+	@FXML
+	public TextField pitchShifterFineTextField;
+	@FXML
+	public Slider pitchShifterRegenSlider;
+	@FXML
+	public TextField pitchShifterRegenTextField;
+	@FXML
+	public Slider pitchShifterMixSlider;
+	@FXML
+	public TextField pitchShifterMixTextField;
+	@FXML
+	public ToggleButton modulationToggleButton;
+	@FXML
+	public TabPane modulationTabPane;
+	@FXML
+	public ListView<String> chorusModeListView;
+	@FXML
+	public Slider chorusSpeedSlider;
+	@FXML
+	public TextField chorusSpeedTextField;
+	@FXML
+	public Slider chorusDepthSlider;
+	@FXML
+	public TextField chorusDepthTextField;
+	@FXML
+	public Slider chorusToneSlider;
+	@FXML
+	public TextField chorusToneTextField;
+	@FXML
+	public ListView<String> flangerModeListView;
+	@FXML
+	public Slider flangerSpeedSlider;
+	@FXML
+	public TextField flangerSpeedTextField;
+	@FXML
+	public Slider flangerDepthSlider;
+	@FXML
+	public TextField flangerDepthTextField;
+	@FXML
+	public Slider flangerRegenSlider;
+	@FXML
+	public TextField flangerRegenTextField;
+	@FXML
+	public ListView<String> phaserModeListView;
+	@FXML
+	public Slider phaserSpeedSlider;
+	@FXML
+	public TextField phaserSpeedTextField;
+	@FXML
+	public Slider phaserDepthSlider;
+	@FXML
+	public TextField phaserDepthTextField;
+	@FXML
+	public Slider phaserRegenSlider;
+	@FXML
+	public TextField phaserRegenTextField;
+	@FXML
+	public ListView<String> tremoloModeListView;
+	@FXML
+	public Slider tremoloSpeedSlider;
+	@FXML
+	public TextField tremoloSpeedTextField;
+	@FXML
+	public Slider tremoloDepthSlider;
+	@FXML
+	public TextField tremoloDepthTextField;
+	@FXML
+	public Slider tremoloSkewSlider;
+	@FXML
+	public TextField tremoloSkewTextField;
+	@FXML
+	public ToggleButton delayToggleButton;
+	@FXML
+	public TabPane delayTabPane;
+	@FXML
+	public Slider studioTimeSlider;
+	@FXML
+	public TextField studioTimeTextField;
+	@FXML
+	public Slider studioFeedbackSlider;
+	@FXML
+	public TextField studioFeedbackTextField;
+	@FXML
+	public Slider studioFreqSlider;
+	@FXML
+	public TextField studioFreqTextField;
+	@FXML
+	public Slider studioLevelSlider;
+	@FXML
+	public TextField studioLevelTextField;
+	@FXML
+	public Slider vintageTimeSlider;
+	@FXML
+	public TextField vintageTimeTextField;
+	@FXML
+	public Slider vintageAgeSlider;
+	@FXML
+	public TextField vintageAgeTextField;
+	@FXML
+	public Slider vintageFreqSlider;
+	@FXML
+	public TextField vintageFreqTextField;
+	@FXML
+	public Slider vintageLevelSlider;
+	@FXML
+	public TextField vintageLevelTextField;
+	@FXML
+	public Slider multiTimeSlider;
+	@FXML
+	public TextField multiTimeTextField;
+	@FXML
+	public Slider multiFeedbackSlider;
+	@FXML
+	public TextField multiFeedbackTextField;
+	@FXML
+	public ListView<Integer> multiTapPatternListView;
+	@FXML
+	public Slider multiLevelSlider;
+	@FXML
+	public TextField multiLevelTextField;
+	@FXML
+	public Slider reverseTimeSlider;
+	@FXML
+	public TextField reverseTimeTextField;
+	@FXML
+	public Slider reverseFeedbackSlider;
+	@FXML
+	public TextField reverseFeedbackTextField;
+	@FXML
+	public Slider reverseFreqSlider;
+	@FXML
+	public TextField reverseFreqTextField;
+	@FXML
+	public Slider reverseLevelSlider;
+	@FXML
+	public TextField reverseLevelTextField;
+	@FXML
+	public ToggleButton reverbToggleButton;
+	@FXML
+	public TabPane reverbTabPane;
+	@FXML
+	public Slider roomDecaySlider;
+	@FXML
+	public TextField roomDecayTextField;
+	@FXML
+	public Slider roomPreDelaySlider;
+	@FXML
+	public TextField roomPreDelayTextField;
+	@FXML
+	public Slider roomToneSlider;
+	@FXML
+	public TextField roomToneTextField;
+	@FXML
+	public Slider roomLevelSlider;
+	@FXML
+	public TextField roomLevelTextField;
+	@FXML
+	public Slider hallDecaySlider;
+	@FXML
+	public TextField hallDecayTextField;
+	@FXML
+	public Slider hallPreDelaySlider;
+	@FXML
+	public TextField hallPreDelayTextField;
+	@FXML
+	public Slider hallToneSlider;
+	@FXML
+	public TextField hallToneTextField;
+	@FXML
+	public Slider hallLevelSlider;
+	@FXML
+	public TextField hallLevelTextField;
+	@FXML
+	public Slider springDecaySlider;
+	@FXML
+	public TextField springDecayTextField;
+	@FXML
+	public Slider springPreDelaySlider;
+	@FXML
+	public TextField springPreDelayTextField;
+	@FXML
+	public Slider springToneSlider;
+	@FXML
+	public TextField springToneTextField;
+	@FXML
+	public Slider springLevelSlider;
+	@FXML
+	public TextField springLevelTextField;
+	@FXML
+	public Slider stadiumDecaySlider;
+	@FXML
+	public TextField stadiumDecayTextField;
+	@FXML
+	public Slider stadiumPreDelaySlider;
+	@FXML
+	public TextField stadiumPreDelayTextField;
+	@FXML
+	public Slider stadiumToneSlider;
+	@FXML
+	public TextField stadiumToneTextField;
+	@FXML
+	public Slider stadiumLevelSlider;
+	@FXML
+	public TextField stadiumLevelTextField;
+	@FXML
+	public TextField presetNumberTextField;
+	@FXML
+	public TextField presetNameTextField;
+	@FXML
+	public TextField presetSearchTextField;
+	@FXML
+	public ListView<String> presetListView;
+	@FXML
+	public ToggleButton autoFlattenEQToggleButton;
+	@FXML
+	public MenuItem aboutMenuItem;
+	@FXML
+	public MenuItem openTunerMenuItem;
+	@FXML
+	public ImageView connectionMethodImageView;
+	@FXML
+	public RingProgressIndicator presetLoadingIndicator;
+	@FXML
+	public TextField modelTextField;
+	@FXML
+	public TextField serialNumberTextField;
+	@FXML
+	public TextField revisionTextField;
+	@FXML
+	public TextField bootloaderTextField;
+	@FXML
+	public TextField mcuTextField;
+	@FXML
+	public TextField dspTextField;
+	@FXML
+	public TextField bluetoothTextField;
 
 	public boolean ignorePresetChange = false;
 	private HostServices hostServices;
@@ -430,21 +593,7 @@ public class CODEInterfaceController implements Initializable {
 			}
 		});
 
-		aboutMenuItem.setOnAction(event -> {
-			FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("about-view.fxml"));
-			try {
-				Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-				Stage stage = new Stage();
-				stage.setTitle("About Marshall CODE Interface");
-				stage.setScene(scene);
-				stage.show();
-
-				AboutDialogController aboutDialogController = fxmlLoader.getController();
-				aboutDialogController.setHostServices(hostServices);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		});
+		aboutMenuItem.setOnAction(event -> AboutDialogController.openDialog(hostServices));
 
 		openTunerMenuItem.setOnAction(event -> {
 			CODEInterfaceApplication.INTERFACE.toggleTuner(true);
@@ -453,10 +602,12 @@ public class CODEInterfaceController implements Initializable {
 	}
 
 	/**
-	 * Set a slider and text field to be linked together. This also enforces float values to only have one decimal place.
-	 * @param slider the slider
-	 * @param textField the text field
-	 * @param consumer the consumer which will accept the new value
+	 * Set a slider and text field to be linked together. This also enforces float values to only have one decimal
+	 * place.
+	 *
+	 * @param slider     the slider
+	 * @param textField  the text field
+	 * @param consumer   the consumer which will accept the new value
 	 * @param clampToInt whether to clamp the value to an integer
 	 */
 	private void setupSliderAndTextField(Slider slider, TextField textField, Consumer<Float> consumer, boolean clampToInt) {
@@ -482,10 +633,12 @@ public class CODEInterfaceController implements Initializable {
 	}
 
 	/**
-	 * Set a slider and text field to be linked together. This also enforces float values to only have one decimal place.
-	 * @param slider the slider
-	 * @param textField the text field
-	 * @param consumer the consumer which will accept the new value
+	 * Set a slider and text field to be linked together. This also enforces float values to only have one decimal
+	 * place.
+	 *
+	 * @param slider     the slider
+	 * @param textField  the text field
+	 * @param consumer   the consumer which will accept the new value
 	 * @param clampToInt whether to clamp the value to an integer
 	 */
 	private void setupSliderAndTextField(Slider slider, TextField textField, BiConsumer<Float, Integer> consumer, boolean clampToInt) {

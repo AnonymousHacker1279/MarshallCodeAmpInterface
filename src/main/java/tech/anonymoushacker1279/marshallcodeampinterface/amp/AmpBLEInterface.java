@@ -74,7 +74,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 			return;
 		}
 
-		orion.writeCharacteristic(device, service, rwCharacteristic, new int[] {176, control, value});
+		orion.writeCharacteristic(device, service, rwCharacteristic, new int[]{176, control, value});
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 			return;
 		}
 
-		orion.writeCharacteristic(device, service, rwCharacteristic, new int[] {192, program});
+		orion.writeCharacteristic(device, service, rwCharacteristic, new int[]{192, program});
 	}
 
 	@Override
