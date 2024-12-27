@@ -8,15 +8,13 @@ The Marshall Gateway app is great, and significantly more convenient than manual
 it be great if your computer (which often is your recording station) could double as an amp controller?
 
 Instead of emulating a device to run the Gateway app on your computer, this program directly communicates with the amp
-over either a USB or BLE connection (Windows only).
+over either a USB or BLE connection.
 
 ## How do I use it?
 
-Download the latest release from
-the [releases page](https://github.com/AnonymousHacker1279/MarshallCodeAmpInterface/releases). Unzip the archive and
-launch the executable for your platform under `bin`. You'll need
-a [Java 23](https://adoptium.net/temurin/releases/?version=23) installation to run the program. Make sure it's in your
-`JAVA_HOME` environment variable.
+Download the latest installer from
+the [releases page](https://github.com/AnonymousHacker1279/MarshallCodeAmpInterface/releases). At this moment, the
+project only supports Windows, but Linux support is planned for the future.
 
 ## License
 

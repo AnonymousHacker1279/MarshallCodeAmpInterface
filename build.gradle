@@ -3,11 +3,11 @@ plugins {
 	id 'application'
 	id 'org.javamodularity.moduleplugin' version '1.8.12'
 	id 'org.openjfx.javafxplugin' version '0.0.13'
-	id 'org.gradlex.java-module-packaging' version '1.0'
+	id 'org.beryx.jlink' version '3.1.1'
 }
 
 group 'tech.anonymoushacker1279'
-version '1.0-SNAPSHOT'
+version '0.0.1'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(23)
 
@@ -40,4 +40,39 @@ dependencies {
 	implementation 'org.jetbrains:annotations:26.0.1'
 	implementation "tech.anonymoushacker1279:OrionBLE:0.0.1-SNAPSHOT-2024.12.20-2:all"
 	implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
+}
+
+jlink {
+	imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+	options = ['--strip-debug', '--compress', 'zip-9', '--no-header-files', '--no-man-pages']
+	launcher {
+		name = 'CODE Amp Interface'
+	}
+
+	forceMerge('annotations')
+	forceMerge('OrionBLE')
+
+	jpackage {
+		targetPlatformName = 'win'
+		if (targetPlatformName == 'win') {
+			targetPlatform("win") {}
+			installerType = 'exe'
+		}
+		installerOptions = [
+				'--name', 'CODE Amp Interface',
+				'--description', "A desktop program to modify amp settings without needing to use the Marshall Gateway app.",
+				'--vendor', 'AnonymousHacker1279'
+		]
+		if (installerType == 'exe') {
+			imageOptions += ['--icon', 'src/main/resources/tech/anonymoushacker1279/marshallcodeampinterface/installer_icon.ico']
+			installerOptions += [
+					'--win-dir-chooser',
+					'--win-menu', '--win-shortcut'
+			]
+		}
+	}
+}
+
+jlinkZip {
+	group = 'distribution'
 }
