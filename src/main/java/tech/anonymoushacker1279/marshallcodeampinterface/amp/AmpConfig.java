@@ -93,6 +93,8 @@ public class AmpConfig {
 	 * @return a new AmpConfig instance
 	 */
 	private static AmpConfig create(byte[] sysexData) {
+		CODEInterfaceApplication.LOGGER.debug("Creating a new configuration instance from sysex data");
+
 		// Remove status bytes
 		sysexData = Arrays.copyOfRange(sysexData, 1, sysexData.length - 1);
 		AmpConfig config = new AmpConfig();
@@ -143,6 +145,8 @@ public class AmpConfig {
 	}
 
 	public static void setInterfaceValues(CODEInterfaceController controller, AmpConfig config) {
+		CODEInterfaceApplication.LOGGER.debug("Setting interface values from a configuration object");
+
 		CODEInterfaceApplication.DEFAULT_CONFIG = config;
 		controller.ignorePresetChange = true;
 

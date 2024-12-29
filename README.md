@@ -19,3 +19,7 @@ project only supports Windows, but Linux support is planned for the future.
 ## License
 
 This project is MIT licensed. See the [LICENSE](LICENSE) file for more information.
+
+<sub>Marshall and Marshall CODE are registered trademarks of Marshall Amplification PLC. Some images contained in this
+program are property of Marshall Amplification PLC. This is not an official Marshall product, nor is it endorsed by
+Marshall.</sub>

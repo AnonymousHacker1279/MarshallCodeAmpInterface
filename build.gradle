@@ -40,6 +40,12 @@ dependencies {
 	implementation 'org.jetbrains:annotations:26.0.1'
 	implementation "tech.anonymoushacker1279:OrionBLE:0.0.1-SNAPSHOT-2024.12.20-2:all"
 	implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
+}
+
+run {
+	// Add RUNNING_IN_IDE environment variable to the run configuration
+	environment 'RUNNING_IN_IDE', 'true'
 }
 
 jlink {
@@ -56,18 +62,23 @@ jlink {
 		targetPlatformName = 'win'
 		if (targetPlatformName == 'win') {
 			targetPlatform("win") {}
-			installerType = 'exe'
+			installerType = 'msi'
 		}
 		installerOptions = [
 				'--name', 'CODE Amp Interface',
 				'--description', "A desktop program to modify amp settings without needing to use the Marshall Gateway app.",
-				'--vendor', 'AnonymousHacker1279'
+				'--vendor', 'AnonymousHacker1279',
+				'--copyright', 'Copyright (c) 2024 Nicholas Smit',
+				'--about-url', 'https://github.com/AnonymousHacker1279/MarshallCodeAmpInterface',
+				'--license-file', 'LICENSE'
 		]
-		if (installerType == 'exe') {
+		if (installerType == 'msi') {
 			imageOptions += ['--icon', 'src/main/resources/tech/anonymoushacker1279/marshallcodeampinterface/installer_icon.ico']
 			installerOptions += [
 					'--win-dir-chooser',
-					'--win-menu', '--win-shortcut'
+					'--win-menu',
+					'--win-shortcut-prompt',
+					'--win-help-url', 'https://github.com/AnonymousHacker1279/MarshallCodeAmpInterface'
 			]
 		}
 	}

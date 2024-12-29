@@ -1,5 +1,6 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
@@ -61,18 +62,22 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 		@Override
 		public void send(MidiMessage message, long timeStamp) {
 			if (message instanceof SysexMessage sysexMessage) {
+				CODEInterfaceApplication.LOGGER.debug("Received sysex message: {}", sysexMessage.getMessage());
 				INCOMING_SYSEX_QUEUE.add(sysexMessage.getMessage());
 			}
 
 			if (message instanceof ShortMessage shortMessage) {
 				if (shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE) {
+					CODEInterfaceApplication.LOGGER.debug("Received control change: {} {}", shortMessage.getData1(), shortMessage.getData2());
 					handleControlChange(shortMessage.getData1(), shortMessage.getData2());
 				}
 				if (shortMessage.getCommand() == ShortMessage.PROGRAM_CHANGE) {
+					CODEInterfaceApplication.LOGGER.debug("Received program change: {}", shortMessage.getData1());
 					handlePresetChange(shortMessage.getData1());
 				}
 
 				if (shortMessage.getCommand() == ShortMessage.POLY_PRESSURE && getTuningDialogController() != null) {
+					CODEInterfaceApplication.LOGGER.debug("Received tuning data: {} {}", shortMessage.getData1(), shortMessage.getData2());
 					handleTuningDataChange(shortMessage.getData1(), shortMessage.getData2());
 				}
 			}

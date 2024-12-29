@@ -1,8 +1,9 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
-import tech.anonymoushacker1279.marshallcodeampinterface.BTConfigurationData;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.BTScanningInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
+import tech.anonymoushacker1279.marshallcodeampinterface.util.BTConfigurationData;
 import tech.anonymoushacker1279.orionble.OrionBLE;
 import tech.anonymoushacker1279.orionble.devices.BLEDevice;
 import tech.anonymoushacker1279.orionble.devices.DeviceFilter;
@@ -34,11 +35,11 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 	private int[] lastSysexMessage;
 
 	public AmpBLEInterface() {
-		// Initialize the connection in a new thread
-		new Thread(this::initializeConnection).start();
+		new Thread(this::initializeConnection, "BLE Connection Initializer").start();
 	}
 
 	private void initializeConnection() {
+		CODEInterfaceApplication.LOGGER.debug("Initializing OrionBLE");
 		orion = new OrionBLE("http://localhost", 5249);
 		orion.waitForConnection(5);
 
@@ -47,6 +48,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 		if (config == null) {
 			DeviceFilter filter = new DeviceFilter.Builder().namePrefix("CODE").build();
 			try {
+				CODEInterfaceApplication.LOGGER.debug("Discovering CODE devices...");
 				device = orion.discoverDevices(filter).getFirst();
 				new BTConfigurationData(device.name(), device.address(), device.isPaired()).save();
 			} catch (NoSuchElementException e) {
@@ -56,6 +58,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 			device = new BLEDevice(config.name(), config.address(), config.isPaired());
 		}
 
+		CODEInterfaceApplication.LOGGER.debug("Registering BLE notify event and starting notification listener");
 		orion.registerNotifyEvent(device, service, notifyCharacteristic);
 		orion.startNotificationListener(device, service, notifyCharacteristic, this::handleIncomingMessage, 500);
 
@@ -117,6 +120,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 				boolean isValidResponse = validateSysexMessage(byteArray);
 				if (!isValidResponse) {
 					// Attempt to resend the last message
+					CODEInterfaceApplication.LOGGER.warn("Invalid response received, resending last message");
 					orion.writeCharacteristic(device, service, rwCharacteristic, lastSysexMessage);
 					notifications.clear();
 					continue;
@@ -139,6 +143,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 
 	@Override
 	public void close() {
+		CODEInterfaceApplication.LOGGER.debug("Unregistering BLE notify event and stopping notification listener");
 		orion.stopNotificationListener(device, service, notifyCharacteristic);
 		orion.unregisterNotifyEvent(device, service, notifyCharacteristic);
 	}
@@ -152,23 +157,26 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 				// Control change
 				int control = messageList.get(1);
 				int value = messageList.get(2);
+				CODEInterfaceApplication.LOGGER.debug("Received control change: {} {}", control, value);
 				handleControlChange(control, value);
 			}
 			case 192 -> {
 				// Program change
 				int program = messageList.get(1);
+				CODEInterfaceApplication.LOGGER.debug("Received program change: {}", program);
 				handlePresetChange(program);
 			}
 			case 160 -> {
-				// Polyphonic key pressure
+				// Polyphonic key pressure (tuning data)
 				int key = messageList.get(1);
 				int pressure = messageList.get(2);
+				CODEInterfaceApplication.LOGGER.debug("Received tuning data: {} {}", key, pressure);
 				handleTuningDataChange(key, pressure);
 			}
 			case 240 -> {
 				// System exclusive message, these should be ignored as they are explicitly handled when expected
 			}
-			default -> System.out.println("Unknown message: " + message);
+			default -> CODEInterfaceApplication.LOGGER.warn("Received unknown message type: {}", message);
 		}
 	}
 }

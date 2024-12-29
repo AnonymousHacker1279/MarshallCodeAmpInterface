@@ -19,7 +19,10 @@ public record AmpModel(String ampName, int familyId, int modelId, int deviceId, 
 	public static void load() {
 		Gson gson = new Gson();
 		URL url = CODEInterfaceApplication.class.getResource("amp_models.json");
+
 		if (url != null) {
+			CODEInterfaceApplication.LOGGER.debug("Loading amp model information");
+
 			try (Reader reader = Files.newBufferedReader(Paths.get(url.toURI()))) {
 				ALL_MODELS = gson.fromJson(reader, TypeToken.getParameterized(List.class, AmpModel.class).getType());
 			} catch (IOException | URISyntaxException e) {

@@ -37,6 +37,7 @@ public class AboutDialogController implements Initializable {
 		Platform.runLater(() -> {
 			try {
 				if (scene == null || stage == null) {
+					CODEInterfaceApplication.LOGGER.debug("Loading About scene");
 					scene = new Scene(fxmlLoader.load(), 600, 400);
 					stage = new Stage();
 					stage.setTitle("About Marshall CODE Interface");

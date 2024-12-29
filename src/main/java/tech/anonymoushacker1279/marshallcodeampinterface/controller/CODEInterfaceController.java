@@ -363,6 +363,8 @@ public class CODEInterfaceController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		CODEInterfaceApplication.LOGGER.debug("Initializing main scene controller");
+
 		ampToggleButton.setOnAction(event -> CODEInterfaceApplication.INTERFACE.togglePreamp(ampToggleButton.isSelected()));
 
 		ampListView.setItems(FXCollections.observableArrayList(

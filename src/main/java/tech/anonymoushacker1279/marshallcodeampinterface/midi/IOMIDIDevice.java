@@ -9,7 +9,7 @@ public class IOMIDIDevice {
 	private final Transmitter transmitter;
 	private final Receiver receiver;
 
-	public IOMIDIDevice(MidiDevice inputDevice, MidiDevice outputDevice) throws MidiUnavailableException {
+	private IOMIDIDevice(MidiDevice inputDevice, MidiDevice outputDevice) throws MidiUnavailableException {
 		this.inputDevice = inputDevice;
 		this.outputDevice = outputDevice;
 
@@ -41,6 +41,12 @@ public class IOMIDIDevice {
 		}
 	}
 
+	/**
+	 * Create a wrapper for a MIDI device with the given name. The wrapper will have a transmitter and receiver.
+	 *
+	 * @param deviceName The name of the MIDI device to wrap
+	 * @return The wrapped MIDI device
+	 */
 	public static IOMIDIDevice createWrapper(String deviceName) throws MidiUnavailableException {
 		MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
 		MidiDevice inputDevice = null;

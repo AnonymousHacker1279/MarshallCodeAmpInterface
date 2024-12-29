@@ -1,7 +1,8 @@
-package tech.anonymoushacker1279.marshallcodeampinterface;
+package tech.anonymoushacker1279.marshallcodeampinterface.util;
 
 import com.google.gson.Gson;
 import org.jetbrains.annotations.Nullable;
+import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +21,8 @@ public record BTConfigurationData(String name, String address, boolean isPaired)
 		String json = gson.toJson(this);
 
 		try {
-			gson.newJsonWriter(new FileWriter("btconfig.json")).jsonValue(json).close();
+			CODEInterfaceApplication.LOGGER.info("Saving Bluetooth configuration data");
+			gson.newJsonWriter(new FileWriter(CODEInterfaceApplication.getRootDataPath() + "/btconfig.json")).jsonValue(json).close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -35,9 +37,11 @@ public record BTConfigurationData(String name, String address, boolean isPaired)
 	public static BTConfigurationData load() {
 		Gson gson = new Gson();
 		try {
-			Reader reader = Files.newBufferedReader(Paths.get("btconfig.json"));
+			CODEInterfaceApplication.LOGGER.info("Loading Bluetooth configuration data");
+			Reader reader = Files.newBufferedReader(Paths.get(CODEInterfaceApplication.getRootDataPath() + "/btconfig.json"));
 			return gson.fromJson(reader, BTConfigurationData.class);
 		} catch (IOException e) {
+			CODEInterfaceApplication.LOGGER.info("Failed to find a configuration file, skipping");
 			return null;
 		}
 	}

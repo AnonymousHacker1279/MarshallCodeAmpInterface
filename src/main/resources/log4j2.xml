@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Properties>
+		<Select>
+			<EnvironmentArbiter propertyName="RUNNING_IN_IDE">
+				<Property name="logPath">runtimeData/logs</Property>
+			</EnvironmentArbiter>
+			<DefaultArbiter>
+				<Property name="logPath">${env:appdata}/CODE Amp Interface/logs</Property>
+			</DefaultArbiter>
+		</Select>
+	</Properties>
+
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %highlight{%-5level} %logger{2.} - %msg%n"
+			               disableAnsi="false"/>
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+		</Console>
+
+		<RollingRandomAccessFile name="infoFile" fileName="${logPath}/app.log"
+		                         filePattern="${logPath}/app-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{2.} - %msg%n"/>
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy/>
+				<OnStartupTriggeringPolicy/>
+			</Policies>
+			<DefaultRolloverStrategy max="5"/>
+		</RollingRandomAccessFile>
+
+		<RollingRandomAccessFile name="debugFile" fileName="${logPath}/debug.log"
+		                         filePattern="${logPath}/debug-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{2.} - %msg%n"/>
+			<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+			<Policies>
+				<OnStartupTriggeringPolicy/>
+				<SizeBasedTriggeringPolicy size="25 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="5"/>
+		</RollingRandomAccessFile>
+	</Appenders>
+
+	<Loggers>
+		<Root level="all">
+			<AppenderRef ref="console"/>
+			<AppenderRef ref="infoFile"/>
+			<AppenderRef ref="debugFile"/>
+		</Root>
+	</Loggers>
+</Configuration>

@@ -18,6 +18,7 @@ public class BTScanningInterfaceController {
 		Platform.runLater(() -> {
 			try {
 				if (scene == null || stage == null) {
+					CODEInterfaceApplication.LOGGER.debug("Loading Bluetooth Scanning scene");
 					scene = new Scene(fxmlLoader.load());
 					stage = new Stage();
 					stage.setTitle("Bluetooth Scanning");

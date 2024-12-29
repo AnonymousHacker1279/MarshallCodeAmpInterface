@@ -53,16 +53,16 @@ public abstract class AmpMIDIInterface {
 	public boolean validateSysexMessage(byte[] message) {
 		// Look for the sysex start and end bytes
 		if (message[0] != (byte) 0xF0 || message[message.length - 1] != (byte) 0xF7) {
-			System.out.println("Start/stop bytes missing!");
+			CODEInterfaceApplication.LOGGER.warn("Sysex message validation failed: Start/stop bytes missing");
 			return false;
 		}
 
 		byte statusByte = message[7];
 		if (statusByte == 0x72 || statusByte == 0x73) {
 			if (message.length < 75) {
-				System.out.println("Message length too short!");
+				CODEInterfaceApplication.LOGGER.warn("Sysex message validation failed: Message too short. Length received: {}", message.length);
+				return false;
 			}
-			return message.length >= 75;
 		}
 
 		return true;
@@ -101,6 +101,7 @@ public abstract class AmpMIDIInterface {
 	 * @param value   the control value
 	 */
 	protected void handleControlChange(int control, int value) {
+		CODEInterfaceApplication.LOGGER.debug("Received control change message: Control: {}, Value: {}", control, value);
 		if (control == 52) {
 			if (value == 1) {
 				TuningDialogController.openDialog(this::setTuningDialogController);
@@ -121,6 +122,7 @@ public abstract class AmpMIDIInterface {
 	 * @param preset the preset number
 	 */
 	protected void handlePresetChange(int preset) {
+		CODEInterfaceApplication.LOGGER.debug("Received program change message: Preset: {}", preset);
 		AmpConfig.setInterfaceValues(CODEInterfaceApplication.CONTROLLER, CODEInterfaceApplication.PRESETS.get(preset));
 		CODEInterfaceApplication.CONTROLLER.presetSearchTextField.clear();
 	}
@@ -132,6 +134,7 @@ public abstract class AmpMIDIInterface {
 	 * @param accuracy the accuracy
 	 */
 	protected void handleTuningDataChange(int note, int accuracy) {
+		CODEInterfaceApplication.LOGGER.debug("Received tuning data change message: Note: {}, Accuracy: {}", note, accuracy);
 		if (getTuningDialogController() != null) {
 			getTuningDialogController().updateTuner(note, accuracy);
 		}
@@ -740,6 +743,7 @@ public abstract class AmpMIDIInterface {
 	 * Get the current amp configuration as a byte array
 	 */
 	public byte[] getAmpConfig() {
+		CODEInterfaceApplication.LOGGER.debug("Requesting current amp configuration");
 		try {
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00, (byte) 0xF7});
 			return receiveSysexMessage();
@@ -752,6 +756,7 @@ public abstract class AmpMIDIInterface {
 	 * Get the amp configuration for a specific preset as a byte array
 	 */
 	public byte[] getAmpConfig(int preset) {
+		CODEInterfaceApplication.LOGGER.debug("Requesting amp configuration for preset {}", preset);
 		try {
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x01, (byte) preset, (byte) 0xF7});
 			return receiveSysexMessage();
@@ -764,6 +769,7 @@ public abstract class AmpMIDIInterface {
 	 * Set the amp hardware information in the interface.
 	 */
 	public void setAmpHardwareInformation() {
+		CODEInterfaceApplication.LOGGER.info("Setting amp hardware information");
 		try {
 			AmpModel.load();
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x10, (byte) 0xF7});
