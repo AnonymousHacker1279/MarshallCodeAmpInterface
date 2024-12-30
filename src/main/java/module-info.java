@@ -6,6 +6,7 @@ module tech.anonymoushacker1279.marshallcodeampinterface {
 	requires java.net.http;
 	requires org.apache.logging.log4j.core;
 	requires java.desktop;
+	requires commons.math3;
 
 	opens tech.anonymoushacker1279.marshallcodeampinterface to javafx.fxml;
 	exports tech.anonymoushacker1279.marshallcodeampinterface;
@@ -15,4 +16,6 @@ module tech.anonymoushacker1279.marshallcodeampinterface {
 	opens tech.anonymoushacker1279.marshallcodeampinterface.controller to javafx.fxml;
 	exports tech.anonymoushacker1279.marshallcodeampinterface.util;
 	opens tech.anonymoushacker1279.marshallcodeampinterface.util to javafx.fxml;
+	exports tech.anonymoushacker1279.marshallcodeampinterface.visualizer;
+	opens tech.anonymoushacker1279.marshallcodeampinterface.visualizer to javafx.fxml;
 }

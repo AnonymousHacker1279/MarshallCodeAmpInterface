@@ -8,14 +8,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
+import tech.anonymoushacker1279.marshallcodeampinterface.util.AudioCapture;
+import tech.anonymoushacker1279.marshallcodeampinterface.util.AudioProcessor;
+import tech.anonymoushacker1279.marshallcodeampinterface.visualizer.*;
 
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.sampled.LineUnavailableException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CODEInterfaceController implements Initializable {
 
@@ -353,9 +359,20 @@ public class CODEInterfaceController implements Initializable {
 	public TextField dspTextField;
 	@FXML
 	public TextField bluetoothTextField;
+	@FXML
+	public AnchorPane visualizerContainer;
+	@FXML
+	public ChoiceBox<String> visualizerChoiceBox;
 
 	public boolean ignorePresetChange = false;
 	private HostServices hostServices;
+
+	private AudioCapture audioCapture;
+	private AudioProcessor audioProcessor;
+	private SpectrogramVisualizer spectrogramVisualizer;
+	private WaveformVisualizer waveformVisualizer;
+	private VUVisualizer vuVisualizer;
+	private ParticleVisualizer particleVisualizer;
 
 	public void setHostServices(HostServices hostServices) {
 		this.hostServices = hostServices;
@@ -601,6 +618,27 @@ public class CODEInterfaceController implements Initializable {
 			CODEInterfaceApplication.INTERFACE.toggleTuner(true);
 			TuningDialogController.openDialog(CODEInterfaceApplication.INTERFACE::setTuningDialogController);
 		});
+
+		new Thread(this::setupVisualizers, "Visualizer Setup").start();
+
+		visualizerChoiceBox.setItems(FXCollections.observableArrayList("Spectrogram", "Waveform", "VU Meter", "Particles"));
+		visualizerChoiceBox.getSelectionModel().select(0);
+		visualizerChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			visualizerContainer.getChildren().forEach(node -> {
+				if (node instanceof AudioVisualizer) {
+					node.setVisible(false);
+				}
+			});
+
+			audioCapture.stopCapture();
+
+			switch (newValue) {
+				case "Spectrogram" -> startVisualizer(spectrogramVisualizer, audioProcessor::processAudioData);
+				case "Waveform" -> startVisualizer(waveformVisualizer, audioProcessor::getRawAudioData);
+				case "VU Meter" -> startVisualizer(vuVisualizer, audioProcessor::getRawAudioData);
+				case "Particles" -> startVisualizer(particleVisualizer, audioProcessor::getRawAudioData);
+			}
+		});
 	}
 
 	/**
@@ -664,5 +702,50 @@ public class CODEInterfaceController implements Initializable {
 				textField.setText(String.valueOf(slider.getValue()));
 			}
 		});
+	}
+
+	private void addVisualizer(AudioVisualizer visualizer) {
+		visualizerContainer.getChildren().add(visualizer);
+		AnchorPane.setTopAnchor(visualizer, 1.0);
+		AnchorPane.setLeftAnchor(visualizer, 1.0);
+		visualizer.toBack();
+		visualizer.setVisible(false);
+	}
+
+	private void setupVisualizers() {
+		audioCapture = new AudioCapture();
+		audioProcessor = new AudioProcessor();
+		spectrogramVisualizer = new SpectrogramVisualizer((int) visualizerContainer.getPrefWidth(), (int) visualizerContainer.getPrefHeight());
+		addVisualizer(spectrogramVisualizer);
+		startVisualizer(spectrogramVisualizer, audioProcessor::processAudioData);
+
+		waveformVisualizer = new WaveformVisualizer((int) visualizerContainer.getPrefWidth(), (int) visualizerContainer.getPrefHeight());
+		addVisualizer(waveformVisualizer);
+
+		vuVisualizer = new VUVisualizer((int) visualizerContainer.getPrefWidth(), (int) visualizerContainer.getPrefHeight());
+		addVisualizer(vuVisualizer);
+
+		particleVisualizer = new ParticleVisualizer((int) visualizerContainer.getPrefWidth(), (int) visualizerContainer.getPrefHeight());
+		addVisualizer(particleVisualizer);
+	}
+
+	private void startVisualizer(AudioVisualizer visualizer, Function<byte[], double[]> dataProcessor) {
+		visualizer.setVisible(true);
+		new Thread(() -> {
+			try {
+				audioCapture.startCapture();
+				while (!CODEInterfaceApplication.isClosing && visualizer.isVisible()) {
+					byte[] audioData = audioCapture.readAudioData();
+					if (audioData != null) {
+						double[] processedData = dataProcessor.apply(audioData);
+						visualizer.updateVisualizer(processedData);
+					}
+				}
+			} catch (LineUnavailableException e) {
+				CODEInterfaceApplication.LOGGER.error(e);
+			} finally {
+				audioCapture.stopCapture();
+			}
+		}, "Audio Visualizer").start();
 	}
 }

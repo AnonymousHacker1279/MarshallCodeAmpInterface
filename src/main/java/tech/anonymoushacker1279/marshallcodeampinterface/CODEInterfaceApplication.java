@@ -29,6 +29,7 @@ public class CODEInterfaceApplication extends Application {
 	public static AmpMIDIInterface INTERFACE;
 	public static AmpConfig DEFAULT_CONFIG = AmpConfig.empty();
 	public static ArrayList<AmpConfig> PRESETS = new ArrayList<>(100);
+	public static boolean isClosing = false;
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
@@ -44,7 +45,7 @@ public class CODEInterfaceApplication extends Application {
 		Scene scene = new Scene(fxmlLoader.load(), 1260, 1070);
 		stage.setTitle("Marshall CODE Interface");
 		stage.setMaxWidth(1260);
-		stage.setMaxHeight(1070);
+		stage.setMaxHeight(830);
 		stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
 		stage.setScene(scene);
 		stage.show();
@@ -116,6 +117,7 @@ public class CODEInterfaceApplication extends Application {
 	@Override
 	public void stop() throws Exception {
 		super.stop();
+		isClosing = true;
 		INTERFACE.close();
 		LOGGER.info("Exiting Marshall CODE Amp Interface...");
 	}
