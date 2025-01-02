@@ -662,10 +662,13 @@ public class CODEInterfaceController implements Initializable {
 			consumer.accept(value);
 		});
 
-		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+		// Text fields should not update until the user presses enter
+		textField.setOnAction(event -> {
 			try {
-				float value = Float.parseFloat(newValue);
-				slider.setValue(clampToInt ? Math.round(value) : value);
+				// Enforce one decimal place for float values and ensure the range is 0-10
+				float value = clampToInt ? Math.round(Float.parseFloat(textField.getText())) : (float) Math.round(Float.parseFloat(textField.getText()) * 10) / 10;
+				textField.setText(String.valueOf(value));
+				slider.setValue(value);
 			} catch (NumberFormatException e) {
 				textField.setText(String.valueOf(slider.getValue()));
 			}
@@ -694,10 +697,13 @@ public class CODEInterfaceController implements Initializable {
 			consumer.accept(value, selectedPreFX);
 		});
 
-		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+		// Text fields should not update until the user presses enter
+		textField.setOnAction(event -> {
 			try {
-				float value = Float.parseFloat(newValue);
-				slider.setValue(clampToInt ? Math.round(value) : value);
+				// Enforce one decimal place for float values and ensure the range is 0-10
+				float value = clampToInt ? Math.round(Float.parseFloat(textField.getText())) : (float) Math.round(Float.parseFloat(textField.getText()) * 10) / 10;
+				textField.setText(String.valueOf(value));
+				slider.setValue(value);
 			} catch (NumberFormatException e) {
 				textField.setText(String.valueOf(slider.getValue()));
 			}

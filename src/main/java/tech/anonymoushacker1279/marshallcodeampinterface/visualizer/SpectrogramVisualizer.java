@@ -1,7 +1,6 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.visualizer;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -9,11 +8,34 @@ public class SpectrogramVisualizer extends AudioVisualizer {
 
 	private final int[][] spectrogramData;
 	private int currentColumn;
+	private final int[] colorLookupTable;
 
 	public SpectrogramVisualizer(int width, int height) {
 		super(width, height);
 		this.spectrogramData = new int[width][height];
 		this.currentColumn = 0;
+		this.colorLookupTable = new int[256];
+		initializeColorLookupTable();
+	}
+
+	/**
+	 * Initialize the color lookup table for the spectrogram. Massively improves performance by precomputing colors
+	 * instead of calculating them on the fly.
+	 */
+	private void initializeColorLookupTable() {
+		for (int i = 0; i < 256; i++) {
+			double normalized = i / 255.0;
+			if (normalized < 0.33) {
+				Color color = Color.color(0, 0, Math.min(1.0, normalized * 3)); // Black to purple
+				colorLookupTable[i] = colorToARGB(color);
+			} else if (normalized < 0.66) {
+				Color color = Color.color(Math.min(1.0, (normalized - 0.33) * 3), 0, 1);
+				colorLookupTable[i] = colorToARGB(color); // Purple to orange
+			} else {
+				Color color = Color.color(1, Math.min(1.0, (normalized - 0.66) * 3), Math.max(0.0, 1 - (normalized - 0.66) * 3));
+				colorLookupTable[i] = colorToARGB(color); // Orange to white
+			}
+		}
 	}
 
 	@Override
@@ -30,33 +52,19 @@ public class SpectrogramVisualizer extends AudioVisualizer {
 	}
 
 	@Override
-	public void drawVisualizer() {
-		PixelWriter pixelWriter = visualizerImage.getPixelWriter();
-		for (int x = 0; x < getWidth(); x++) {
-			for (int y = 0; y < getHeight(); y++) {
-				int intensity = spectrogramData[(int) ((currentColumn + x) % getWidth())][y];
-				Color color = getColorForIntensity(intensity);
-				pixelWriter.setColor(x, (int) (getHeight() - y - 1), color);
+	protected void drawVisualizer(int width, int height) {
+		// Draw spectrogram data to the buffer
+		for (int x = 0; x < width; x++) {
+			int column = (currentColumn + x) % width;
+			for (int y = 0; y < height; y++) {
+				int intensity = spectrogramData[column][y];
+				writeToBuffer(x, height - 1 - y, colorLookupTable[intensity]);
 			}
 		}
-
-		GraphicsContext gc = getGraphicsContext2D();
-		gc.drawImage(visualizerImage, 0, 0);
-		drawFrequencyLabels(gc);
 	}
 
-	private Color getColorForIntensity(int intensity) {
-		double normalized = intensity / 255.0;
-		if (normalized < 0.33) {
-			return Color.color(0, 0, Math.min(1.0, normalized * 3)); // Black to purple
-		} else if (normalized < 0.66) {
-			return Color.color(Math.min(1.0, (normalized - 0.33) * 3), 0, 1); // Purple to orange
-		} else {
-			return Color.color(1, Math.min(1.0, (normalized - 0.66) * 3), Math.max(0.0, 1 - (normalized - 0.66) * 3)); // Orange to white
-		}
-	}
-
-	private void drawFrequencyLabels(GraphicsContext gc) {
+	@Override
+	protected void drawOverlays(GraphicsContext gc) {
 		gc.setFont(new Font(10));
 		for (int i = 0; i < getHeight(); i += 50) {
 			int frequency = (int) (i * (48000.0 / 2) / getHeight());

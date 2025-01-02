@@ -1,6 +1,5 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.visualizer;
 
-import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -20,10 +19,6 @@ public class ParticleVisualizer extends AudioVisualizer {
 
 	@Override
 	public void updateVisualizer(double[] audioData) {
-		if (audioData == null || audioData.length == 0) {
-			return;
-		}
-
 		for (double sample : audioData) {
 			double intensity = Math.abs(sample);
 			// Normalize intensity regardless of volume
@@ -48,28 +43,14 @@ public class ParticleVisualizer extends AudioVisualizer {
 	}
 
 	@Override
-	public void drawVisualizer() {
-		int width = (int) getWidth();
-		int height = (int) getHeight();
-		PixelWriter pixelWriter = visualizerImage.getPixelWriter();
-
-		// Clear the image
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				pixelWriter.setColor(x, y, Color.BLACK);
-			}
-		}
-
-		// Draw particles
+	protected void drawVisualizer(int width, int height) {
 		for (Particle particle : particles) {
 			int x = (int) particle.getX();
 			int y = (int) particle.getY();
 			if (x >= 0 && x < width && y >= 0 && y < height) {
-				pixelWriter.setColor(x, y, particle.getColor());
+				writeToBuffer(x, y, colorToARGB(particle.getColor()));
 			}
 		}
-
-		getGraphicsContext2D().drawImage(visualizerImage, 0, 0);
 	}
 
 	static class Particle {

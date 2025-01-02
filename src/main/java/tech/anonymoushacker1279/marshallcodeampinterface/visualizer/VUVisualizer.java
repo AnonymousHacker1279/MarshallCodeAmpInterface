@@ -1,6 +1,5 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.visualizer;
 
-import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
 public class VUVisualizer extends AudioVisualizer {
@@ -19,10 +18,6 @@ public class VUVisualizer extends AudioVisualizer {
 
 	@Override
 	public void updateVisualizer(double[] audioData) {
-		if (audioData == null || audioData.length == 0) {
-			return;
-		}
-
 		// Calculate the RMS (Root Mean Square) loudness
 		double rms = 0;
 		for (double sample : audioData) {
@@ -42,44 +37,34 @@ public class VUVisualizer extends AudioVisualizer {
 		historyIndex = (historyIndex + 1) % loudnessHistory.length;
 	}
 
+	/**
+	 * Check if any of the samples in the audio data exceed the maximum amplitude.
+	 *
+	 * @param audioData the audio data
+	 * @return true if clipping is detected, false otherwise
+	 */
 	private boolean checkForClipping(double[] audioData) {
 		for (double sample : audioData) {
 			if (Math.abs(sample) >= MAX_AMPLITUDE) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	@Override
-	public void drawVisualizer() {
-		int width = (int) getWidth();
-		int height = (int) getHeight();
-		PixelWriter pixelWriter = visualizerImage.getPixelWriter();
-
-		// Clear the image
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				pixelWriter.setColor(x, y, Color.BLACK);
-			}
-		}
-
-		// Draw the VU meter and histogram
-		double yScale = 1;
+	protected void drawVisualizer(int width, int height) {
 		for (int i = 0; i < loudnessHistory.length; i++) {
 			double loudness = loudnessHistory[(historyIndex + i) % loudnessHistory.length];
-			int barHeight = (int) ((loudness + 60) / 60 * height * yScale); // Normalize dB to fit the height
-
-			// Highlight clipping points
+			int barHeight = (int) ((loudness + 60) / 60 * height);
 			Color color = clippingHistory[(historyIndex + i) % loudnessHistory.length] ? Color.RED : Color.GREEN;
 
 			for (int y = height - 1; y >= height - barHeight; y--) {
 				if (y >= 0 && y < height) {
-					pixelWriter.setColor(i, y, color);
+					writeToBuffer(i, y, colorToARGB(color));
 				}
 			}
 		}
-
-		getGraphicsContext2D().drawImage(visualizerImage, 0, 0);
 	}
 }
