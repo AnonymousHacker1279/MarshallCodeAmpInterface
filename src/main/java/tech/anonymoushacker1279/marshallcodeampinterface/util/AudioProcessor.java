@@ -7,14 +7,10 @@ import org.apache.commons.math3.transform.TransformType;
 
 public class AudioProcessor {
 
-	private final FastFourierTransformer fft;
-
-	public AudioProcessor() {
-		fft = new FastFourierTransformer(DftNormalization.STANDARD);
-	}
+	private final FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
 
 	/**
-	 * Normalize the data and apply the FFT to it.
+	 * Normalize the data, apply the FFT, and return the magnitudes of the complex data (in dB).
 	 *
 	 * @param audioData the audio data
 	 * @return the processed audio data
@@ -30,6 +26,12 @@ public class AudioProcessor {
 		return magnitudes;
 	}
 
+	/**
+	 * Convert raw audio data to an array of doubles. No additional processing is done.
+	 *
+	 * @param audioData the raw audio data
+	 * @return the audio samples
+	 */
 	public double[] getRawAudioData(byte[] audioData) {
 		double[] audioSamples = new double[audioData.length / 2];
 		for (int i = 0; i < audioSamples.length; i++) {

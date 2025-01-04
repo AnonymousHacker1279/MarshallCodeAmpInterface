@@ -2,6 +2,8 @@ package tech.anonymoushacker1279.marshallcodeampinterface.visualizer;
 
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
+
 public class VUVisualizer extends AudioVisualizer {
 
 	private static final double MAX_AMPLITUDE = 1.0;
@@ -14,6 +16,9 @@ public class VUVisualizer extends AudioVisualizer {
 		loudnessHistory = new double[width];
 		clippingHistory = new boolean[width];
 		historyIndex = 0;
+
+		// Initialize loudnessHistory with -60 dB (silence) to prevent a green screen on startup
+		Arrays.fill(loudnessHistory, -60.0);
 	}
 
 	@Override

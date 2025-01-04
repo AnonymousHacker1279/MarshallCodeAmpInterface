@@ -2,6 +2,7 @@ package tech.anonymoushacker1279.marshallcodeampinterface.controller;
 
 import atlantafx.base.controls.RingProgressIndicator;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,7 +10,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
+import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpBLEInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 import tech.anonymoushacker1279.marshallcodeampinterface.util.AudioCapture;
 import tech.anonymoushacker1279.marshallcodeampinterface.util.AudioProcessor;
@@ -363,6 +366,8 @@ public class CODEInterfaceController implements Initializable {
 	public AnchorPane visualizerContainer;
 	@FXML
 	public ChoiceBox<String> visualizerChoiceBox;
+	@FXML
+	public Text visualizerUnavailableText;
 
 	public boolean ignorePresetChange = false;
 	private HostServices hostServices;
@@ -619,7 +624,12 @@ public class CODEInterfaceController implements Initializable {
 			TuningDialogController.openDialog(CODEInterfaceApplication.INTERFACE::setTuningDialogController);
 		});
 
-		new Thread(this::setupVisualizers, "Visualizer Setup").start();
+		if (CODEInterfaceApplication.INTERFACE instanceof AmpBLEInterface) {
+			visualizerChoiceBox.setDisable(true);
+			visualizerUnavailableText.setVisible(true);
+		} else {
+			new Thread(this::setupVisualizers, "Visualizer Setup").start();
+		}
 
 		visualizerChoiceBox.setItems(FXCollections.observableArrayList("Spectrogram", "Waveform", "VU Meter", "Particles"));
 		visualizerChoiceBox.getSelectionModel().select(0);
@@ -629,8 +639,6 @@ public class CODEInterfaceController implements Initializable {
 					node.setVisible(false);
 				}
 			});
-
-			audioCapture.stopCapture();
 
 			switch (newValue) {
 				case "Spectrogram" -> startVisualizer(spectrogramVisualizer, audioProcessor::processAudioData);
@@ -711,19 +719,28 @@ public class CODEInterfaceController implements Initializable {
 	}
 
 	private void addVisualizer(AudioVisualizer visualizer) {
-		visualizerContainer.getChildren().add(visualizer);
-		AnchorPane.setTopAnchor(visualizer, 1.0);
-		AnchorPane.setLeftAnchor(visualizer, 1.0);
-		visualizer.toBack();
-		visualizer.setVisible(false);
+		Platform.runLater(() -> {
+			visualizerContainer.getChildren().add(visualizer);
+			AnchorPane.setTopAnchor(visualizer, 1.0);
+			AnchorPane.setLeftAnchor(visualizer, 1.0);
+			visualizer.toBack();
+			visualizer.setVisible(false);
+		});
 	}
 
 	private void setupVisualizers() {
 		audioCapture = new AudioCapture();
 		audioProcessor = new AudioProcessor();
+
+		try {
+			audioCapture.startCapture();
+		} catch (LineUnavailableException e) {
+			CODEInterfaceApplication.LOGGER.error("Failed to start audio capture", e);
+		}
+
 		spectrogramVisualizer = new SpectrogramVisualizer((int) visualizerContainer.getPrefWidth(), (int) visualizerContainer.getPrefHeight());
 		addVisualizer(spectrogramVisualizer);
-		startVisualizer(spectrogramVisualizer, audioProcessor::processAudioData);
+		Platform.runLater(() -> startVisualizer(spectrogramVisualizer, audioProcessor::processAudioData));
 
 		waveformVisualizer = new WaveformVisualizer((int) visualizerContainer.getPrefWidth(), (int) visualizerContainer.getPrefHeight());
 		addVisualizer(waveformVisualizer);
@@ -738,20 +755,17 @@ public class CODEInterfaceController implements Initializable {
 	private void startVisualizer(AudioVisualizer visualizer, Function<byte[], double[]> dataProcessor) {
 		visualizer.setVisible(true);
 		new Thread(() -> {
-			try {
-				audioCapture.startCapture();
-				while (!CODEInterfaceApplication.isClosing && visualizer.isVisible()) {
-					byte[] audioData = audioCapture.readAudioData();
-					if (audioData != null) {
-						double[] processedData = dataProcessor.apply(audioData);
-						visualizer.updateVisualizer(processedData);
-					}
+			while (!CODEInterfaceApplication.isClosing && visualizer.isVisible()) {
+				byte[] audioData = audioCapture.readAudioData();
+				if (audioData != null) {
+					double[] processedData = dataProcessor.apply(audioData);
+					visualizer.updateVisualizer(processedData);
 				}
-			} catch (LineUnavailableException e) {
-				CODEInterfaceApplication.LOGGER.error(e);
-			} finally {
-				audioCapture.stopCapture();
 			}
 		}, "Audio Visualizer").start();
+	}
+
+	public AudioCapture getAudioCapture() {
+		return audioCapture;
 	}
 }

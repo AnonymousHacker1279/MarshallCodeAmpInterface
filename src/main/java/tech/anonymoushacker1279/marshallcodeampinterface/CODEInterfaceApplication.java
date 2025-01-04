@@ -119,6 +119,11 @@ public class CODEInterfaceApplication extends Application {
 		super.stop();
 		isClosing = true;
 		INTERFACE.close();
+
+		if (CONTROLLER.getAudioCapture() != null) {
+			CONTROLLER.getAudioCapture().stopCapture();
+		}
+
 		LOGGER.info("Exiting Marshall CODE Amp Interface...");
 	}
 
