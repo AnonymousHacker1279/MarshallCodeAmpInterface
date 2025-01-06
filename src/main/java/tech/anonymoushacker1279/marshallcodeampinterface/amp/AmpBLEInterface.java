@@ -2,6 +2,7 @@ package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.BTScanningInterfaceController;
+import tech.anonymoushacker1279.marshallcodeampinterface.controller.ErrorDialogController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.util.BTConfigurationData;
 import tech.anonymoushacker1279.orionble.OrionBLE;
@@ -35,7 +36,14 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 	private int[] lastSysexMessage;
 
 	public AmpBLEInterface() {
-		new Thread(this::initializeConnection, "BLE Connection Initializer").start();
+		Thread thread = new Thread(this::initializeConnection, "BLE Connection Initializer");
+		thread.setUncaughtExceptionHandler((t, e) -> {
+			BTScanningInterfaceController.closeDialog();
+
+			CODEInterfaceApplication.LOGGER.fatal("Failed to connect to device via USB or BLE");
+			ErrorDialogController.openDialog("Failed to connect to a Marshall CODE amplifier. Please ensure the device is connected over USB or Bluetooth and try again.", e.getMessage());
+		});
+		thread.start();
 	}
 
 	private void initializeConnection() {
@@ -46,16 +54,14 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 		BTConfigurationData config = BTConfigurationData.load();
 
 		if (config == null) {
-			DeviceFilter filter = new DeviceFilter.Builder().namePrefix("CODE").build();
-			try {
-				CODEInterfaceApplication.LOGGER.debug("Discovering CODE devices...");
-				device = orion.discoverDevices(filter).getFirst();
-				new BTConfigurationData(device.name(), device.address(), device.isPaired()).save();
-			} catch (NoSuchElementException e) {
-				throw new RuntimeException("No CODE device found");
-			}
+			scanForDevice();
 		} else {
-			device = new BLEDevice(config.name(), config.address(), config.isPaired());
+			if (orion.isDeviceConnected(config.address())) {
+				device = new BLEDevice(config.name(), config.address(), config.isPaired());
+			} else {
+				CODEInterfaceApplication.LOGGER.warn("Previously connected device is not connected, scanning for new device");
+				scanForDevice();
+			}
 		}
 
 		CODEInterfaceApplication.LOGGER.debug("Registering BLE notify event and starting notification listener");
@@ -64,6 +70,17 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 
 		BTScanningInterfaceController.closeDialog();
 		isConnected = true;
+	}
+
+	private void scanForDevice() {
+		DeviceFilter filter = new DeviceFilter.Builder().namePrefix("CODE").build();
+		try {
+			CODEInterfaceApplication.LOGGER.debug("Discovering CODE devices...");
+			device = orion.discoverDevices(filter).getFirst();
+			new BTConfigurationData(device.name(), device.address(), device.isPaired()).save();
+		} catch (NoSuchElementException e) {
+			throw new RuntimeException("No CODE device found");
+		}
 	}
 
 	@Override
@@ -143,9 +160,11 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 
 	@Override
 	public void close() {
-		CODEInterfaceApplication.LOGGER.debug("Unregistering BLE notify event and stopping notification listener");
-		orion.stopNotificationListener(device, service, notifyCharacteristic);
-		orion.unregisterNotifyEvent(device, service, notifyCharacteristic);
+		if (device != null) {
+			CODEInterfaceApplication.LOGGER.debug("Unregistering BLE notify event and stopping notification listener");
+			orion.stopNotificationListener(device, service, notifyCharacteristic);
+			orion.unregisterNotifyEvent(device, service, notifyCharacteristic);
+		}
 	}
 
 	private void handleIncomingMessage(GATTNotification notification) {

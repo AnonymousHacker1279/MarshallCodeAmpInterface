@@ -7,11 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AboutDialogController implements Initializable {
@@ -43,6 +45,7 @@ public class AboutDialogController implements Initializable {
 					stage.setTitle("About Marshall CODE Interface");
 					stage.setScene(scene);
 					stage.setResizable(false);
+					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
 				}
 
 				stage.show();

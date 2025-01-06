@@ -3,10 +3,12 @@ package tech.anonymoushacker1279.marshallcodeampinterface.controller;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class BTScanningInterfaceController {
 
@@ -24,6 +26,7 @@ public class BTScanningInterfaceController {
 					stage.setTitle("Bluetooth Scanning");
 					stage.setScene(scene);
 					stage.setAlwaysOnTop(true);
+					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
 
 					stage.setOnCloseRequest(event -> {
 						event.consume();

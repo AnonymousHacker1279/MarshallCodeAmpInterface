@@ -14,6 +14,7 @@ import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpUSBInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.BTScanningInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.CODEInterfaceController;
+import tech.anonymoushacker1279.marshallcodeampinterface.controller.ErrorDialogController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
@@ -36,19 +37,19 @@ public class CODEInterfaceApplication extends Application {
 	@Override
 	public void start(Stage stage) throws IOException {
 		LOGGER.info("Starting Marshall CODE Amp Interface...");
-		initializeDevices();
-
 		Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
+
+		initializeDevices();
 
 		LOGGER.debug("Loading main scene");
 		FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("main-view.fxml"));
-		Scene scene = new Scene(fxmlLoader.load(), 1260, 1070);
+		Scene scene = new Scene(fxmlLoader.load());
 		stage.setTitle("Marshall CODE Interface");
-		stage.setMaxWidth(1260);
-		stage.setMaxHeight(830);
 		stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
 		stage.setScene(scene);
+		stage.setResizable(false);
 		stage.show();
+
 		CONTROLLER = fxmlLoader.getController();
 		CONTROLLER.setHostServices(getHostServices());
 
@@ -67,6 +68,8 @@ public class CODEInterfaceApplication extends Application {
 				LOGGER.error(e);
 			}
 		}
+
+		LOGGER.info("Device initialization complete, successfully connected via {}", INTERFACE instanceof AmpUSBInterface ? "USB" : "BLE");
 
 		INTERFACE.setAmpHardwareInformation();
 
@@ -95,19 +98,9 @@ public class CODEInterfaceApplication extends Application {
 			INTERFACE = new AmpUSBInterface(device);
 		} catch (MidiUnavailableException | RuntimeException e) {
 			LOGGER.debug("USB connection failed, attempting BLE connection...");
-
-			try {
-				LOGGER.debug("Attempting BLE connection...");
-				BTScanningInterfaceController.openDialog();
-				INTERFACE = new AmpBLEInterface();
-			} catch (RuntimeException e2) {
-				LOGGER.fatal("Failed to connect to device via USB or BLE, exiting...");
-				LOGGER.fatal(e2);
-				System.exit(1);
-			}
+			BTScanningInterfaceController.openDialog();
+			INTERFACE = new AmpBLEInterface();
 		}
-
-		LOGGER.info("Device initialization complete, successfully connected via {}", INTERFACE instanceof AmpUSBInterface ? "USB" : "BLE");
 	}
 
 	public static void main(String[] args) {
@@ -140,12 +133,15 @@ public class CODEInterfaceApplication extends Application {
 			return Path.of(System.getProperty("user.dir"), "runtimeData");
 		}
 
-		Path path = Path.of(System.getProperty("appdata"), "CODE Amp Interface");
+		Path path = Path.of(System.getenv("appdata"), "CODE Amp Interface");
 		// Create the directory if it doesn't exist
 		if (!path.toFile().exists()) {
 			boolean created = path.toFile().mkdir();
 			if (!created) {
-				throw new RuntimeException("Failed to create application data directory");
+				RuntimeException e = new RuntimeException("Failed to create application data directory");
+				ErrorDialogController.openDialog("Unable to create a data directory for the application.", e.getMessage());
+				LOGGER.fatal(e);
+				System.exit(1);
 			}
 		}
 
