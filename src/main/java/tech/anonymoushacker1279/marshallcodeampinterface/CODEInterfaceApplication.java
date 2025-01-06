@@ -46,10 +46,10 @@ public class CODEInterfaceApplication extends Application {
 		initializeDevices();
 
 		LOGGER.debug("Loading main scene");
-		FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("main-view.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("views/main.fxml"));
 		Scene scene = new Scene(fxmlLoader.load());
 		stage.setTitle("Marshall CODE Interface");
-		stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
+		stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/code50.png"))));
 		stage.setScene(scene);
 		stage.setResizable(false);
 		stage.show();
@@ -58,7 +58,7 @@ public class CODEInterfaceApplication extends Application {
 		CONTROLLER.setHostServices(getHostServices());
 
 		if (INTERFACE instanceof AmpBLEInterface) {
-			CONTROLLER.connectionMethodImageView.setImage(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("bluetooth.png"))));
+			CONTROLLER.connectionMethodImageView.setImage(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/bluetooth.png"))));
 		}
 
 		new Thread(this::threadedSetup, "Async Initialization Handler").start();

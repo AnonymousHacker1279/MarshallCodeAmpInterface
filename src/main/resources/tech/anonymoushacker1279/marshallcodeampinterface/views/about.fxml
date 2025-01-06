@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterface.controller.AboutDialogController">
+	<children>
+		<Text layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A desktop program to modify amp settings without needing to use the Marshall Gateway app." textAlignment="CENTER" wrappingWidth="600.0">
+			<font>
+				<Font size="18.0" />
+			</font>
+		</Text>
+		<TextFlow layoutY="14.0" prefHeight="52.0" prefWidth="600.0" textAlignment="CENTER">
+			<children>
+				<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Marshall CODE Interface by ">
+					<font>
+						<Font size="22.0" />
+					</font>
+				</Text>
+				<Hyperlink fx:id="nameHyperlink" text="AnonymousHacker1279">
+					<font>
+						<Font size="22.0" />
+					</font>
+				</Hyperlink>
+			</children>
+		</TextFlow>
+		<ImageView fitHeight="150.0" fitWidth="200.0" layoutX="209.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="125.0">
+			<image>
+				<Image url="@../images/code50.png" />
+			</image>
+		</ImageView>
+		<Text layoutX="37.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Marshall and Marshall CODE are registered trademarks of Marshall Amplification PLC." AnchorPane.topAnchor="298.0" />
+		<Text layoutX="32.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some images contained in this program are property of Marshall Amplification PLC." textAlignment="CENTER" wrappingWidth="535.8486328125" AnchorPane.topAnchor="317.892578125" />
+		<Text layoutX="37.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open source under the MIT license" textAlignment="CENTER" wrappingWidth="526.01171875">
+			<font>
+				<Font name="System Bold Italic" size="16.0" />
+			</font>
+		</Text>
+      <Text fx:id="versionText" layoutX="32.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version: X" />
+      <Button fx:id="githubButton" layoutX="495.0" layoutY="183.0" mnemonicParsing="false" text="GitHub" />
+	</children>
+</AnchorPane>

@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class ErrorDialogController implements Initializable {
 
-	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("error-view.fxml"));
+	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("views/error.fxml"));
 	private static Scene scene;
 	private static Stage stage;
 
@@ -49,7 +49,7 @@ public class ErrorDialogController implements Initializable {
 					stage.setTitle("Fatal Application Error");
 					stage.setScene(scene);
 					stage.setAlwaysOnTop(true);
-					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
+					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/code50.png"))));
 
 					ErrorDialogController controller = fxmlLoader.getController();
 					String preparedMessage = message + "\n\n" + exception;

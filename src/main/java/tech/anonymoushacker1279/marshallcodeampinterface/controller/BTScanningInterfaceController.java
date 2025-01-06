@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class BTScanningInterfaceController {
 
-	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("bt-scanning-view.fxml"));
+	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("views/bt-scanning.fxml"));
 	private static Scene scene;
 	private static Stage stage;
 
@@ -26,7 +26,7 @@ public class BTScanningInterfaceController {
 					stage.setTitle("Bluetooth Scanning");
 					stage.setScene(scene);
 					stage.setAlwaysOnTop(true);
-					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
+					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/code50.png"))));
 
 					stage.setOnCloseRequest(event -> {
 						event.consume();

@@ -38,7 +38,7 @@ public class UpdateAvailableController implements Initializable {
 	private TextArea changelogTextArea;
 
 	private HostServices hostServices;
-	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("update-available-view.fxml"));
+	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("views/update-available.fxml"));
 	private static Scene scene;
 	private static Stage stage;
 
@@ -61,7 +61,7 @@ public class UpdateAvailableController implements Initializable {
 					stage.setTitle("Update Available");
 					stage.setScene(scene);
 					stage.setResizable(false);
-					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("code50.png"))));
+					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/code50.png"))));
 				}
 
 				stage.show();

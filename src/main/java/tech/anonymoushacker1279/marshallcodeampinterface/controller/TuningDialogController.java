@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -13,6 +14,7 @@ import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplicatio
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -23,7 +25,7 @@ public class TuningDialogController implements Initializable {
 	@FXML
 	Line tuningLine;
 
-	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("tuner-view.fxml"));
+	private static final FXMLLoader fxmlLoader = new FXMLLoader(CODEInterfaceApplication.class.getResource("views/tuner.fxml"));
 	private static Scene scene;
 	private static Stage stage;
 	private final Rotate tuningLineRotate = new Rotate();
@@ -71,6 +73,7 @@ public class TuningDialogController implements Initializable {
 					stage.setTitle("Tuner");
 					stage.setScene(scene);
 					stage.setResizable(false);
+					stage.getIcons().add(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/code50.png"))));
 
 					stage.setOnCloseRequest(event -> {
 						event.consume();

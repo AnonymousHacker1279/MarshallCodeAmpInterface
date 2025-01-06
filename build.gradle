@@ -82,7 +82,7 @@ jlink {
 				'--license-file', 'LICENSE'
 		]
 		if (installerType == 'msi') {
-			imageOptions += ['--icon', 'src/main/resources/tech/anonymoushacker1279/marshallcodeampinterface/installer_icon.ico']
+			imageOptions += ['--icon', 'src/main/resources/tech/anonymoushacker1279/marshallcodeampinterface/images/installer_icon.ico']
 			installerOptions += [
 					'--win-dir-chooser',
 					'--win-menu',
