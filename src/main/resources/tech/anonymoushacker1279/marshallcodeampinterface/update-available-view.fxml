@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterface.controller.UpdateAvailableController">
+	<children>
+		<ImageView fitHeight="64.0" fitWidth="64.0" layoutX="14.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@update.png" />
+			</image>
+		</ImageView>
+		<Text layoutX="91.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="An update is available!" textAlignment="CENTER">
+			<font>
+				<Font size="42.0" />
+			</font>
+		</Text>
+		<Text fx:id="currentVersionText" layoutX="91.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Version: X" />
+		<Text fx:id="latestVersionText" layoutX="233.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Latest Version: X" />
+		<TextArea fx:id="changelogTextArea" editable="false" layoutX="14.0" layoutY="156.0" prefHeight="230.0" prefWidth="570.0" />
+		<Button fx:id="downloadButton" layoutX="420.0" layoutY="97.0" mnemonicParsing="false" text="Download" />
+	</children>
+</AnchorPane>

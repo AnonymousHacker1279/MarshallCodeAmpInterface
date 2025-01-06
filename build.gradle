@@ -49,6 +49,14 @@ run {
 	environment 'RUNNING_IN_IDE', 'true'
 }
 
+processResources {
+	filesMatching('**/VERSION') {
+		filter {
+			it.replace('${version}', version)
+		}
+	}
+}
+
 jlink {
 	imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
 	options = ['--strip-debug', '--compress', 'zip-9', '--no-header-files', '--no-man-pages']

@@ -15,10 +15,12 @@ import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpUSBInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.BTScanningInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.CODEInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.ErrorDialogController;
+import tech.anonymoushacker1279.marshallcodeampinterface.controller.UpdateAvailableController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class CODEInterfaceApplication extends Application {
 	public static boolean isClosing = false;
 
 	public static final Logger LOGGER = LogManager.getLogger();
+
+	public static String APP_VERSION;
 
 	@Override
 	public void start(Stage stage) throws IOException {
@@ -58,6 +62,8 @@ public class CODEInterfaceApplication extends Application {
 		}
 
 		new Thread(this::threadedSetup, "Async Initialization Handler").start();
+
+		UpdateAvailableController.checkForUpdates(getHostServices());
 	}
 
 	private void threadedSetup() {
@@ -104,6 +110,14 @@ public class CODEInterfaceApplication extends Application {
 	}
 
 	public static void main(String[] args) {
+		// Set the application version from the VERSION file
+		try (FileInputStream fis = new FileInputStream(Objects.requireNonNull(CODEInterfaceApplication.class.getResource("VERSION")).getFile())) {
+			APP_VERSION = new String(fis.readAllBytes()).trim();
+		} catch (IOException e) {
+			LOGGER.error("Failed to load application version", e);
+			APP_VERSION = "Unknown";
+		}
+
 		launch();
 	}
 
