@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'tech.anonymoushacker1279'
-version '0.0.1'
+version '1.0.0'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(23)
 
@@ -38,7 +38,7 @@ javafx {
 
 dependencies {
 	implementation 'org.jetbrains:annotations:26.0.1'
-	implementation "tech.anonymoushacker1279:OrionBLE:0.0.1-SNAPSHOT-2025.01.05-1:all"
+	implementation "tech.anonymoushacker1279:OrionBLE:1.0.0:all"
 	implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
 	implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
 	implementation 'org.apache.commons:commons-math3:3.6.1'
