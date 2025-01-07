@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tech.anonymoushacker1279.marshallcodeampinterface.controller.ErrorDialogController">
+	<children>
+		<HBox layoutX="25.0" layoutY="14.0" prefHeight="64.0" prefWidth="450.0">
+			<children>
+				<ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+					<image>
+						<Image url="@../images/error.png"/>
+					</image>
+				</ImageView>
+				<Text strokeType="OUTSIDE" strokeWidth="0.0"
+				      text="A fatal error occurred, and the application must exit.">
+					<font>
+						<Font size="16.0"/>
+					</font>
+					<HBox.margin>
+						<Insets left="10.0" top="20.0"/>
+					</HBox.margin>
+				</Text>
+			</children>
+		</HBox>
+		<TextArea fx:id="errorTextArea" editable="false" layoutX="25.0" layoutY="87.0" maxHeight="150.0"
+		          maxWidth="450.0" prefWidth="450.0" wrapText="true"/>
+		<Button fx:id="openLogFolderButton" alignment="CENTER" contentDisplay="CENTER" layoutX="325.0" layoutY="245.0"
+		        mnemonicParsing="false" prefHeight="32.0" prefWidth="150.0" text="Open Log Folder"
+		        textAlignment="CENTER">
+		</Button>
+	</children>
+</AnchorPane>

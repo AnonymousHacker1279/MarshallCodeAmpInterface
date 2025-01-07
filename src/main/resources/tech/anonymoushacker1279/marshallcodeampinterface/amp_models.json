@@ -1,0 +1,51 @@
+[
+  {
+    "ampName": "CODE 25",
+    "familyId": 48,
+    "modelId": 16,
+    "deviceId": 2,
+    "ampImage":"amp_code25"
+  },
+  {
+    "ampName": "CODE 50",
+    "familyId": 48,
+    "modelId": 16,
+    "deviceId": 3,
+    "ampImage":"amp_code50"
+  },
+  {
+    "ampName": "CODE 50/100 (Test Unit)",
+    "familyId": 48,
+    "modelId": 16,
+    "deviceId": 0,
+    "ampImage":"amp_code50"
+  },
+  {
+    "ampName": "CODE 100",
+    "familyId": 48,
+    "modelId": 16,
+    "deviceId": 4,
+    "ampImage":"amp_code100"
+  },
+  {
+    "ampName": "CODE 100H",
+    "familyId": 48,
+    "modelId": 16,
+    "deviceId": 5,
+    "ampImage":"amp_code100h"
+  },
+  {
+    "ampName": "CODE LTE 20",
+    "familyId": 48,
+    "modelId": 8,
+    "deviceId": 1,
+    "ampImage":"amp_code25"
+  },
+  {
+    "ampName": "CODE LTE 50",
+    "familyId": 48,
+    "modelId": 8,
+    "deviceId": 2,
+    "ampImage":"amp_code50"
+  }
+]

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import atlantafx.base.controls.RingProgressIndicator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterface.controller.BTScanningInterfaceController">
+   <children>
+      <Text layoutX="172.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Marshall CODE Interface">
+         <font>
+            <Font name="System Italic" size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="166.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A USB connection could not be established." />
+      <Text layoutX="106.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The program is attempting to scan for a CODE amp wirelessly..." />
+      <RingProgressIndicator layoutX="260.0" layoutY="168.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="64.0" prefWidth="80.0" />
+      <Text layoutX="165.0" layoutY="301.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This may take some time. Please be patient." />
+   </children>
+</AnchorPane>
