@@ -7,6 +7,7 @@ module tech.anonymoushacker1279.marshallcodeampinterface {
 	requires org.apache.logging.log4j.core;
 	requires java.desktop;
 	requires commons.math3;
+	requires org.semver4j;
 
 	opens tech.anonymoushacker1279.marshallcodeampinterface to javafx.fxml;
 	exports tech.anonymoushacker1279.marshallcodeampinterface;

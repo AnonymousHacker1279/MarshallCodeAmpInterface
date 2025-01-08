@@ -14,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.semver4j.Semver;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 
 import java.io.IOException;
@@ -95,7 +96,8 @@ public class UpdateAvailableController implements Initializable {
 				String changelog = releaseInfo.get("body").toString();
 				String downloadUrl = releaseInfo.get("html_url").toString();
 
-				if (response.contains(CODEInterfaceApplication.APP_VERSION)) {
+				Semver latestSemver = new Semver(latestVersion);
+				if (latestSemver.isLowerThan(CODEInterfaceApplication.APP_VERSION)) {
 					CODEInterfaceApplication.LOGGER.info("No updates available");
 				} else {
 					CODEInterfaceApplication.LOGGER.info("Update available: {}", latestVersion);

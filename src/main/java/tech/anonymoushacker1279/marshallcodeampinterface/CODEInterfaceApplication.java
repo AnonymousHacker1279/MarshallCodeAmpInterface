@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.semver4j.Semver;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpBLEInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpUSBInterface;
@@ -36,7 +37,7 @@ public class CODEInterfaceApplication extends Application {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public static String APP_VERSION;
+	public static Semver APP_VERSION;
 
 	@Override
 	public void start(Stage stage) throws IOException {
@@ -112,10 +113,10 @@ public class CODEInterfaceApplication extends Application {
 	public static void main(String[] args) {
 		// Set the application version from the VERSION file
 		try (FileInputStream fis = new FileInputStream(Objects.requireNonNull(CODEInterfaceApplication.class.getResource("VERSION")).getFile())) {
-			APP_VERSION = new String(fis.readAllBytes()).trim();
+			APP_VERSION = new Semver(new String(fis.readAllBytes()).trim());
 		} catch (IOException e) {
 			LOGGER.error("Failed to load application version", e);
-			APP_VERSION = "Unknown";
+			APP_VERSION = null;
 		}
 
 		launch();
