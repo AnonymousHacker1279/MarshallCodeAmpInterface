@@ -9,6 +9,8 @@ plugins {
 group 'tech.anonymoushacker1279'
 version '1.0.1'
 
+apply from: 'optimization_utils.gradle'
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(23)
 
 repositories {
