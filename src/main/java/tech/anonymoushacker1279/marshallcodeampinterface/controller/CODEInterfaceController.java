@@ -1,6 +1,8 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.controller;
 
 import atlantafx.base.controls.RingProgressIndicator;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -11,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import org.semver4j.Semver;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpBLEInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.amp.AmpConfig;
@@ -20,6 +24,9 @@ import tech.anonymoushacker1279.marshallcodeampinterface.visualizer.*;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.sampled.LineUnavailableException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
@@ -345,6 +352,10 @@ public class CODEInterfaceController implements Initializable {
 	@FXML
 	public MenuItem openTunerMenuItem;
 	@FXML
+	public MenuItem loadPresetMenuItem;
+	@FXML
+	public MenuItem savePresetMenuItem;
+	@FXML
 	public ImageView connectionMethodImageView;
 	@FXML
 	public RingProgressIndicator presetLoadingIndicator;
@@ -622,6 +633,66 @@ public class CODEInterfaceController implements Initializable {
 		openTunerMenuItem.setOnAction(event -> {
 			CODEInterfaceApplication.INTERFACE.toggleTuner(true);
 			TuningDialogController.openDialog(CODEInterfaceApplication.INTERFACE::setTuningDialogController);
+		});
+
+		loadPresetMenuItem.setOnAction(event -> {
+			// Prompt the user to select a file
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Load Preset");
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Marshall CODE Preset", "*.mcp"));
+
+			// Load the preset
+			Gson gson = new Gson();
+			File file = fileChooser.showOpenDialog(CODEInterfaceApplication.MAIN_STAGE);
+			if (file != null) {
+				try (FileReader reader = new FileReader(file)) {
+					JsonObject json = gson.fromJson(reader, JsonObject.class);
+					Semver version = new Semver(json.get("appVersion").getAsString());
+
+					if (version.isLowerThan(CODEInterfaceApplication.APP_VERSION)) {
+						CODEInterfaceApplication.LOGGER.warn("Preset was created with an older version of the application ({})", version);
+
+						Alert alert = new Alert(Alert.AlertType.WARNING);
+						alert.setTitle("Preset Version Mismatch");
+						alert.setHeaderText("Preset may not be compatible");
+						alert.setContentText("The preset you are trying to load was created with an older version of the application. Things may not work as expected!");
+						alert.showAndWait();
+					} else if (version.isGreaterThan(CODEInterfaceApplication.APP_VERSION)) {
+						CODEInterfaceApplication.LOGGER.warn("Preset was created with a newer version of the application ({})", version);
+
+						Alert alert = new Alert(Alert.AlertType.WARNING);
+						alert.setTitle("Preset Version Mismatch");
+						alert.setHeaderText("Preset may not be compatible");
+						alert.setContentText("The preset you are trying to load was created with a newer version of the application. Things may not work as expected!");
+						alert.showAndWait();
+					}
+
+					AmpConfig config = AmpConfig.create(json);
+					AmpConfig.setInterfaceValues(this, config);
+				} catch (Exception e) {
+					CODEInterfaceApplication.LOGGER.error("Failed to load preset", e);
+				}
+			}
+		});
+
+		savePresetMenuItem.setOnAction(event -> {
+			// Prompt the user to select a file
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save Preset");
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Marshall CODE Preset", "*.mcp"));
+			fileChooser.setInitialFileName(CODEInterfaceApplication.DEFAULT_CONFIG.presetName + ".mcp");
+
+			// Save the preset
+			Gson gson = new Gson();
+			File file = fileChooser.showSaveDialog(CODEInterfaceApplication.MAIN_STAGE);
+			if (file != null) {
+				try (FileWriter writer = new FileWriter(file)) {
+					JsonObject json = AmpConfig.createJsonFromConfig(AmpConfig.getCurrentConfig(this));
+					gson.toJson(json, writer);
+				} catch (Exception e) {
+					CODEInterfaceApplication.LOGGER.error("Failed to save preset", e);
+				}
+			}
 		});
 
 		if (CODEInterfaceApplication.INTERFACE instanceof AmpBLEInterface) {

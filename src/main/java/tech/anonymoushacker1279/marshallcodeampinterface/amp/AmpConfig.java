@@ -1,5 +1,6 @@
 package tech.anonymoushacker1279.marshallcodeampinterface.amp;
 
+import com.google.gson.JsonObject;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.CODEInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
@@ -100,7 +101,7 @@ public class AmpConfig {
 		AmpConfig config = new AmpConfig();
 
 		// Bytes 9-27 are the preset name
-		config.presetName = new String(sysexData, 9, 18);
+		config.presetName = new String(sysexData, 9, 18).trim();
 		config.presetNumber = sysexData[8];
 		config.ampEnabled = sysexData[39] == 1;
 		config.ampType = sysexData[40];
@@ -140,6 +141,60 @@ public class AmpConfig {
 		config.reverbParameter2 = sysexData[58];
 		config.reverbParameter3 = sysexData[59];
 		config.reverbParameter4 = sysexData[60];
+
+		return config;
+	}
+
+	/**
+	 * Create a new AmpConfig instance based on the provided JSON object. Used for loading presets from files.
+	 *
+	 * @param jsonObject the JSON object
+	 * @return a new AmpConfig instance
+	 */
+	public static AmpConfig create(JsonObject jsonObject) {
+		CODEInterfaceApplication.LOGGER.debug("Creating a new configuration instance from a JSON object");
+
+		AmpConfig config = new AmpConfig();
+		config.presetName = "Local File Preset";
+		config.presetNumber = 0;
+		config.ampEnabled = jsonObject.get("ampEnabled").getAsBoolean();
+		config.ampType = jsonObject.get("ampType").getAsInt();
+		config.gain = jsonObject.get("gain").getAsInt();
+		config.volume = jsonObject.get("volume").getAsInt();
+		config.gate = jsonObject.get("gate").getAsInt();
+		config.bass = jsonObject.get("bass").getAsInt();
+		config.middle = jsonObject.get("middle").getAsInt();
+		config.treble = jsonObject.get("treble").getAsInt();
+		config.powerEnabled = jsonObject.get("powerEnabled").getAsBoolean();
+		config.powerType = jsonObject.get("powerType").getAsInt();
+		config.presence = jsonObject.get("presence").getAsInt();
+		config.resonance = jsonObject.get("resonance").getAsInt();
+		config.cabEnabled = jsonObject.get("cabEnabled").getAsBoolean();
+		config.cabType = jsonObject.get("cabType").getAsInt();
+		config.preFXEnabled = jsonObject.get("preFXEnabled").getAsBoolean();
+		config.preFXType = jsonObject.get("preFXType").getAsInt();
+		config.preFXParameter1 = jsonObject.get("preFXParameter1").getAsInt();
+		config.preFXParameter2 = jsonObject.get("preFXParameter2").getAsInt();
+		config.preFXParameter3 = jsonObject.get("preFXParameter3").getAsInt();
+		config.preFXParameter4 = jsonObject.get("preFXParameter4").getAsInt();
+		config.modulationEnabled = jsonObject.get("modulationEnabled").getAsBoolean();
+		config.modulationType = jsonObject.get("modulationType").getAsInt();
+		config.modulationParameter1 = jsonObject.get("modulationParameter1").getAsInt();
+		config.modulationParameter2 = jsonObject.get("modulationParameter2").getAsInt();
+		config.modulationParameter3 = jsonObject.get("modulationParameter3").getAsInt();
+		config.modulationParameter4 = jsonObject.get("modulationParameter4").getAsInt();
+		config.delayEnabled = jsonObject.get("delayEnabled").getAsBoolean();
+		config.delayType = jsonObject.get("delayType").getAsInt();
+		config.delayParameter1 = jsonObject.get("delayParameter1").getAsInt();
+		config.delayParameter2 = jsonObject.get("delayParameter2").getAsInt();
+		config.delayParameter3 = jsonObject.get("delayParameter3").getAsInt();
+		config.delayParameter4 = jsonObject.get("delayParameter4").getAsInt();
+		config.reverbEnabled = jsonObject.get("reverbEnabled").getAsBoolean();
+		config.reverbType = jsonObject.get("reverbType").getAsInt();
+		config.reverbParameter1 = jsonObject.get("reverbParameter1").getAsInt();
+		config.reverbParameter2 = jsonObject.get("reverbParameter2").getAsInt();
+		config.reverbParameter3 = jsonObject.get("reverbParameter3").getAsInt();
+		config.reverbParameter4 = jsonObject.get("reverbParameter4").getAsInt();
 
 		return config;
 	}
@@ -534,5 +589,184 @@ public class AmpConfig {
 				}
 			}
 		}
+	}
+
+	public static AmpConfig getCurrentConfig(CODEInterfaceController controller) {
+		AmpConfig config = new AmpConfig();
+		config.presetName = controller.presetNameTextField.getText();
+		config.presetNumber = Integer.parseInt(controller.presetNumberTextField.getText());
+		config.ampEnabled = controller.ampToggleButton.isSelected();
+		config.ampType = controller.ampListView.getSelectionModel().getSelectedIndex();
+		config.gain = (int) (controller.gainSlider.getValue() * 10);
+		config.volume = (int) (controller.volumeSlider.getValue() * 10);
+		config.gate = (int) (controller.gateSlider.getValue() * 10);
+		config.bass = (int) (controller.bassSlider.getValue() * 10);
+		config.middle = (int) (controller.middleSlider.getValue() * 10);
+		config.treble = (int) (controller.trebleSlider.getValue() * 10);
+		config.powerEnabled = controller.powerToggleButton.isSelected();
+		config.powerType = controller.powerListView.getSelectionModel().getSelectedIndex();
+		config.presence = (int) (controller.presenceSlider.getValue() * 10);
+		config.resonance = (int) (controller.resonanceSlider.getValue() * 10);
+		config.cabEnabled = controller.cabToggleButton.isSelected();
+		config.cabType = controller.cabListView.getSelectionModel().getSelectedIndex();
+		config.preFXEnabled = controller.preFXToggleButton.isSelected();
+		config.preFXType = controller.preFXTabPane.getSelectionModel().getSelectedIndex();
+		switch (config.preFXType) {
+			case 0 -> {
+				config.preFXParameter1 = (int) (controller.compressorToneSlider.getValue() * 10);
+				config.preFXParameter2 = (int) (controller.compressorRatioSlider.getValue() * 10);
+				config.preFXParameter3 = (int) (controller.compressorCompSlider.getValue() * 10);
+				config.preFXParameter4 = (int) (controller.compressorLevelSlider.getValue() * 10);
+			}
+			case 1 -> {
+				config.preFXParameter1 = controller.distortionModeListView.getSelectionModel().getSelectedIndex();
+				config.preFXParameter2 = (int) (controller.distortionDriveSlider.getValue() * 10);
+				config.preFXParameter3 = (int) (controller.distortionToneSlider.getValue() * 10);
+				config.preFXParameter4 = (int) (controller.distortionLevelSlider.getValue() * 10);
+			}
+			case 2 -> {
+				config.preFXParameter1 = controller.autoWahModeListView.getSelectionModel().getSelectedIndex();
+				config.preFXParameter2 = (int) (controller.autoWahFreqSlider.getValue() * 10);
+				config.preFXParameter3 = (int) (controller.autoWahSensitivitySlider.getValue() * 10);
+				config.preFXParameter4 = (int) (controller.autoWahResSlider.getValue() * 10);
+			}
+			case 3 -> {
+				config.preFXParameter1 = (int) (controller.pitchShifterSemitoneSlider.getValue() + 12);
+				config.preFXParameter2 = (int) (controller.pitchShifterFineSlider.getValue() * 10);
+				config.preFXParameter3 = (int) (controller.pitchShifterRegenSlider.getValue() * 10);
+				config.preFXParameter4 = (int) (controller.pitchShifterMixSlider.getValue() * 10);
+			}
+		}
+		config.modulationEnabled = controller.modulationToggleButton.isSelected();
+		config.modulationType = controller.modulationTabPane.getSelectionModel().getSelectedIndex();
+		switch (config.modulationType) {
+			case 0 -> {
+				config.modulationParameter1 = controller.chorusModeListView.getSelectionModel().getSelectedIndex();
+				config.modulationParameter2 = (int) (controller.chorusSpeedSlider.getValue() * 10);
+				config.modulationParameter3 = (int) (controller.chorusDepthSlider.getValue() * 10);
+				config.modulationParameter4 = (int) (controller.chorusToneSlider.getValue() * 10);
+			}
+			case 1 -> {
+				config.modulationParameter1 = controller.flangerModeListView.getSelectionModel().getSelectedIndex();
+				config.modulationParameter2 = (int) (controller.flangerSpeedSlider.getValue() * 10);
+				config.modulationParameter3 = (int) (controller.flangerDepthSlider.getValue() * 10);
+				config.modulationParameter4 = (int) (controller.flangerRegenSlider.getValue() * 10);
+			}
+			case 2 -> {
+				config.modulationParameter1 = controller.phaserModeListView.getSelectionModel().getSelectedIndex();
+				config.modulationParameter2 = (int) (controller.phaserSpeedSlider.getValue() * 10);
+				config.modulationParameter3 = (int) (controller.phaserDepthSlider.getValue() * 10);
+				config.modulationParameter4 = (int) (controller.phaserRegenSlider.getValue() * 10);
+			}
+			case 3 -> {
+				config.modulationParameter1 = controller.tremoloModeListView.getSelectionModel().getSelectedIndex();
+				config.modulationParameter2 = (int) (controller.tremoloSpeedSlider.getValue() * 10);
+				config.modulationParameter3 = (int) (controller.tremoloDepthSlider.getValue() * 10);
+				config.modulationParameter4 = (int) (controller.tremoloSkewSlider.getValue() + 50);
+			}
+		}
+		config.delayEnabled = controller.delayToggleButton.isSelected();
+		config.delayType = controller.delayTabPane.getSelectionModel().getSelectedIndex();
+		switch (config.delayType) {
+			case 0 -> {
+				config.delayParameter1 = (int) controller.studioTimeSlider.getValue();
+				config.delayParameter2 = (int) (controller.studioFeedbackSlider.getValue() * 10);
+				config.delayParameter3 = (int) (controller.studioFreqSlider.getValue() * 10);
+				config.delayParameter4 = (int) (controller.studioLevelSlider.getValue() * 10);
+			}
+			case 1 -> {
+				config.delayParameter1 = (int) controller.vintageTimeSlider.getValue();
+				config.delayParameter2 = (int) (controller.vintageAgeSlider.getValue() * 10);
+				config.delayParameter3 = (int) (controller.vintageFreqSlider.getValue() * 10);
+				config.delayParameter4 = (int) (controller.vintageLevelSlider.getValue() * 10);
+			}
+			case 2 -> {
+				config.delayParameter1 = (int) controller.multiTimeSlider.getValue();
+				config.delayParameter2 = (int) (controller.multiFeedbackSlider.getValue() * 10);
+				config.delayParameter3 = controller.multiTapPatternListView.getSelectionModel().getSelectedIndex();
+				config.delayParameter4 = (int) (controller.multiLevelSlider.getValue() * 10);
+			}
+			case 3 -> {
+				config.delayParameter1 = (int) controller.reverseTimeSlider.getValue();
+				config.delayParameter2 = (int) (controller.reverseFeedbackSlider.getValue() * 10);
+				config.delayParameter3 = (int) (controller.reverseFreqSlider.getValue() * 10);
+				config.delayParameter4 = (int) (controller.reverseLevelSlider.getValue() * 10);
+			}
+		}
+		config.reverbEnabled = controller.reverbToggleButton.isSelected();
+		config.reverbType = controller.reverbTabPane.getSelectionModel().getSelectedIndex();
+		switch (config.reverbType) {
+			case 0 -> {
+				config.reverbParameter1 = (int) (controller.roomDecaySlider.getValue() * 10);
+				config.reverbParameter2 = (int) (controller.roomPreDelaySlider.getValue() * 10);
+				config.reverbParameter3 = (int) (controller.roomToneSlider.getValue() * 10);
+				config.reverbParameter4 = (int) (controller.roomLevelSlider.getValue() * 10);
+			}
+			case 1 -> {
+				config.reverbParameter1 = (int) (controller.hallDecaySlider.getValue() * 10);
+				config.reverbParameter2 = (int) (controller.hallPreDelaySlider.getValue() * 10);
+				config.reverbParameter3 = (int) (controller.hallToneSlider.getValue() * 10);
+				config.reverbParameter4 = (int) (controller.hallLevelSlider.getValue() * 10);
+			}
+			case 2 -> {
+				config.reverbParameter1 = (int) (controller.springDecaySlider.getValue() * 10);
+				config.reverbParameter2 = (int) (controller.springPreDelaySlider.getValue() * 10);
+				config.reverbParameter3 = (int) (controller.springToneSlider.getValue() * 10);
+				config.reverbParameter4 = (int) (controller.springLevelSlider.getValue() * 10);
+			}
+			case 3 -> {
+				config.reverbParameter1 = (int) (controller.stadiumDecaySlider.getValue() * 10);
+				config.reverbParameter2 = (int) (controller.stadiumPreDelaySlider.getValue() * 10);
+				config.reverbParameter3 = (int) (controller.stadiumToneSlider.getValue() * 10);
+				config.reverbParameter4 = (int) (controller.stadiumLevelSlider.getValue() * 10);
+			}
+		}
+
+		return config;
+	}
+
+	public static JsonObject createJsonFromConfig(AmpConfig config) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("appVersion", CODEInterfaceApplication.APP_VERSION.toString());
+		jsonObject.addProperty("ampEnabled", config.ampEnabled);
+		jsonObject.addProperty("ampType", config.ampType);
+		jsonObject.addProperty("gain", config.gain);
+		jsonObject.addProperty("volume", config.volume);
+		jsonObject.addProperty("gate", config.gate);
+		jsonObject.addProperty("bass", config.bass);
+		jsonObject.addProperty("middle", config.middle);
+		jsonObject.addProperty("treble", config.treble);
+		jsonObject.addProperty("powerEnabled", config.powerEnabled);
+		jsonObject.addProperty("powerType", config.powerType);
+		jsonObject.addProperty("presence", config.presence);
+		jsonObject.addProperty("resonance", config.resonance);
+		jsonObject.addProperty("cabEnabled", config.cabEnabled);
+		jsonObject.addProperty("cabType", config.cabType);
+		jsonObject.addProperty("preFXEnabled", config.preFXEnabled);
+		jsonObject.addProperty("preFXType", config.preFXType);
+		jsonObject.addProperty("preFXParameter1", config.preFXParameter1);
+		jsonObject.addProperty("preFXParameter2", config.preFXParameter2);
+		jsonObject.addProperty("preFXParameter3", config.preFXParameter3);
+		jsonObject.addProperty("preFXParameter4", config.preFXParameter4);
+		jsonObject.addProperty("modulationEnabled", config.modulationEnabled);
+		jsonObject.addProperty("modulationType", config.modulationType);
+		jsonObject.addProperty("modulationParameter1", config.modulationParameter1);
+		jsonObject.addProperty("modulationParameter2", config.modulationParameter2);
+		jsonObject.addProperty("modulationParameter3", config.modulationParameter3);
+		jsonObject.addProperty("modulationParameter4", config.modulationParameter4);
+		jsonObject.addProperty("delayEnabled", config.delayEnabled);
+		jsonObject.addProperty("delayType", config.delayType);
+		jsonObject.addProperty("delayParameter1", config.delayParameter1);
+		jsonObject.addProperty("delayParameter2", config.delayParameter2);
+		jsonObject.addProperty("delayParameter3", config.delayParameter3);
+		jsonObject.addProperty("delayParameter4", config.delayParameter4);
+		jsonObject.addProperty("reverbEnabled", config.reverbEnabled);
+		jsonObject.addProperty("reverbType", config.reverbType);
+		jsonObject.addProperty("reverbParameter1", config.reverbParameter1);
+		jsonObject.addProperty("reverbParameter2", config.reverbParameter2);
+		jsonObject.addProperty("reverbParameter3", config.reverbParameter3);
+		jsonObject.addProperty("reverbParameter4", config.reverbParameter4);
+
+		return jsonObject;
 	}
 }

@@ -39,6 +39,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -61,6 +62,9 @@
 				<Menu mnemonicParsing="false" text="File">
 					<items>
 						<MenuItem fx:id="openTunerMenuItem" mnemonicParsing="false" text="Open Tuner" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="loadPresetMenuItem" mnemonicParsing="false" text="Load Preset from File" />
+                  <MenuItem fx:id="savePresetMenuItem" mnemonicParsing="false" text="Save Preset to File" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">

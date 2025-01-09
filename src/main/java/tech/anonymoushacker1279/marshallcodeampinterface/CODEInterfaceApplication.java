@@ -39,9 +39,12 @@ public class CODEInterfaceApplication extends Application {
 
 	public static Semver APP_VERSION;
 
+	public static Stage MAIN_STAGE;
+
 	@Override
 	public void start(Stage stage) throws IOException {
 		LOGGER.info("Starting Marshall CODE Amp Interface...");
+		MAIN_STAGE = stage;
 		Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
 
 		initializeDevices();
