@@ -48,7 +48,7 @@ public class AudioCapture {
 			if (targetLineInfo instanceof DataLine.Info dataLineInfo) {
 				AudioFormat[] formats = dataLineInfo.getFormats();
 				for (AudioFormat format : formats) {
-					if (format.getChannels() == 2 && format.getSampleSizeInBits() == 16) {
+					if (format.getSampleSizeInBits() == 16) {
 						AudioFormat specifiedFormat = new AudioFormat(
 								format.getEncoding(),
 								48000,
@@ -58,9 +58,11 @@ public class AudioCapture {
 								2500,
 								format.isBigEndian()
 						);
+
 						targetLine = (TargetDataLine) mixer.getLine(dataLineInfo);
 						targetLine.open(specifiedFormat);
 						targetLine.start();
+
 						return;
 					}
 				}
@@ -82,6 +84,7 @@ public class AudioCapture {
 		if (bytesRead > 0) {
 			return buffer;
 		}
+
 		return null;
 	}
 
