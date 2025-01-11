@@ -21,11 +21,12 @@ import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
 import javax.sound.midi.MidiUnavailableException;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Properties;
 
 public class CODEInterfaceApplication extends Application {
 
@@ -37,7 +38,8 @@ public class CODEInterfaceApplication extends Application {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public static Semver APP_VERSION;
+	public static Semver APP_VERSION = Semver.ZERO;
+	public static String COMMIT = "Unknown";
 
 	public static Stage MAIN_STAGE;
 
@@ -114,12 +116,14 @@ public class CODEInterfaceApplication extends Application {
 	}
 
 	public static void main(String[] args) {
-		// Set the application version from the VERSION file
-		try (FileInputStream fis = new FileInputStream(Objects.requireNonNull(CODEInterfaceApplication.class.getResource("VERSION")).getFile())) {
-			APP_VERSION = new Semver(new String(fis.readAllBytes()).trim());
-		} catch (IOException e) {
-			LOGGER.error("Failed to load application version", e);
-			APP_VERSION = null;
+		try {
+			InputStream url = CODEInterfaceApplication.class.getResourceAsStream("app.properties");
+			Properties properties = new Properties();
+			properties.load(url);
+			APP_VERSION = new Semver(properties.getProperty("version"));
+			COMMIT = properties.getProperty("commit");
+		} catch (IOException | NullPointerException e) {
+			LOGGER.error("Failed to load version information from app.properties file", e);
 		}
 
 		launch();

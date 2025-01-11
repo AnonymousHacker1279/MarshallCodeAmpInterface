@@ -42,7 +42,8 @@
 				<Font name="System Bold Italic" size="16.0" />
 			</font>
 		</Text>
-      <Text fx:id="versionText" layoutX="32.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version: X" />
+      <Text fx:id="versionText" layoutX="32.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version: X" />
       <Button fx:id="githubButton" layoutX="495.0" layoutY="183.0" mnemonicParsing="false" text="GitHub" />
+      <Text fx:id="commitText" layoutX="32.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Commit: X" />
 	</children>
 </AnchorPane>

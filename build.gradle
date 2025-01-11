@@ -11,6 +11,15 @@ version '1.0.1'
 
 apply from: 'optimization_utils.gradle'
 
+def getGitHash = { ->
+	def stdout = new ByteArrayOutputStream()
+	exec {
+		commandLine 'git', 'rev-parse', '--short', 'HEAD'
+		standardOutput = stdout
+	}
+	return stdout.toString().trim()
+}
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(23)
 
 repositories {
@@ -52,11 +61,15 @@ run {
 	environment 'RUNNING_IN_IDE', 'true'
 }
 
-processResources {
-	filesMatching('**/VERSION') {
-		filter {
-			it.replace('${version}', version)
-		}
+tasks.named('processResources', ProcessResources).configure {
+	LinkedHashMap<String, String> replaceProperties = [
+			version: version, commit: getGitHash()
+	]
+
+	inputs.properties replaceProperties
+
+	filesMatching(['**/app.properties']) {
+		expand replaceProperties + [project: project]
 	}
 }
 

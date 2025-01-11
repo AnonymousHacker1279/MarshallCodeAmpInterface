@@ -25,6 +25,8 @@ public class AboutDialogController implements Initializable {
 	@FXML
 	private Text versionText;
 	@FXML
+	private Text commitText;
+	@FXML
 	private Button githubButton;
 
 	private HostServices hostServices;
@@ -39,6 +41,7 @@ public class AboutDialogController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		versionText.setText("Version: " + CODEInterfaceApplication.APP_VERSION);
+		commitText.setText("Commit: " + CODEInterfaceApplication.COMMIT);
 		nameHyperlink.setOnAction(event -> hostServices.showDocument("https://github.com/AnonymousHacker1279"));
 		githubButton.setOnAction(event -> hostServices.showDocument("https://github.com/AnonymousHacker1279/MarshallCodeAmpInterface"));
 	}

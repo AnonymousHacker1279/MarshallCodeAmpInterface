@@ -5,11 +5,9 @@ import com.google.gson.reflect.TypeToken;
 import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplication;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 public record AmpModel(String ampName, int familyId, int modelId, int deviceId, String ampImage) {
@@ -18,15 +16,15 @@ public record AmpModel(String ampName, int familyId, int modelId, int deviceId, 
 
 	public static void load() {
 		Gson gson = new Gson();
-		URL url = CODEInterfaceApplication.class.getResource("amp_models.json");
+		InputStream inputStream = CODEInterfaceApplication.class.getResourceAsStream("amp_models.json");
 
-		if (url != null) {
+		if (inputStream != null) {
 			CODEInterfaceApplication.LOGGER.debug("Loading amp model information");
 
-			try (Reader reader = Files.newBufferedReader(Paths.get(url.toURI()))) {
+			try (Reader reader = new InputStreamReader(inputStream)) {
 				ALL_MODELS = gson.fromJson(reader, TypeToken.getParameterized(List.class, AmpModel.class).getType());
-			} catch (IOException | URISyntaxException e) {
-				throw new RuntimeException(e);
+			} catch (IOException e) {
+				CODEInterfaceApplication.LOGGER.error("Failed to load amp models", e);
 			}
 		} else {
 			throw new RuntimeException("Failed to load amp models");
