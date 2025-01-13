@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'tech.anonymoushacker1279'
-version '1.0.1'
+version '1.1.0'
 
 apply from: 'optimization_utils.gradle'
 
@@ -93,7 +93,7 @@ jlink {
 				'--name', 'CODE Amp Interface',
 				'--description', "A desktop program to modify amp settings without needing to use the Marshall Gateway app.",
 				'--vendor', 'AnonymousHacker1279',
-				'--copyright', 'Copyright (c) 2024 Nicholas Smit',
+				'--copyright', 'Copyright (c) 2025 Nicholas Smit',
 				'--about-url', 'https://github.com/AnonymousHacker1279/MarshallCodeAmpInterface',
 				'--license-file', 'LICENSE'
 		]

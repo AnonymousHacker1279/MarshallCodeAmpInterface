@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.RingProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.anonymoushacker1279.marshallcodeampinterface.controller.GatewayPresetBrowserController">
+	<children>
+		<TextField fx:id="searchTextField" layoutX="14.0" layoutY="14.0" prefHeight="32.0" prefWidth="210.0" promptText="Search for presets..." />
+		<Text layoutX="305.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Marshall Gateway Preset Library">
+			<font>
+				<Font size="20.0" />
+			</font>
+		</Text>
+		<ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="86.0" prefHeight="300.0" prefWidth="570.0">
+			<content>
+				<AnchorPane fx:id="presetAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="570.0" />
+			</content>
+		</ScrollPane>
+      <RingProgressIndicator fx:id="ringProgressIndicator" layoutX="233.0" layoutY="20.0" visible="false" />
+	</children>
+</AnchorPane>

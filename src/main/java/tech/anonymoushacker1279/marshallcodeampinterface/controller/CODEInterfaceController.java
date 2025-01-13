@@ -356,6 +356,8 @@ public class CODEInterfaceController implements Initializable {
 	@FXML
 	public MenuItem savePresetMenuItem;
 	@FXML
+	public MenuItem openGatewayPresetBrowserMenuItem;
+	@FXML
 	public ImageView connectionMethodImageView;
 	@FXML
 	public RingProgressIndicator presetLoadingIndicator;
@@ -693,6 +695,10 @@ public class CODEInterfaceController implements Initializable {
 					CODEInterfaceApplication.LOGGER.error("Failed to save preset", e);
 				}
 			}
+		});
+
+		openGatewayPresetBrowserMenuItem.setOnAction(event -> {
+			GatewayPresetBrowserController.openDialog();
 		});
 
 		if (CODEInterfaceApplication.INTERFACE instanceof AmpBLEInterface) {

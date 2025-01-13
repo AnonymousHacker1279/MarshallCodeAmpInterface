@@ -17,6 +17,8 @@ import tech.anonymoushacker1279.marshallcodeampinterface.controller.BTScanningIn
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.CODEInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.ErrorDialogController;
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.UpdateAvailableController;
+import tech.anonymoushacker1279.marshallcodeampinterface.gateway.GatewayAPIHandler;
+import tech.anonymoushacker1279.marshallcodeampinterface.gateway.GatewayKeystoreHandler;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.IOMIDIDevice;
 
@@ -34,14 +36,16 @@ public class CODEInterfaceApplication extends Application {
 	public static AmpMIDIInterface INTERFACE;
 	public static AmpConfig DEFAULT_CONFIG = AmpConfig.empty();
 	public static ArrayList<AmpConfig> PRESETS = new ArrayList<>(100);
+	public static Stage MAIN_STAGE;
+	public static final GatewayKeystoreHandler KEYSTORE_HANDLER = new GatewayKeystoreHandler();
+	public static final GatewayAPIHandler GATEWAY_API_HANDLER = new GatewayAPIHandler();
+
 	public static boolean isClosing = false;
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public static Semver APP_VERSION = Semver.ZERO;
 	public static String COMMIT = "Unknown";
-
-	public static Stage MAIN_STAGE;
 
 	@Override
 	public void start(Stage stage) throws IOException {
@@ -100,6 +104,12 @@ public class CODEInterfaceApplication extends Application {
 
 		Platform.runLater(() -> CONTROLLER.presetLoadingIndicator.setVisible(false));
 		LOGGER.info("Preset loading complete");
+
+		LOGGER.info("Attempting to connect to the Marshall Gateway API...");
+		boolean success = GATEWAY_API_HANDLER.tryKeystoreLogin();
+		if (!success) {
+			LOGGER.info("Keystore login failed, the user likely has not tried to log in before");
+		}
 	}
 
 	private static void initializeDevices() {

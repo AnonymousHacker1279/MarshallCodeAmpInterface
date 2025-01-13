@@ -65,6 +65,8 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="loadPresetMenuItem" mnemonicParsing="false" text="Load Preset from File" />
                   <MenuItem fx:id="savePresetMenuItem" mnemonicParsing="false" text="Save Preset to File" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="openGatewayPresetBrowserMenuItem" mnemonicParsing="false" text="Gateway Preset Browser" />
 					</items>
 				</Menu>
 				<Menu mnemonicParsing="false" text="Help">

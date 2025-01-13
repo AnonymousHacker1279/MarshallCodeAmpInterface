@@ -13,8 +13,11 @@ module tech.anonymoushacker1279.marshallcodeampinterface {
 	exports tech.anonymoushacker1279.marshallcodeampinterface;
 	exports tech.anonymoushacker1279.marshallcodeampinterface.midi;
 	exports tech.anonymoushacker1279.marshallcodeampinterface.amp;
+	exports tech.anonymoushacker1279.marshallcodeampinterface.gateway;
 	exports tech.anonymoushacker1279.marshallcodeampinterface.controller;
 	opens tech.anonymoushacker1279.marshallcodeampinterface.controller to javafx.fxml;
+	exports tech.anonymoushacker1279.marshallcodeampinterface.controller.components;
+	opens tech.anonymoushacker1279.marshallcodeampinterface.controller.components to javafx.fxml;
 	exports tech.anonymoushacker1279.marshallcodeampinterface.util;
 	opens tech.anonymoushacker1279.marshallcodeampinterface.util to javafx.fxml;
 	exports tech.anonymoushacker1279.marshallcodeampinterface.visualizer;

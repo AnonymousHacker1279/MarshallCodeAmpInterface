@@ -97,11 +97,11 @@ public class UpdateAvailableController implements Initializable {
 				String downloadUrl = releaseInfo.get("html_url").toString();
 
 				Semver latestSemver = new Semver(latestVersion);
-				if (latestSemver.isLowerThan(CODEInterfaceApplication.APP_VERSION)) {
-					CODEInterfaceApplication.LOGGER.info("No updates available");
-				} else {
+				if (latestSemver.isGreaterThan(CODEInterfaceApplication.APP_VERSION)) {
 					CODEInterfaceApplication.LOGGER.info("Update available: {}", latestVersion);
 					openDialog(services, latestVersion, changelog, downloadUrl);
+				} else {
+					CODEInterfaceApplication.LOGGER.info("No updates available");
 				}
 			} catch (NullPointerException e) {
 				CODEInterfaceApplication.LOGGER.error("Failed to check for updates due to missing response information");
