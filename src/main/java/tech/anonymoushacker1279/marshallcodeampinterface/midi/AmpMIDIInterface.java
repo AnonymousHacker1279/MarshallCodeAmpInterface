@@ -42,7 +42,7 @@ public abstract class AmpMIDIInterface {
 	/**
 	 * Receive a sysex message from the connected device
 	 */
-	public abstract byte[] receiveSysexMessage();
+	public abstract byte[] receiveSysexMessage(int expectedLength);
 
 	/**
 	 * Validate an incoming sysex message to check for errors
@@ -746,7 +746,7 @@ public abstract class AmpMIDIInterface {
 		CODEInterfaceApplication.LOGGER.debug("Requesting current amp configuration");
 		try {
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x73, 0x01, 0x00, (byte) 0xF7});
-			return receiveSysexMessage();
+			return receiveSysexMessage(75);
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);
 		}
@@ -759,7 +759,22 @@ public abstract class AmpMIDIInterface {
 		CODEInterfaceApplication.LOGGER.debug("Requesting amp configuration for preset {}", preset);
 		try {
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x01, (byte) preset, (byte) 0xF7});
-			return receiveSysexMessage();
+			return receiveSysexMessage(75);
+		} catch (InvalidMidiDataException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Save the specified {@link AmpConfig} to the device, overwriting the given preset.
+	 *
+	 * @param config the configuration to save
+	 * @param preset the preset to save the configuration to
+	 */
+	public void saveConfigToDevice(AmpConfig config, int preset) {
+		CODEInterfaceApplication.LOGGER.debug("Overwriting amp preset {} on device", preset);
+		try {
+			sendSysexMessage(AmpConfig.createSysexFromConfig(config, preset));
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);
 		}
@@ -773,7 +788,7 @@ public abstract class AmpMIDIInterface {
 		try {
 			AmpModel.load();
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x10, (byte) 0xF7});
-			byte[] message = receiveSysexMessage();
+			byte[] message = receiveSysexMessage(36);
 			CODEInterfaceApplication.CONTROLLER.serialNumberTextField.setText(new String(message, 9, 18));
 
 			int familyId = message[4] & 0xFF;
@@ -799,7 +814,7 @@ public abstract class AmpMIDIInterface {
 			CODEInterfaceApplication.CONTROLLER.dspTextField.setText("v" + majorDspVersion + "." + minorDspVersion);
 
 			sendSysexMessage(new byte[]{(byte) 0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x62, 0x01, 0x04, (byte) 0xF7});
-			message = receiveSysexMessage();
+			message = receiveSysexMessage(21);
 			CODEInterfaceApplication.CONTROLLER.bluetoothTextField.setText(new String(message, 11, 3));
 		} catch (InvalidMidiDataException e) {
 			throw new RuntimeException(e);

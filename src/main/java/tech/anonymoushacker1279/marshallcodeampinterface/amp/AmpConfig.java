@@ -5,7 +5,8 @@ import tech.anonymoushacker1279.marshallcodeampinterface.CODEInterfaceApplicatio
 import tech.anonymoushacker1279.marshallcodeampinterface.controller.CODEInterfaceController;
 import tech.anonymoushacker1279.marshallcodeampinterface.midi.AmpMIDIInterface;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AmpConfig {
 
@@ -96,51 +97,66 @@ public class AmpConfig {
 	private static AmpConfig create(byte[] sysexData) {
 		CODEInterfaceApplication.LOGGER.debug("Creating a new configuration instance from sysex data");
 
-		// Remove status bytes
-		sysexData = Arrays.copyOfRange(sysexData, 1, sysexData.length - 1);
 		AmpConfig config = new AmpConfig();
 
-		// Bytes 9-27 are the preset name
-		config.presetName = new String(sysexData, 9, 18).trim();
-		config.presetNumber = sysexData[8];
-		config.ampEnabled = sysexData[39] == 1;
-		config.ampType = sysexData[40];
-		config.gain = sysexData[28];
-		config.volume = sysexData[32];
-		config.gate = sysexData[41];
-		config.bass = sysexData[29];
-		config.middle = sysexData[30];
-		config.treble = sysexData[31];
-		config.powerEnabled = sysexData[61] == 1;
-		config.powerType = sysexData[62];
-		config.presence = sysexData[66];
-		config.resonance = sysexData[65];
-		config.cabEnabled = sysexData[63] == 1;
-		config.cabType = sysexData[64];
-		config.preFXEnabled = sysexData[33] == 1;
-		config.preFXType = sysexData[34];
-		config.preFXParameter1 = sysexData[35];
-		config.preFXParameter2 = sysexData[36];
-		config.preFXParameter3 = sysexData[37];
-		config.preFXParameter4 = sysexData[38];
-		config.modulationEnabled = sysexData[42] == 1;
-		config.modulationType = sysexData[43];
-		config.modulationParameter1 = sysexData[44];
-		config.modulationParameter2 = sysexData[45];
-		config.modulationParameter3 = sysexData[46];
-		config.modulationParameter4 = sysexData[47];
-		config.delayEnabled = sysexData[48] == 1;
-		config.delayType = sysexData[49];
-		config.delayParameter1 = (sysexData[50] * 128) + sysexData[51]; // 2 bytes, MSB & LSB
-		config.delayParameter2 = sysexData[52];
-		config.delayParameter3 = sysexData[53];
-		config.delayParameter4 = sysexData[54];
-		config.reverbEnabled = sysexData[55] == 1;
-		config.reverbType = sysexData[56];
-		config.reverbParameter1 = sysexData[57];
-		config.reverbParameter2 = sysexData[58];
-		config.reverbParameter3 = sysexData[59];
-		config.reverbParameter4 = sysexData[60];
+		config.presetName = new String(sysexData, 10, 19).trim();
+		config.presetNumber = sysexData[9];
+
+		// Preamp settings
+		config.gain = sysexData[29];
+		config.bass = sysexData[30];
+		config.middle = sysexData[31];
+		config.treble = sysexData[32];
+		config.volume = sysexData[33];
+
+		// FX pedal settings
+		config.preFXEnabled = sysexData[34] == 1;
+		config.preFXType = sysexData[35];
+		config.preFXParameter1 = sysexData[36];
+		config.preFXParameter2 = sysexData[37];
+		config.preFXParameter3 = sysexData[38];
+		config.preFXParameter4 = sysexData[39];
+
+		// Amp settings
+		config.ampEnabled = sysexData[40] == 1;
+		config.ampType = sysexData[41];
+		config.gate = sysexData[42];
+
+		// Modulation settings
+		config.modulationEnabled = sysexData[43] == 1;
+		config.modulationType = sysexData[44];
+		config.modulationParameter1 = sysexData[45];
+		config.modulationParameter2 = sysexData[46];
+		config.modulationParameter3 = sysexData[47];
+		config.modulationParameter4 = sysexData[48];
+
+		// Delay settings
+		config.delayEnabled = sysexData[49] == 1;
+		config.delayType = sysexData[50];
+		config.delayParameter1 = (sysexData[51] * 128) + sysexData[52]; // 2 bytes, MSB & LSB
+		config.delayParameter2 = sysexData[53];
+		config.delayParameter3 = sysexData[54];
+		config.delayParameter4 = sysexData[55];
+
+		// Reverb settings
+		config.reverbEnabled = sysexData[56] == 1;
+		config.reverbType = sysexData[57];
+		config.reverbParameter1 = sysexData[58];
+		config.reverbParameter2 = sysexData[59];
+		config.reverbParameter3 = sysexData[60];
+		config.reverbParameter4 = sysexData[61];
+
+		// Power amp settings
+		config.powerEnabled = sysexData[62] == 1;
+		config.powerType = sysexData[63];
+
+		// Cab settings
+		config.cabEnabled = sysexData[64] == 1;
+		config.cabType = sysexData[65];
+
+		// More power amp settings
+		config.resonance = sysexData[66];
+		config.presence = sysexData[67];
 
 		return config;
 	}
@@ -768,5 +784,99 @@ public class AmpConfig {
 		jsonObject.addProperty("reverbParameter4", config.reverbParameter4);
 
 		return jsonObject;
+	}
+
+	/**
+	 * Create a sysex message from an AmpConfig object.
+	 *
+	 * @param config The AmpConfig object to create a sysex message from
+	 * @return A byte array containing the sysex message
+	 */
+	public static byte[] createSysexFromConfig(AmpConfig config, int preset) {
+		ArrayList<Integer> message = new ArrayList<>(List.of(0xF0, 0x00, 0x21, 0x15, 0x7F, 0x7F, 0x7F, 0x72, 0x02, preset));
+
+		// First 18 bytes are the preset name
+		byte[] nameBytes = config.presetName.getBytes();
+		for (int i = 0; i < 18; i++) {
+			// If the name is less than 18 characters, pad with spaces
+			if (i < nameBytes.length) {
+				message.add(nameBytes[i] & 0xFF);
+			} else {
+				message.add(0x20);
+			}
+		}
+
+		// Byte 28 is a fixed value
+		message.add(0x00);
+
+		// Next 5 bytes are preamp settings
+		message.add(config.gain);
+		message.add(config.bass);
+		message.add(config.middle);
+		message.add(config.treble);
+		message.add(config.volume);
+
+		// Next 6 bytes are FX pedal settings
+		message.add(config.preFXEnabled ? 1 : 0);
+		message.add(config.preFXType);
+		message.add(config.preFXParameter1);
+		message.add(config.preFXParameter2);
+		message.add(config.preFXParameter3);
+		message.add(config.preFXParameter4);
+
+		// Next 3 bytes are amp settings
+		message.add(config.ampEnabled ? 1 : 0);
+		message.add(config.ampType);
+		message.add(config.gate);
+
+		// Next 6 bytes are modulation settings
+		message.add(config.modulationEnabled ? 1 : 0);
+		message.add(config.modulationType);
+		message.add(config.modulationParameter1);
+		message.add(config.modulationParameter2);
+		message.add(config.modulationParameter3);
+		message.add(config.modulationParameter4);
+
+		// Next 7 bytes are delay settings
+		message.add(config.delayEnabled ? 1 : 0);
+		message.add(config.delayType);
+		message.add(config.delayParameter1 / 128); // MSB
+		message.add(config.delayParameter1 % 128); // LSB
+		message.add(config.delayParameter2);
+		message.add(config.delayParameter3);
+		message.add(config.delayParameter4);
+
+		// Next 6 bytes are reverb settings
+		message.add(config.reverbEnabled ? 1 : 0);
+		message.add(config.reverbType);
+		message.add(config.reverbParameter1);
+		message.add(config.reverbParameter2);
+		message.add(config.reverbParameter3);
+		message.add(config.reverbParameter4);
+
+		// Next 2 bytes are power amp settings
+		message.add(config.powerEnabled ? 1 : 0);
+		message.add(config.powerType);
+
+		// Next 2 bytes are cab settings
+		message.add(config.cabEnabled ? 1 : 0);
+		message.add(config.cabType);
+
+		// Next 2 bytes are more power amp settings (resonance and presence)
+		message.add(config.resonance);
+		message.add(config.presence);
+
+		// Next 6 bytes are fixed values (3, 4, 1, 2, 3, 4)
+		message.addAll(List.of(3, 4, 1, 2, 3, 4));
+
+		// Finally, the sysex end byte
+		message.add(0xF7);
+
+		byte[] messageBytes = new byte[message.size()];
+		for (int i = 0; i < message.size(); i++) {
+			messageBytes[i] = message.get(i).byteValue();
+		}
+
+		return messageBytes;
 	}
 }

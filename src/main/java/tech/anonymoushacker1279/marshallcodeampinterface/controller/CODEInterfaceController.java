@@ -82,6 +82,8 @@ public class CODEInterfaceController implements Initializable {
 	@FXML
 	public ToggleButton preFXToggleButton;
 	@FXML
+	private TabPane fxTabPane;
+	@FXML
 	public TabPane preFXTabPane;
 	@FXML
 	public Slider compressorToneSlider;
@@ -356,7 +358,11 @@ public class CODEInterfaceController implements Initializable {
 	@FXML
 	public MenuItem savePresetMenuItem;
 	@FXML
+	public MenuItem savePresetToAmpMenuItem;
+	@FXML
 	public MenuItem openGatewayPresetBrowserMenuItem;
+	@FXML
+	public MenuItem refreshInterfaceMenuItem;
 	@FXML
 	public ImageView connectionMethodImageView;
 	@FXML
@@ -384,6 +390,7 @@ public class CODEInterfaceController implements Initializable {
 
 	public boolean ignorePresetChange = false;
 	private HostServices hostServices;
+	private CODEInterfaceApplication app;
 
 	private AudioCapture audioCapture;
 	private AudioProcessor audioProcessor;
@@ -394,6 +401,10 @@ public class CODEInterfaceController implements Initializable {
 
 	public void setHostServices(HostServices hostServices) {
 		this.hostServices = hostServices;
+	}
+
+	public void setApp(CODEInterfaceApplication app) {
+		this.app = app;
 	}
 
 	@Override
@@ -469,6 +480,7 @@ public class CODEInterfaceController implements Initializable {
 				"ODR",
 				"DIST"
 		));
+		distortionModeListView.getSelectionModel().select(0);
 		distortionModeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> CODEInterfaceApplication.INTERFACE.setPedalParameter1(distortionModeListView.getItems().indexOf(newValue), preFXTabPane.getSelectionModel().getSelectedIndex()));
 
 		setupSliderAndTextField(distortionDriveSlider, distortionDriveTextField, CODEInterfaceApplication.INTERFACE::setPedalParameter2, false);
@@ -479,6 +491,7 @@ public class CODEInterfaceController implements Initializable {
 				"ENV",
 				"LFO"
 		));
+		autoWahModeListView.getSelectionModel().select(0);
 		autoWahModeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> CODEInterfaceApplication.INTERFACE.setPedalParameter1(autoWahModeListView.getItems().indexOf(newValue), preFXTabPane.getSelectionModel().getSelectedIndex()));
 
 		setupSliderAndTextField(autoWahFreqSlider, autoWahFreqTextField, CODEInterfaceApplication.INTERFACE::setPedalParameter2, false);
@@ -498,6 +511,7 @@ public class CODEInterfaceController implements Initializable {
 				"CLS",
 				"VIB"
 		));
+		chorusModeListView.getSelectionModel().select(0);
 		chorusModeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> CODEInterfaceApplication.INTERFACE.setModulationParameter1(chorusModeListView.getItems().indexOf(newValue)));
 
 		setupSliderAndTextField(chorusSpeedSlider, chorusSpeedTextField, CODEInterfaceApplication.INTERFACE::setModulationParameter2, false);
@@ -508,6 +522,7 @@ public class CODEInterfaceController implements Initializable {
 				"JET",
 				"MET"
 		));
+		flangerModeListView.getSelectionModel().select(0);
 		flangerModeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> CODEInterfaceApplication.INTERFACE.setModulationParameter1(flangerModeListView.getItems().indexOf(newValue)));
 
 		setupSliderAndTextField(flangerSpeedSlider, flangerSpeedTextField, CODEInterfaceApplication.INTERFACE::setModulationParameter2, false);
@@ -518,6 +533,7 @@ public class CODEInterfaceController implements Initializable {
 				"CLS",
 				"VBE"
 		));
+		phaserModeListView.getSelectionModel().select(0);
 		phaserModeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> CODEInterfaceApplication.INTERFACE.setModulationParameter1(phaserModeListView.getItems().indexOf(newValue)));
 
 		setupSliderAndTextField(phaserSpeedSlider, phaserSpeedTextField, CODEInterfaceApplication.INTERFACE::setModulationParameter2, false);
@@ -528,6 +544,7 @@ public class CODEInterfaceController implements Initializable {
 				"VLV",
 				"SQR"
 		));
+		tremoloModeListView.getSelectionModel().select(0);
 		tremoloModeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> CODEInterfaceApplication.INTERFACE.setModulationParameter1(tremoloModeListView.getItems().indexOf(newValue)));
 
 		setupSliderAndTextField(tremoloSpeedSlider, tremoloSpeedTextField, CODEInterfaceApplication.INTERFACE::setModulationParameter2, false);
@@ -637,6 +654,11 @@ public class CODEInterfaceController implements Initializable {
 			TuningDialogController.openDialog(CODEInterfaceApplication.INTERFACE::setTuningDialogController);
 		});
 
+		refreshInterfaceMenuItem.setOnAction(event -> {
+			CODEInterfaceApplication.LOGGER.info("Refreshing interface...");
+			new Thread(app::threadedSetup, "Async Initialization Handler").start();
+		});
+
 		loadPresetMenuItem.setOnAction(event -> {
 			// Prompt the user to select a file
 			FileChooser fileChooser = new FileChooser();
@@ -695,6 +717,10 @@ public class CODEInterfaceController implements Initializable {
 					CODEInterfaceApplication.LOGGER.error("Failed to save preset", e);
 				}
 			}
+		});
+
+		savePresetToAmpMenuItem.setOnAction(event -> {
+			SavePresetToAmpDialogController.openDialog();
 		});
 
 		openGatewayPresetBrowserMenuItem.setOnAction(event -> {

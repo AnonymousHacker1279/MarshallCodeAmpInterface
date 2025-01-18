@@ -43,7 +43,25 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 	}
 
 	@Override
-	public byte[] receiveSysexMessage() {
+	public byte[] receiveSysexMessage(int expectedLength) {
+		waitForSysexMessage();
+
+		byte[] message = INCOMING_SYSEX_QUEUE.getFirst();
+		while (message.length != expectedLength) {
+			INCOMING_SYSEX_QUEUE.removeFirst();
+
+			if (INCOMING_SYSEX_QUEUE.isEmpty()) {
+				waitForSysexMessage();
+			}
+
+			message = INCOMING_SYSEX_QUEUE.getFirst();
+		}
+
+		INCOMING_SYSEX_QUEUE.removeFirst();
+		return message;
+	}
+
+	private void waitForSysexMessage() {
 		while (INCOMING_SYSEX_QUEUE.isEmpty()) {
 			try {
 				Thread.sleep(10);
@@ -51,10 +69,6 @@ public class AmpUSBInterface extends AmpMIDIInterface {
 				throw new RuntimeException(e);
 			}
 		}
-
-		byte[] message = INCOMING_SYSEX_QUEUE.getFirst();
-		INCOMING_SYSEX_QUEUE.removeFirst();
-		return message;
 	}
 
 	private class MessageReceiver implements Receiver {

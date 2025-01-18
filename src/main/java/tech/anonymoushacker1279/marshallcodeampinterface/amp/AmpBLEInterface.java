@@ -119,7 +119,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 	}
 
 	@Override
-	public byte[] receiveSysexMessage() {
+	public byte[] receiveSysexMessage(int expectedLength) {
 		List<GATTNotification> notifications;
 		do {
 			notifications = orion.getNotifications(device, service, notifyCharacteristic);
@@ -135,7 +135,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 				}
 
 				boolean isValidResponse = validateSysexMessage(byteArray);
-				if (!isValidResponse) {
+				if (!isValidResponse || byteArray.length != expectedLength) {
 					// Attempt to resend the last message
 					CODEInterfaceApplication.LOGGER.warn("Invalid response received, resending last message");
 					orion.writeCharacteristic(device, service, rwCharacteristic, lastSysexMessage);
@@ -149,7 +149,7 @@ public class AmpBLEInterface extends AmpMIDIInterface {
 			}
 
 			try {
-				Thread.sleep(250);
+				Thread.sleep(150);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}

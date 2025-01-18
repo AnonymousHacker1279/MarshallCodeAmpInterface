@@ -66,6 +66,7 @@ public class CODEInterfaceApplication extends Application {
 
 		CONTROLLER = fxmlLoader.getController();
 		CONTROLLER.setHostServices(getHostServices());
+		CONTROLLER.setApp(this);
 
 		if (INTERFACE instanceof AmpBLEInterface) {
 			CONTROLLER.connectionMethodImageView.setImage(new Image(Objects.requireNonNull(CODEInterfaceApplication.class.getResourceAsStream("images/bluetooth.png"))));
@@ -76,7 +77,7 @@ public class CODEInterfaceApplication extends Application {
 		UpdateAvailableController.checkForUpdates(getHostServices());
 	}
 
-	private void threadedSetup() {
+	public void threadedSetup() {
 		while (!INTERFACE.isReady()) {
 			try {
 				Thread.sleep(100);
@@ -88,6 +89,10 @@ public class CODEInterfaceApplication extends Application {
 		LOGGER.info("Device initialization complete, successfully connected via {}", INTERFACE instanceof AmpUSBInterface ? "USB" : "BLE");
 
 		INTERFACE.setAmpHardwareInformation();
+
+		PRESETS.clear();
+		Platform.runLater(() -> CONTROLLER.presetListView.getItems().clear());
+		Platform.runLater(() -> CONTROLLER.presetLoadingIndicator.setVisible(true));
 
 		LOGGER.info("Loading presets...");
 		DEFAULT_CONFIG = AmpConfig.create(INTERFACE);

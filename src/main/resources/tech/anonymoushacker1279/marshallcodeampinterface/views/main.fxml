@@ -62,9 +62,11 @@
 				<Menu mnemonicParsing="false" text="File">
 					<items>
 						<MenuItem fx:id="openTunerMenuItem" mnemonicParsing="false" text="Open Tuner" />
+                  <MenuItem fx:id="refreshInterfaceMenuItem" mnemonicParsing="false" text="Refresh Interface" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="loadPresetMenuItem" mnemonicParsing="false" text="Load Preset from File" />
                   <MenuItem fx:id="savePresetMenuItem" mnemonicParsing="false" text="Save Preset to File" />
+                  <MenuItem fx:id="savePresetToAmpMenuItem" mnemonicParsing="false" text="Save Preset to Amp" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="openGatewayPresetBrowserMenuItem" mnemonicParsing="false" text="Gateway Preset Browser" />
 					</items>
@@ -336,7 +338,7 @@
                      </tooltip></ListView>
 					</children>
 				</AnchorPane>
-				<TabPane layoutX="15.0" layoutY="450.0" prefHeight="290.0" prefWidth="600.0">
+				<TabPane fx:id="fxTabPane" layoutX="15.0" layoutY="450.0" prefHeight="290.0" prefWidth="600.0">
 					<tabs>
 						<Tab closable="false" text="PRE-FX">
 							<content>
